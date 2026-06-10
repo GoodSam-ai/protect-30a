@@ -8,6 +8,55 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- SEO / social -->
+<link rel="canonical" href="https://protect30a.com/">
+<meta name="author" content="Protect 30A">
+<meta name="theme-color" content="#0e3b38">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Protect 30A">
+<meta property="og:title" content="Protect 30A — The South Walton Stormwater Plan">
+<meta property="og:description" content="A community plan to stop flooding, protect our rare coastal dune lakes, and keep money raised on 30A working on 30A. Learn the plan, the timeline, and how to help.">
+<meta property="og:url" content="https://protect30a.com/">
+<meta property="og:image" content="https://protect30a.com/og-image.jpg"><!-- [UNVERIFIED] create & upload 1200x630 og-image.jpg before sharing links -->
+<meta property="og:image:alt" content="Protect 30A — coastal dune lake illustration with the South Walton stormwater plan headline">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Protect 30A — The South Walton Stormwater Plan">
+<meta name="twitter:description" content="Stop the flooding. Protect our rare coastal dune lakes. Keep 30A money working on 30A.">
+<meta name="twitter:image" content="https://protect30a.com/og-image.jpg">
+<link rel="icon" href="data:image/svg+xml,%3Csvg viewBox='0 0 16 16' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='16' height='16' rx='3' fill='%230e3b38'/%3E%3Cpath d='M2.5 10c1.8-1.5 3.6-1.5 5.5 0s3.7 1.5 5.5 0' stroke='%23fbf8f1' stroke-width='1.2' stroke-linecap='round' fill='none'/%3E%3Cpath d='M4 7.5c1.2-1 2.4-1 3.6 0' stroke='%238fcdc4' stroke-width='1' stroke-linecap='round' fill='none'/%3E%3C/svg%3E">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://protect30a.com/",
+      "url": "https://protect30a.com/",
+      "name": "Protect 30A — The South Walton Stormwater Plan",
+      "description": "A community plan to stop flooding, protect our rare coastal dune lakes, and keep money raised on 30A working on 30A.",
+      "inLanguage": "en",
+      "about": [
+        {"@type": "Thing", "name": "Stormwater management"},
+        {"@type": "Thing", "name": "Coastal dune lakes"}
+      ],
+      "spatialCoverage": {"@type": "Place", "name": "South Walton County, Florida, United States"}
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {"@type": "Question", "name": "Is the 30A stormwater plan a new tax?", "acceptedAnswer": {"@type": "Answer", "text": "It's a special assessment, not a general tax. An assessment can only fund improvements that specially benefit the properties paying it, is set in public hearings, and every dollar is legally tied to stormwater work inside the 30A benefit area."}},
+        {"@type": "Question", "name": "How much will the 30A stormwater assessment cost me?", "acceptedAnswer": {"@type": "Answer", "text": "Per-property numbers don't exist yet — they depend on engineering studies and a project list developed with community input. By law, costs must be fairly apportioned by benefit, published in advance, mailed to every affected owner, and adopted only after public hearings."}},
+        {"@type": "Question", "name": "Who decides what stormwater projects get built on 30A?", "acceptedAnswer": {"@type": "Answer", "text": "The project list is developed through engineering studies and community input, then adopted by the County Commission in noticed public hearings. Phase 3 offers the option of a locally elected district board."}},
+        {"@type": "Question", "name": "Why not use existing county funds or wait for federal grants?", "acceptedAnswer": {"@type": "Answer", "text": "County-wide funds compete with every other county priority, and federal mitigation grants have been unreliable. This plan builds on local capital plus Florida's Resilient Florida grant program."}},
+        {"@type": "Question", "name": "What happens if nothing is done about 30A stormwater?", "acceptedAnswer": {"@type": "Answer", "text": "Repair costs keep landing on everyone through emergency fixes, property damage, and degraded dune lakes. If the county doesn't adopt its funding resolution before January 1, 2027, the program slips at least a year."}},
+        {"@type": "Question", "name": "Does the 30A stormwater plan create a new layer of government?", "acceptedAnswer": {"@type": "Answer", "text": "Not in Phase 1 — an MSBU is a funding boundary administered by existing county government through the existing tax bill. A new governance body only enters in Phase 3, and only if the community chooses it through a public legislative process."}}
+      ]
+    }
+  ]
+}
+</script>
 <style>
 :root{
   --teal-deep:#0e3b38;
@@ -32,6 +81,7 @@
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
+#top,#why,#plan,#timeline,#lakes,#wq-explorer,#faq,#help{scroll-margin-top:84px}
 body{font-family:var(--font-body);color:var(--ink);background:var(--cream);line-height:1.65;-webkit-font-smoothing:antialiased}
 h1,h2,h3,.display{font-family:var(--font-display)}
 img{max-width:100%}
@@ -56,7 +106,23 @@ nav.scrolled .nav-links a{color:var(--ink-soft)}
 .nav-links a:hover{color:var(--gold)}
 .nav-cta{background:var(--gold);color:var(--teal-deep)!important;padding:9px 18px;border-radius:999px;font-weight:700!important}
 .nav-cta:hover{filter:brightness(1.06);color:var(--teal-deep)!important}
-@media(max-width:820px){.nav-links li:not(.keep){display:none}}
+.nav-burger{display:none;background:none;border:0;cursor:pointer;width:44px;height:44px;flex-direction:column;align-items:center;justify-content:center;gap:5px;border-radius:8px;margin-left:10px}
+.nav-burger span{display:block;width:22px;height:2px;background:var(--white);border-radius:2px;transition:transform .25s,opacity .25s,background .3s}
+nav.scrolled .nav-burger span,nav.menu-open .nav-burger span{background:var(--teal-deep)}
+nav.menu-open .nav-burger span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+nav.menu-open .nav-burger span:nth-child(2){opacity:0}
+nav.menu-open .nav-burger span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+@media(max-width:820px){
+  .nav-links li:not(.keep){display:none}
+  .nav-burger{display:flex}
+  nav.menu-open{background:rgba(251,248,241,.97);backdrop-filter:blur(10px);box-shadow:0 2px 18px rgba(14,59,56,.10)}
+  nav.menu-open .nav-logo{color:var(--teal-deep)}
+  nav.menu-open .nav-links{position:absolute;top:100%;left:0;right:0;flex-direction:column;align-items:stretch;gap:0;background:rgba(251,248,241,.97);backdrop-filter:blur(10px);box-shadow:0 14px 24px rgba(14,59,56,.12);padding:6px 0 16px;border-top:1px solid rgba(14,59,56,.08)}
+  nav.menu-open .nav-links li{display:block}
+  nav.menu-open .nav-links a{display:block;padding:13px 28px;color:var(--ink-soft)}
+  nav.menu-open .nav-links li.keep{padding:12px 28px 0}
+  nav.menu-open .nav-cta{display:block;text-align:center;color:var(--teal-deep)!important}
+}
 
 /* ---------- HERO ---------- */
 .hero{position:relative;min-height:96vh;display:flex;align-items:center;justify-content:center;text-align:center;color:var(--white);background:linear-gradient(180deg,#0c3431 0%,#155450 45%,#2a7670 78%,#3d827c 100%);overflow:hidden;padding:120px 24px 160px}
@@ -119,7 +185,7 @@ nav.scrolled .nav-links a{color:var(--ink-soft)}
 .plan .section-title{color:var(--white)}
 .plan .lede{color:rgba(255,255,255,.82)}
 .phase-tabs{display:flex;gap:10px;margin:42px 0 0;flex-wrap:wrap}
-.phase-tab{flex:1;min-width:200px;background:rgba(255,255,255,.07);border:1.5px solid rgba(143,205,196,.3);color:var(--white);border-radius:14px;padding:18px 20px;text-align:left;cursor:pointer;transition:all .25s;font-family:var(--font-body)}
+.phase-tab{flex:1;min-width:min(200px,100%);background:rgba(255,255,255,.07);border:1.5px solid rgba(143,205,196,.3);color:var(--white);border-radius:14px;padding:18px 20px;text-align:left;cursor:pointer;transition:all .25s;font-family:var(--font-body)}
 .phase-tab .step{font-size:.72rem;letter-spacing:.13em;text-transform:uppercase;color:var(--aqua);font-weight:700}
 .phase-tab .name{display:block;font-family:var(--font-display);font-size:1.18rem;font-weight:600;margin-top:4px}
 .phase-tab .when{display:block;font-size:.8rem;color:rgba(255,255,255,.65);margin-top:3px}
@@ -176,7 +242,7 @@ nav.scrolled .nav-links a{color:var(--ink-soft)}
 .lake-credit a{color:var(--ink-soft)}
 .lakes-fact{margin-top:30px;background:rgba(14,59,56,.45);border-left:4px solid var(--gold);padding:20px 24px;border-radius:0 14px 14px 0;max-width:720px}
 .lakes-fact p{font-size:1rem;color:rgba(255,255,255,.92)}
-.lake-gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:26px;margin-top:50px}
+.lake-gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(330px,100%),1fr));gap:26px;margin-top:50px}
 .lake-card{background:var(--white);color:var(--ink);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-lg);display:flex;flex-direction:column;transition:transform .25s}
 .lake-card:hover{transform:translateY(-6px)}
 .lake-art{line-height:0;background:var(--aqua-pale)}
@@ -356,6 +422,18 @@ nav.scrolled .nav-links a{color:var(--ink-soft)}
 /* reduced motion: skip chart animation */
 @media(prefers-reduced-motion:reduce){
   .wq-pill,.wq-select{transition:none}
+  .bob,.floaty{animation:none}
+  .reveal{opacity:1;transform:none;transition:none}
+  .phase-panel{animation:none}
+  html{scroll-behavior:auto}
+}
+a:focus-visible,button:focus-visible,select:focus-visible,.btn:focus-visible,.nav-cta:focus-visible{outline:3px solid var(--gold);outline-offset:2px;border-radius:4px}
+/* ---------- mobile touch targets (≥44px) ---------- */
+@media(max-width:820px){
+  .nav-cta{padding:12px 22px}
+  .lake-chip{padding:12px 20px;min-height:44px}
+  .wq-pill{min-height:44px}
+  .wq-select{min-height:44px}
 }
 
 /* mobile */
@@ -399,7 +477,7 @@ footer a:hover{text-decoration:underline}
     <svg width="26" height="26" viewBox="0 0 26 26" fill="none"><circle cx="13" cy="13" r="12" stroke="currentColor" stroke-width="2"/><path d="M4 15c3-2.5 6-2.5 9 0s6 2.5 9 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M6 10c2.5-2 5-2 7.5 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
     Protect 30A
   </a>
-  <ul class="nav-links">
+  <ul class="nav-links" id="nav-menu">
     <li><a href="#why">Why Now</a></li>
     <li><a href="#plan">The Plan</a></li>
     <li><a href="#timeline">Timeline</a></li>
@@ -408,6 +486,9 @@ footer a:hover{text-decoration:underline}
     <li><a href="#faq">FAQ</a></li>
     <li class="keep"><a class="nav-cta" href="#help">Show Support</a></li>
   </ul>
+  <button class="nav-burger" id="nav-burger" aria-label="Open menu" aria-expanded="false" aria-controls="nav-menu">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
 
 <header class="hero" id="top">
@@ -446,7 +527,7 @@ footer a:hover{text-decoration:underline}
     <p class="lede reveal">South Walton has grown faster than its drainage. Every big storm sends more runoff into our streets, our yards, and our irreplaceable dune lakes. We can keep reacting — or we can fund real infrastructure, together.</p>
     <div class="stat-grid">
       <div class="stat-card reveal"><div class="num" data-count="15">0</div><div class="unit">coastal dune lakes</div><p>South Walton's named coastal dune lakes are a globally rare treasure — found in only a handful of places on Earth.</p></div>
-      <div class="stat-card reveal"><div class="num" data-count="100">0</div><div class="unit">% of runoff flows somewhere</div><p>Stormwater doesn't disappear. Untreated, it carries sediment and pollutants downhill — and on 30A, downhill means our lakes and the Gulf.</p></div>
+      <div class="stat-card reveal"><div class="num" data-count="100">0</div><div class="unit">% of runoff flows somewhere</div><p>Rain that falls on pavement doesn't disappear — it flows downhill. Untreated, it carries sediment, nutrients, and pollutants with it, and on 30A, downhill means our lakes and the Gulf.</p></div>
       <div class="stat-card reveal"><div class="num" data-count="2027">0</div><div class="unit">first projects funded</div><p>If we act this year, the first locally funded stormwater projects can begin with the November 2027 cycle.</p></div>
       <div class="stat-card reveal"><div class="num" data-count="1">0</div><div class="unit">year lost if we wait</div><p>Miss the January 1, 2027 deadline and the whole program slips to 2028 — another year of flooding without funded fixes.</p></div>
     </div>
@@ -788,7 +869,7 @@ footer a:hover{text-decoration:underline}
     <h3>Fuller Lake</h3>
     <p class="lake-tag"><em>The wildest of the fifteen — kept quiet on purpose.</em></p>
     <p>Fuller Lake sits at the far western end of the dune lake chain, inside the private Coffeen Nature Preserve next to Topsail Hill Preserve State Park. Before World War II, Robert Bushnell bought roughly 2,000 acres here, and the Army Air Corps soon took it over as a secret missile test site. When the war ended, the family chose preservation over development, founding Four Mile Village. Dorothy Coffeen called the land "a haven for all God's creatures." The Sierra Foundation cared for it from 1976 to 2003, followed by the Coffeen Land Trust.</p>
-    <p>Fed only by rain and groundwater, the 40-acre lake is rated the third most pristine dune lake in Walton County. Water lilies spread across dark, tea-colored water; alligators, nesting bald eagles, ospreys, and a heron rookery all call it home, with marsh connecting it to Morris Lake next door. Because so little development touches its shore, Fuller Lake shows what every dune lake once was — and what clean, careful stormwater management can still protect.</p>
+    <p>Fed only by rain and groundwater, the 40-acre lake has been described as among the most pristine dune lakes in Walton County. Water lilies spread across dark, tea-colored water; alligators, nesting bald eagles, ospreys, and a heron rookery all call it home, with marsh connecting it to Morris Lake next door. Because so little development touches its shore, Fuller Lake shows what every dune lake once was — and what clean, careful stormwater management can still protect.</p>
     <div class="lake-meta"><span>📍 Western end of 30A, beside Topsail Hill</span><span>Coffeen Nature Preserve · guided tours only</span></div>
   </div>
 </article>
@@ -1633,7 +1714,7 @@ footer a:hover{text-decoration:underline}
     <h3>Draper Lake</h3>
     <p class="lake-tag"><em>A hidden mirror at the quiet edge of Blue Mountain.</em></p>
     <p>Tucked into the west end of Blue Mountain Beach, Draper Lake is the quiet one — the only one of South Walton's fifteen named coastal dune lakes ringed almost entirely by private neighborhoods like Old Florida Beach, The Retreat, and Draper Lake Coastal Village. Most people meet it in passing: a flash of still water from Scenic 30A, or from the steel bridge on the Timpoochee Trail, where the lake's northern reach slips beneath the bike path. Residents paddle it from small docks at first light and last.</p>
-    <p>Coastal dune lakes exist in only a handful of places on Earth, and Walton County holds the world's densest collection. Draper trades fresh water with the Gulf through an outfall that opens across the beach after heavy rains — a delicate brackish rhythm that university researchers have studied here for years. But every rooftop and roadway nearby drains toward this basin. Managing that stormwater is how a lake this rare stays this clear.</p>
+    <p>Coastal dune lakes exist in only a handful of places on Earth, and Walton County holds the world's densest collection. Draper trades fresh water with the Gulf through an outfall that opens across the beach after heavy rains — a delicate brackish rhythm that researchers from the University of Florida and the Mattie Kelly Environmental Institute have studied for years. But every rooftop and roadway nearby drains toward this basin. Managing that stormwater is how a lake this rare stays this clear.</p>
     <div class="lake-meta"><span>📍 West end of Blue Mountain Beach, along Scenic 30A</span><span>🌉 Best public view: the Timpoochee Trail bridge</span></div>
   </div>
 </article>
@@ -2934,6 +3015,7 @@ footer a:hover{text-decoration:underline}
     </div>
     <div class="foot-note">
       <p>A community initiative for the 30A corridor, South Walton County, Florida. Assessment amounts shown nowhere on this page because they don't exist yet — they will be set through the public process described above. Legal framework summarized in plain language; statutory text controls.</p>
+      <p style="margin-top:12px"><strong>Disclosure:</strong> This page is published by Doug Liles, a Santa Rosa Beach resident and property owner, as a community advocacy resource. It does not represent the official position of any special district, Walton County, or any other government body. Water quality data courtesy of the Choctawhatchee Basin Alliance volunteer monitoring program. Questions: <a href="mailto:doug@goodsamaritaninstitute.org">doug@goodsamaritaninstitute.org</a>.</p>
     </div>
   </div>
 </footer>
@@ -2942,6 +3024,20 @@ footer a:hover{text-decoration:underline}
 // ---------- nav scroll state ----------
 const nav=document.getElementById('nav');
 addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>60),{passive:true});
+
+// ---------- mobile menu toggle ----------
+const burger=document.getElementById('nav-burger');
+if(burger&&nav){
+  const setMenu=open=>{
+    nav.classList.toggle('menu-open',open);
+    burger.setAttribute('aria-expanded',String(open));
+    burger.setAttribute('aria-label',open?'Close menu':'Open menu');
+  };
+  burger.addEventListener('click',()=>setMenu(!nav.classList.contains('menu-open')));
+  nav.querySelectorAll('.nav-links a').forEach(a=>a.addEventListener('click',()=>setMenu(false)));
+  addEventListener('resize',()=>{if(innerWidth>820)setMenu(false)},{passive:true});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')setMenu(false)});
+}
 
 // ---------- scroll reveal ----------
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');io.unobserve(e.target)}}),{threshold:.12});
@@ -2956,7 +3052,7 @@ function tick(){
   cdDays.textContent=d;cdHours.textContent=h;cdMins.textContent=m;cdSecs.textContent=s;
 }
 const cdDays=document.getElementById('cd-days'),cdHours=document.getElementById('cd-hours'),cdMins=document.getElementById('cd-mins'),cdSecs=document.getElementById('cd-secs');
-tick();setInterval(tick,1000);
+tick();const cdTimer=setInterval(()=>{tick();if(gate-new Date()<=0)clearInterval(cdTimer)},1000);
 
 // ---------- count-up stats ----------
 const statIO=new IntersectionObserver(es=>es.forEach(e=>{
