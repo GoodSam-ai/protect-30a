@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Protect 30A — The Show | Weekly Community Media for South Walton</title>
+<meta name="description" content="Protect30A is a weekly, district-by-district community show for the 30A corridor — a neutral Digest, a clearly-labeled local Opinion, and a featured resident voice, on Spotify, YouTube, and the web. Eight communities, one headlined every week." />
+<meta name="author" content="Protect 30A" />
+<meta name="theme-color" content="#0e3b38" />
+<link rel="canonical" href="https://protect30a.org/show" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Protect 30A" />
+<meta property="og:title" content="Protect 30A — The Show | Weekly Community Media for South Walton" />
+<meta property="og:description" content="A weekly, district-by-district community show for 30A: a neutral Digest, a labeled local Opinion, and a featured resident voice. Eight communities on rotation." />
+<meta property="og:url" content="https://protect30a.org/show" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Protect 30A — The Show" />
+<meta name="twitter:description" content="Weekly community media for the 30A corridor. Eight districts, one headlined every week. Listen on Spotify & YouTube." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --teal-900:#0b3530; --teal-800:#0e3b38; --teal-700:#13524b; --teal-600:#1c6157; --teal-400:#3f8a7e;
+    --cream:#fbf7ef; --sand:#efe6d2; --sand-2:#e4d7ba; --line:#e7dcc6;
+    --terra:#c56b4a; --terra-deep:#a8542f;
+    --ink:#22302d; --ink-soft:#54635e; --cream-on-teal:#f3ede0; --teal-on-teal-soft:#bcd4cc;
+    --maxw:1160px; --r:14px; --shadow:0 12px 34px rgba(11,53,48,.12);
+    --serif:"Fraunces",Georgia,serif; --sans:"Inter",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--cream);line-height:1.6;-webkit-font-smoothing:antialiased}
+  a{color:inherit}
+  h1,h2,h3{font-family:var(--serif);font-weight:600;line-height:1.1;margin:0}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+  .kicker{font-family:var(--sans);font-weight:600;letter-spacing:.16em;text-transform:uppercase;font-size:.72rem;color:var(--terra)}
+  section{padding:84px 0}
+  .lead{font-size:1.12rem;color:var(--ink-soft);max-width:60ch}
+
+  /* NAV */
+  header.nav{position:sticky;top:0;z-index:50;background:rgba(14,59,56,.96);backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,.08)}
+  .nav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
+  .brand{display:flex;align-items:center;gap:10px;color:var(--cream-on-teal);text-decoration:none;font-family:var(--serif);font-weight:600;font-size:1.18rem;letter-spacing:.01em}
+  .brand .dot{width:11px;height:11px;border-radius:50%;background:var(--terra);box-shadow:0 0 0 4px rgba(197,107,74,.22)}
+  .navlinks{display:flex;align-items:center;gap:26px}
+  .navlinks a{color:var(--teal-on-teal-soft);text-decoration:none;font-size:.92rem;font-weight:500}
+  .navlinks a:hover{color:#fff}
+  .navlinks a.cta{color:#fff;background:var(--terra);padding:9px 16px;border-radius:999px;font-weight:600}
+  .navlinks a.cta:hover{background:var(--terra-deep)}
+  .navlinks a.back{color:var(--teal-on-teal-soft);font-size:.86rem}
+  .menu-btn{display:none;background:none;border:0;color:#fff;font-size:1.5rem;cursor:pointer}
+
+  /* HERO */
+  .hero{background:radial-gradient(1200px 500px at 80% -10%,rgba(63,138,126,.45),transparent),linear-gradient(180deg,var(--teal-800),var(--teal-900));color:var(--cream-on-teal);padding:96px 0 104px;position:relative;overflow:hidden}
+  .hero .wrap{position:relative;z-index:2;max-width:880px}
+  .hero h1{color:#fff;font-size:clamp(2.4rem,5.6vw,4rem);margin:18px 0 0;letter-spacing:-.01em}
+  .hero h1 em{font-style:italic;color:#ffd9be}
+  .hero p.sub{font-size:1.2rem;color:var(--teal-on-teal-soft);margin:22px 0 0;max-width:62ch}
+  .hero .actions{display:flex;flex-wrap:wrap;gap:14px;margin-top:34px}
+  .btn{display:inline-block;text-decoration:none;font-weight:600;padding:14px 26px;border-radius:999px;font-size:1rem;transition:.15s}
+  .btn-primary{background:var(--terra);color:#fff}
+  .btn-primary:hover{background:var(--terra-deep)}
+  .btn-ghost{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.45)}
+  .btn-ghost:hover{border-color:#fff;background:rgba(255,255,255,.08)}
+  .hero .meta{margin-top:30px;display:flex;gap:22px;flex-wrap:wrap;color:var(--teal-on-teal-soft);font-size:.92rem}
+  .hero .meta b{color:#fff;font-weight:600}
+  .dune{position:absolute;left:0;right:0;bottom:-2px;height:70px;z-index:1}
+
+  /* GENERIC SECTION HEADERS */
+  .sec-head{max-width:62ch;margin-bottom:42px}
+  .sec-head h2{font-size:clamp(1.8rem,3.6vw,2.6rem);margin:12px 0 16px;color:var(--teal-800)}
+  .on-sand{background:var(--sand)}
+  .on-teal{background:linear-gradient(180deg,var(--teal-800),var(--teal-900));color:var(--cream-on-teal)}
+  .on-teal h2{color:#fff}.on-teal .lead{color:var(--teal-on-teal-soft)}
+
+  /* CARDS */
+  .grid{display:grid;gap:22px}
+  .g2{grid-template-columns:repeat(2,1fr)}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  .g4{grid-template-columns:repeat(4,1fr)}
+  .card{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:26px;box-shadow:var(--shadow)}
+  .card h3{font-size:1.32rem;color:var(--teal-800);margin-bottom:8px}
+  .card .tag{display:inline-block;font-family:var(--sans);font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:999px;margin-bottom:14px}
+  .tag-digest{background:#dcebe6;color:var(--teal-700)}
+  .tag-opinion{background:#f6e3d8;color:var(--terra-deep)}
+  .tag-voice{background:var(--sand-2);color:#6c5a32}
+
+  /* DISTRICTS */
+  .districts .wrap{position:relative}
+  .dist-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:8px}
+  .dist{display:flex;align-items:center;gap:16px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+  .dist .num{flex:none;width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:var(--teal-700);color:#fff;font-family:var(--serif);font-weight:600;font-size:1.15rem}
+  .dist:first-child .num{background:var(--terra)}
+  .dist .nm{font-weight:600;color:var(--teal-800);font-size:1.04rem}
+  .dist small{display:block;color:var(--ink-soft);font-weight:400;font-size:.84rem}
+
+  /* LISTEN */
+  .channel{display:flex;flex-direction:column;gap:10px;text-align:left}
+  .channel .ic{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;color:#fff;font-weight:700}
+  .ic-spot{background:#1DB954}.ic-yt{background:#FF0000}.ic-web{background:var(--teal-700)}
+  .channel a.lk{color:var(--terra-deep);font-weight:600;text-decoration:none}
+  .channel a.lk:hover{text-decoration:underline}
+  .note{font-size:.86rem;color:var(--ink-soft)}
+
+  /* SPECIALS BOARD */
+  .special{background:#fff;border:1px solid var(--line);border-left:4px solid var(--terra);border-radius:10px;padding:18px 20px}
+  .special .when{font-size:.74rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--terra-deep)}
+  .special h4{margin:6px 0 4px;font-family:var(--serif);font-weight:600;color:var(--teal-800);font-size:1.1rem}
+  .sample-flag{font-size:.72rem;color:var(--ink-soft);font-style:italic}
+
+  /* SPONSOR / PRICING */
+  .tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;align-items:stretch}
+  .tier{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px;display:flex;flex-direction:column;box-shadow:var(--shadow)}
+  .tier.featured{border:2px solid var(--terra);position:relative}
+  .tier.featured .ribbon{position:absolute;top:-13px;left:28px;background:var(--terra);color:#fff;font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:5px 12px;border-radius:999px}
+  .tier h3{color:var(--teal-800);font-size:1.3rem}
+  .tier .price{font-family:var(--serif);font-size:2.1rem;color:var(--teal-800);margin:12px 0 2px;font-weight:600}
+  .tier .price span{font-family:var(--sans);font-size:.9rem;color:var(--ink-soft);font-weight:500}
+  .tier .was{font-size:.86rem;color:var(--ink-soft)}
+  .tier ul{list-style:none;padding:0;margin:18px 0 22px;display:flex;flex-direction:column;gap:9px}
+  .tier li{position:relative;padding-left:24px;font-size:.94rem}
+  .tier li::before{content:"";position:absolute;left:0;top:8px;width:12px;height:12px;border-radius:50%;background:#dcebe6;box-shadow:inset 0 0 0 3px var(--teal-600)}
+  .tier .btn{margin-top:auto;text-align:center}
+  .addons{margin-top:30px;background:#fff;border:1px dashed var(--sand-2);border-radius:14px;padding:24px}
+  .addons h4{font-family:var(--serif);color:var(--teal-800);margin:0 0 14px;font-size:1.15rem}
+  .addons .row{display:flex;justify-content:space-between;gap:16px;padding:9px 0;border-bottom:1px solid var(--line);font-size:.95rem}
+  .addons .row:last-child{border-bottom:0}
+  .addons .row b{color:var(--teal-800);white-space:nowrap}
+  .founding{margin-top:22px;background:#0e3b38;color:var(--cream-on-teal);border-radius:14px;padding:20px 24px;font-size:.98rem}
+  .founding b{color:#ffd9be}
+  .season{margin-top:14px;font-size:.92rem;color:var(--ink-soft)}
+
+  /* DISCLOSURE */
+  .disclose{background:#fff;border:1px solid var(--line);border-radius:14px;padding:26px 28px;font-size:.95rem;color:var(--ink-soft)}
+  .disclose strong{color:var(--ink)}
+  .pills{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+  .pill{background:var(--sand);border:1px solid var(--sand-2);border-radius:999px;padding:7px 14px;font-size:.84rem;color:#5c4d2c;font-weight:500}
+
+  /* FOOTER */
+  footer{background:var(--teal-900);color:var(--teal-on-teal-soft);padding:54px 0 40px;font-size:.92rem}
+  footer a{color:#fff;text-decoration:none}
+  footer a:hover{text-decoration:underline}
+  .foot-top{display:flex;justify-content:space-between;flex-wrap:wrap;gap:30px;border-bottom:1px solid rgba(255,255,255,.12);padding-bottom:26px;margin-bottom:22px}
+  .foot-top .brand{margin-bottom:8px}
+  .foot-links{display:flex;gap:28px;flex-wrap:wrap}
+
+  @media(max-width:860px){
+    .navlinks{position:fixed;inset:64px 0 auto 0;background:var(--teal-900);flex-direction:column;align-items:flex-start;gap:0;padding:8px 24px 20px;display:none;border-bottom:1px solid rgba(255,255,255,.1)}
+    .navlinks.open{display:flex}
+    .navlinks a{padding:12px 0;width:100%;border-bottom:1px solid rgba(255,255,255,.07)}
+    .navlinks a.cta{margin-top:10px;text-align:center}
+    .menu-btn{display:block}
+    .g2,.g3,.g4,.tiers,.dist-grid{grid-template-columns:1fr}
+    section{padding:62px 0}
+  }
+</style>
+</head>
+<body>
+<a id="top"></a>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#top"><span class="dot"></span> Protect 30A</a>
+    <nav class="navlinks" id="nav">
+      <a class="back" href="https://protect30a.org/#plan">← The Stormwater Plan</a>
+      <a href="#show">The Show</a>
+      <a href="#districts">Districts</a>
+      <a href="#listen">Listen</a>
+      <a href="#sponsor">Sponsor</a>
+      <a href="#community">Community</a>
+      <a class="cta" href="#sponsor">Become a sponsor</a>
+    </nav>
+    <button class="menu-btn" id="menuBtn" aria-label="Menu">☰</button>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero" style="padding-top:96px">
+  <div class="wrap">
+    <span class="kicker" style="color:#ffd9be">A Community Initiative · South Walton, Florida</span>
+    <h1>The conversation 30A is already having — <em>now in one place.</em></h1>
+    <p class="sub">Protect30A is a weekly, district-by-district community show: a neutral <b style="color:#fff">Digest</b> of what your neighborhood is talking about, a clearly-labeled local <b style="color:#fff">Opinion</b>, and a featured resident voice — on Spotify, YouTube, and right here.</p>
+    <div class="actions">
+      <a class="btn btn-primary" href="#listen">Listen to the show</a>
+      <a class="btn btn-ghost" href="#sponsor">Become a founding sponsor</a>
+    </div>
+    <div class="meta">
+      <span><b>New episodes weekly</b></span>
+      <span><b>8</b> communities on rotation</span>
+      <span>Independent · community-produced</span>
+    </div>
+  </div>
+  <svg class="dune" viewBox="0 0 1440 70" preserveAspectRatio="none" aria-hidden="true"><path d="M0,40 C240,5 480,5 720,32 C960,58 1200,58 1440,28 L1440,70 L0,70 Z" fill="#fbf7ef"/></svg>
+</section>
+
+<!-- WHAT IT IS -->
+<section id="show">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">How the show works</span>
+      <h2>Two clearly separated parts — so you always know what you're hearing.</h2>
+      <p class="lead">The same trust standard that runs the rest of Protect 30A runs the show: sourced, fair, and clearly labeled. Facts and opinion never blur together.</p>
+    </div>
+    <div class="grid g3">
+      <div class="card">
+        <span class="tag tag-digest">The Digest</span>
+        <h3>What your district is talking about</h3>
+        <p>A neutral, sourced summary of the week in each community — events, businesses, beach access, traffic, local life. Multiple sides attributed. Every claim traceable to a dated, linked source.</p>
+      </div>
+      <div class="card">
+        <span class="tag tag-opinion">The Opinion</span>
+        <h3>A clearly-labeled local take</h3>
+        <p>Personally-voiced commentary, visibly separated from the Digest — and from any official role. Tagged on-air and in the show notes so it's never mistaken for the neutral report.</p>
+      </div>
+      <div class="card">
+        <span class="tag tag-voice">Featured voice</span>
+        <h3>A neighbor opens every episode</h3>
+        <p>Each show begins with a resident voicing the concern that matters to them this week — in their own words, with their permission. Real people, not talking points.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DISTRICTS -->
+<section id="districts" class="districts on-sand">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">Eight communities</span>
+      <h2>One headlined every week, on rotation.</h2>
+      <p class="lead">An 8-week rotation headlines each district about six to seven times a year — and all eight stay refreshed on the site every week.</p>
+    </div>
+    <div class="dist-grid">
+      <div class="dist"><span class="num">1</span><span class="nm">Inlet Beach</span></div>
+      <div class="dist"><span class="num">2</span><span class="nm">Rosemary Beach</span></div>
+      <div class="dist"><span class="num">3</span><span class="nm">Alys Beach</span></div>
+      <div class="dist"><span class="num">4</span><span class="nm">Watersound <small>Seacrest · Prominence · Origins</small></span></div>
+      <div class="dist"><span class="num">5</span><span class="nm">Seagrove <small>Seaside · WaterColor</small></span></div>
+      <div class="dist"><span class="num">6</span><span class="nm">Grayton Beach <small>Blue Mountain Beach</small></span></div>
+      <div class="dist"><span class="num">7</span><span class="nm">Santa Rosa Beach <small>Gulf Place · Dune Allen</small></span></div>
+      <div class="dist"><span class="num">8</span><span class="nm">Sandestin <small>Miramar Beach · Seascape</small></span></div>
+    </div>
+  </div>
+</section>
+
+<!-- LISTEN -->
+<section id="listen">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">Listen &amp; watch</span>
+      <h2>Three ways to follow along.</h2>
+      <p class="lead">Audio on Spotify, a short explainer video on YouTube, and full show notes with sources right here on Protect30A.com.</p>
+    </div>
+    <div class="grid g3">
+      <div class="card channel">
+        <div class="ic ic-spot">▶</div>
+        <h3>Podcast on Spotify</h3>
+        <p>The full weekly episode — Digest, Opinion, and the featured voice.</p>
+        <a class="lk" href="#" data-placeholder>Follow on Spotify →</a>
+        <p class="note">Channel link goes live at launch.</p>
+      </div>
+      <div class="card channel">
+        <div class="ic ic-yt">►</div>
+        <h3>Explainer on YouTube</h3>
+        <p>A short, captioned video recap of each week's headlined district.</p>
+        <a class="lk" href="#" data-placeholder>Subscribe on YouTube →</a>
+        <p class="note">Channel link goes live at launch.</p>
+      </div>
+      <div class="card channel">
+        <div class="ic ic-web">◆</div>
+        <h3>Show notes on the web</h3>
+        <p>Every episode with a transcript and the sources behind each item.</p>
+        <a class="lk" href="#community">Get the weekly recap →</a>
+        <p class="note">Accessibility: transcripts + captions on every episode.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- THIS WEEK ON 30A -->
+<section id="specials" class="on-sand">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">This Week on 30A</span>
+      <h2>Local specials, in the show and on the board.</h2>
+      <p class="lead">Featured merchant specials — like Sunday concerts at the Gulf Place green — run in the episode show notes and on this weekly board. Clearly disclosed as sponsored.</p>
+    </div>
+    <div class="grid g3">
+      <div class="special">
+        <div class="when">Sun · Gulf Place</div>
+        <h4>[Merchant] — Sunday concert special</h4>
+        <p class="sample-flag">Sample listing — your special here.</p>
+      </div>
+      <div class="special">
+        <div class="when">This week · Grayton</div>
+        <h4>[Merchant] — locals' happy hour</h4>
+        <p class="sample-flag">Sample listing — your special here.</p>
+      </div>
+      <div class="special">
+        <div class="when">Weekend · Rosemary</div>
+        <h4>[Merchant] — market &amp; live music</h4>
+        <p class="sample-flag">Sample listing — your special here.</p>
+      </div>
+    </div>
+    <p style="margin-top:24px"><a class="btn btn-primary" href="mailto:doug@goodsamaritaninstitute.org?subject=Protect30A%20%E2%80%94%20This%20Week%20on%2030A%20special">Submit your special</a></p>
+  </div>
+</section>
+
+<!-- SPONSOR -->
+<section id="sponsor">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">Sponsor the show</span>
+      <h2>Be the local name beside the conversation.</h2>
+      <p class="lead">Founding rates, locked for your first six months. You're paying for placement and community goodwill on a brand-new, hyperlocal show — not inflated download claims.</p>
+    </div>
+    <div class="tiers">
+      <div class="tier">
+        <h3>Specials Listing</h3>
+        <div class="price">$79<span>/mo founding</span></div>
+        <div class="was">then $99/mo</div>
+        <ul>
+          <li>Spot on the “This Week on 30A” specials board</li>
+          <li>One show-notes mention every week</li>
+          <li>Great for a weekly offer or event</li>
+        </ul>
+        <a class="btn btn-ghost" style="color:var(--terra-deep);border-color:var(--terra)" href="mailto:doug@goodsamaritaninstitute.org?subject=Protect30A%20Sponsorship%20%E2%80%94%20Specials%20Listing">Start here</a>
+      </div>
+      <div class="tier featured">
+        <span class="ribbon">Most popular</span>
+        <h3>District Segment</h3>
+        <div class="price">$249<span>/mo founding</span></div>
+        <div class="was">then $299/mo · or $89/episode</div>
+        <ul>
+          <li>“[District] segment, brought to you by you”</li>
+          <li>Logo + link in the show notes</li>
+          <li>One social mention each week</li>
+          <li>Own your home community</li>
+        </ul>
+        <a class="btn btn-primary" href="mailto:doug@goodsamaritaninstitute.org?subject=Protect30A%20Sponsorship%20%E2%80%94%20District%20Segment">Sponsor a district</a>
+      </div>
+      <div class="tier">
+        <h3>Presenting Sponsor</h3>
+        <div class="price">$649<span>/mo founding</span></div>
+        <div class="was">then $799/mo · limited to 1–2</div>
+        <ul>
+          <li>“Protect30A, presented by you” every episode</li>
+          <li>Opening + closing audio read</li>
+          <li>Logo in the YouTube explainer</li>
+          <li>Top show-notes + website banner · 2 socials</li>
+        </ul>
+        <a class="btn btn-ghost" style="color:var(--terra-deep);border-color:var(--terra)" href="mailto:doug@goodsamaritaninstitute.org?subject=Protect30A%20Sponsorship%20%E2%80%94%20Presenting%20Sponsor">Inquire</a>
+      </div>
+    </div>
+
+    <p class="season">Prefer a season? <b>Season Pass</b> (prepay 12 months, ~2 months free): Presenting <b>$6,490</b> (vs. $7,788) · District <b>$2,490</b> (vs. $2,988).</p>
+
+    <div class="addons">
+      <h4>À la carte add-ons</h4>
+      <div class="row"><span>Featured “Special” single push</span><b>$49</b></div>
+      <div class="row"><span>Host-read podcast spot (60–90s), one episode</span><b>$120</b></div>
+      <div class="row"><span>Community Spark / photo-contest sponsor (one challenge)</span><b>$299</b></div>
+      <div class="row"><span>Email newsletter mention</span><b>$59</b></div>
+    </div>
+
+    <div class="founding"><b>Founding Sponsor bonus:</b> the first 5 sponsors lock founding rates for 6 months and get “Founding Sponsor” recognition on the site.</div>
+
+    <div class="disclose" style="margin-top:22px">
+      <strong>How sponsorship stays clean:</strong> Every sponsorship is clearly and conspicuously disclosed as sponsored — in the audio and in writing — consistent with the FTC Endorsement Guides (16&nbsp;CFR&nbsp;Part&nbsp;255). Payments are made to an independent media entity, not to any government body or public official. Sponsorship of the show is separate from, and does not influence, any public office.
+    </div>
+  </div>
+</section>
+
+<!-- COMMUNITY SPARK -->
+<section id="community" class="on-teal">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker" style="color:#ffd9be">Community Spark</span>
+      <h2>The part of the show that gives back.</h2>
+      <p class="lead">Listener shout-outs, neighbor stories, and district challenges — like photo contests that show off the best of each community.</p>
+    </div>
+    <div class="grid g3">
+      <div class="card">
+        <h3>Shout-outs</h3>
+        <p>Celebrate a neighbor, a volunteer, or a local business doing good. Family-friendly, no naming-and-shaming.</p>
+      </div>
+      <div class="card">
+        <h3>Neighbor stories</h3>
+        <p>The history and character of each district, told by the people who live it. Submitted with a simple release.</p>
+      </div>
+      <div class="card">
+        <h3>District challenges</h3>
+        <p>Photo contests and friendly community challenges, with posted rules and eligibility.</p>
+      </div>
+    </div>
+    <p style="margin-top:26px"><a class="btn btn-primary" href="mailto:doug@goodsamaritaninstitute.org?subject=Protect30A%20Community%20Spark%20submission">Submit a shout-out or story</a></p>
+  </div>
+</section>
+
+<!-- TRANSPARENCY -->
+<section id="transparency">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">Transparency, proudly stated</span>
+      <h2>Independent. Community-produced. Clearly labeled.</h2>
+    </div>
+    <div class="disclose">
+      <p style="font-size:1.05rem;color:var(--ink)">“Protect30A is an independent, community-produced program. It is not a publication of, and does not speak for, any government body or special district. Opinions expressed are personal. We aim for accuracy and welcome corrections.”</p>
+      <p><strong>Disclosure:</strong> The Protect30A show is published by Doug Liles, a Santa Rosa Beach resident and property owner, as community media. It does not represent the official position of the South Walton County Mosquito Control District, Walton County, or any other government body. The neutral <strong>Digest</strong> and the personal <strong>Opinion</strong> are always clearly separated. Sponsored content is clearly disclosed (FTC 16&nbsp;CFR&nbsp;Part&nbsp;255), and sponsorship is handled through an independent media entity, kept separate from any public office. Corrections are published within 48 hours and logged. Questions: <a href="mailto:doug@goodsamaritaninstitute.org" style="color:var(--terra-deep);font-weight:600">doug@goodsamaritaninstitute.org</a>.</p>
+      <div class="pills">
+        <span class="pill">Neutral Digest, labeled Opinion</span>
+        <span class="pill">Sources on every item</span>
+        <span class="pill">Sponsored content disclosed</span>
+        <span class="pill">48-hour corrections policy</span>
+        <span class="pill">Independent of any government body</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="foot-top">
+      <div>
+        <a class="brand" href="#top" style="font-size:1.25rem"><span class="dot"></span> Protect 30A</a>
+        <div style="margin-top:6px;max-width:42ch">Weekly community media for the 30A corridor, South Walton County, Florida.</div>
+      </div>
+      <div class="foot-links">
+        <a href="https://protect30a.org/#plan">The Stormwater Plan</a>
+        <a href="#show">The Show</a>
+        <a href="#districts">Districts</a>
+        <a href="#sponsor">Sponsor</a>
+        <a href="mailto:doug@goodsamaritaninstitute.org">Contact</a>
+      </div>
+    </div>
+    <div>© <span id="yr"></span> Protect 30A · A community initiative. Independent of any government body. Sponsorships clearly disclosed per FTC 16 CFR Part 255.</div>
+  </div>
+</footer>
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@graph":[
+    {
+      "@type":"Organization",
+      "@id":"https://protect30a.org/#protect30a",
+      "name":"Protect 30A",
+      "url":"https://protect30a.org/",
+      "description":"An independent community initiative and weekly community-media program for the 30A corridor in South Walton County, Florida.",
+      "email":"doug@goodsamaritaninstitute.org",
+      "areaServed":"30A / South Walton County, Florida"
+    },
+    {
+      "@type":"PodcastSeries",
+      "@id":"https://protect30a.org/show#podcast",
+      "name":"Protect30A: The Show",
+      "url":"https://protect30a.org/show",
+      "description":"A weekly, district-by-district community show for the 30A corridor: a neutral Digest of what each community is discussing, a clearly-labeled local Opinion, and a featured resident voice. Eight communities, one headlined every week.",
+      "inLanguage":"en-US",
+      "publisher":{"@id":"https://protect30a.org/#protect30a"}
+    },
+    {
+      "@type":"ItemList",
+      "name":"Protect30A community districts",
+      "description":"The eight community districts covered by Protect30A, one headlined each week on rotation.",
+      "numberOfItems":8,
+      "itemListElement":[
+        {"@type":"ListItem","position":1,"name":"Inlet Beach"},
+        {"@type":"ListItem","position":2,"name":"Rosemary Beach"},
+        {"@type":"ListItem","position":3,"name":"Alys Beach"},
+        {"@type":"ListItem","position":4,"name":"Watersound / Seacrest / Prominence / Origins"},
+        {"@type":"ListItem","position":5,"name":"Seagrove / Seaside / WaterColor"},
+        {"@type":"ListItem","position":6,"name":"Grayton Beach / Blue Mountain Beach"},
+        {"@type":"ListItem","position":7,"name":"Santa Rosa Beach / Gulf Place / Dune Allen"},
+        {"@type":"ListItem","position":8,"name":"Sandestin / Miramar Beach / Seascape"}
+      ]
+    },
+    {
+      "@type":"Service",
+      "name":"Protect30A sponsorships",
+      "serviceType":"Local media sponsorship",
+      "provider":{"@id":"https://protect30a.org/#protect30a"},
+      "areaServed":"30A / South Walton County, Florida",
+      "offers":{
+        "@type":"OfferCatalog",
+        "name":"Sponsorship tiers (founding rates)",
+        "itemListElement":[
+          {"@type":"Offer","name":"Specials Listing","price":"79","priceCurrency":"USD","description":"Specials-board listing + weekly show-notes mention. Founding monthly rate."},
+          {"@type":"Offer","name":"District Segment Sponsor","price":"249","priceCurrency":"USD","description":"Sponsor one district's weekly segment with audio read, logo/link, and a social mention. Founding monthly rate."},
+          {"@type":"Offer","name":"Presenting Sponsor","price":"649","priceCurrency":"USD","description":"Presenting credit on every episode, video logo, top placement and website banner. Founding monthly rate, limited to 1-2 sponsors."}
+        ]
+      }
+    },
+    {
+      "@type":"FAQPage",
+      "mainEntity":[
+        {"@type":"Question","name":"What is Protect30A: The Show?","acceptedAnswer":{"@type":"Answer","text":"A weekly, district-by-district community show for the 30A corridor. Each episode has a neutral Digest of what a community is discussing, a clearly-labeled local Opinion, and a featured resident voice, published on Spotify, YouTube, and Protect30A.com."}},
+        {"@type":"Question","name":"Is the show affiliated with any government body?","acceptedAnswer":{"@type":"Answer","text":"No. Protect30A is independent, community-produced media. It is not a publication of, and does not speak for, any special district, Walton County, or any other government body. Opinions expressed are personal."}},
+        {"@type":"Question","name":"How do sponsorships work?","acceptedAnswer":{"@type":"Answer","text":"Local merchants can sponsor a specials listing, a district segment, or the whole show as presenting sponsor. Every sponsorship is clearly disclosed as sponsored per the FTC Endorsement Guides (16 CFR Part 255), and payments are made to an independent media entity, separate from any public office."}},
+        {"@type":"Question","name":"Which communities does Protect30A cover?","acceptedAnswer":{"@type":"Answer","text":"Eight: Inlet Beach; Rosemary Beach; Alys Beach; Watersound/Seacrest/Prominence/Origins; Seagrove/Seaside/WaterColor; Grayton Beach/Blue Mountain Beach; Santa Rosa Beach/Gulf Place/Dune Allen; and Sandestin/Miramar Beach/Seascape. One is headlined each week on rotation."}}
+      ]
+    }
+  ]
+}
+</script>
+<script>
+  document.getElementById('yr').textContent=new Date().getFullYear();
+  var mb=document.getElementById('menuBtn'),nv=document.getElementById('nav');
+  mb.addEventListener('click',function(){nv.classList.toggle('open')});
+  nv.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){nv.classList.remove('open')})});
+  document.querySelectorAll('a[data-placeholder]').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();alert('Channel link goes live at launch — paste your Spotify/YouTube URL here.');})});
+</script>
+</body>
+</html>
