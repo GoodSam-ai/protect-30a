@@ -1,6 +1,39 @@
 {
   "redirects": [
     {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "protect30a.com"
+        }
+      ],
+      "destination": "https://protect30a.org/",
+      "permanent": true
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.protect30a.com"
+        }
+      ],
+      "destination": "https://protect30a.org/",
+      "permanent": true
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.protect30a.org"
+        }
+      ],
+      "destination": "https://protect30a.org/",
+      "permanent": true
+    },
+    {
       "source": "/:path*",
       "has": [
         {
@@ -17,6 +50,17 @@
         {
           "type": "host",
           "value": "www.protect30a.com"
+        }
+      ],
+      "destination": "https://protect30a.org/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.protect30a.org"
         }
       ],
       "destination": "https://protect30a.org/:path*",
