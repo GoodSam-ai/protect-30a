@@ -12,10 +12,10 @@
 <meta property="og:site_name" content="Protect 30A" />
 <meta property="og:title" content="Protect 30A — The Show | Weekly Community Media for South Walton" />
 <meta property="og:description" content="A weekly, district-by-district community show for 30A: a neutral Digest, a labeled local Opinion, and a featured resident voice. Eight communities on rotation." />
-<meta property="og:url" content="https://protect30a.org/show" />
+<meta property="og:url" content="https://protect30a.org/show" /><meta property="og:image" content="https://protect30a.org/og-image.jpg" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Protect 30A — The Show" />
-<meta name="twitter:description" content="Weekly community media for the 30A corridor. Eight districts, one headlined every week. Listen on Spotify & YouTube." />
+<meta name="twitter:description" content="Weekly community media for the 30A corridor. Eight districts, one headlined every week. Listen on Spotify & YouTube." /><meta name="twitter:image" content="https://protect30a.org/og-image.jpg" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -172,7 +172,7 @@
       <a href="#community">Community</a>
       <a class="cta" href="#sponsor">Become a sponsor</a>
     </nav>
-    <button class="menu-btn" id="menuBtn" aria-label="Menu">☰</button>
+    <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="nav">☰</button>
   </div>
 </header>
 
@@ -250,7 +250,7 @@
     <div class="sec-head">
       <span class="kicker">Listen &amp; watch</span>
       <h2>Three ways to follow along.</h2>
-      <p class="lead">Audio on Spotify, a short explainer video on YouTube, and full show notes with sources right here on Protect30A.com.</p>
+      <p class="lead">Audio on Spotify, a short explainer video on YouTube, and full show notes with sources right here on Protect30A.org.</p>
     </div>
     <div class="grid g3">
       <div class="card channel">
@@ -498,7 +498,7 @@
     {
       "@type":"FAQPage",
       "mainEntity":[
-        {"@type":"Question","name":"What is Protect30A: The Show?","acceptedAnswer":{"@type":"Answer","text":"A weekly, district-by-district community show for the 30A corridor. Each episode has a neutral Digest of what a community is discussing, a clearly-labeled local Opinion, and a featured resident voice, published on Spotify, YouTube, and Protect30A.com."}},
+        {"@type":"Question","name":"What is Protect30A: The Show?","acceptedAnswer":{"@type":"Answer","text":"A weekly, district-by-district community show for the 30A corridor. Each episode has a neutral Digest of what a community is discussing, a clearly-labeled local Opinion, and a featured resident voice, published on Spotify, YouTube, and Protect30A.org."}},
         {"@type":"Question","name":"Is the show affiliated with any government body?","acceptedAnswer":{"@type":"Answer","text":"No. Protect30A is independent, community-produced media. It is not a publication of, and does not speak for, any special district, Walton County, or any other government body. Opinions expressed are personal."}},
         {"@type":"Question","name":"How do sponsorships work?","acceptedAnswer":{"@type":"Answer","text":"Local merchants can sponsor a specials listing, a district segment, or the whole show as presenting sponsor. Every sponsorship is clearly disclosed as sponsored per the FTC Endorsement Guides (16 CFR Part 255), and payments are made to an independent media entity, separate from any public office."}},
         {"@type":"Question","name":"Which communities does Protect30A cover?","acceptedAnswer":{"@type":"Answer","text":"Eight: Inlet Beach; Rosemary Beach; Alys Beach; Watersound/Seacrest/Prominence/Origins; Seagrove/Seaside/WaterColor; Grayton Beach/Blue Mountain Beach; Santa Rosa Beach/Gulf Place/Dune Allen; and Sandestin/Miramar Beach/Seascape. One is headlined each week on rotation."}}
@@ -510,9 +510,9 @@
 <script>
   document.getElementById('yr').textContent=new Date().getFullYear();
   var mb=document.getElementById('menuBtn'),nv=document.getElementById('nav');
-  mb.addEventListener('click',function(){nv.classList.toggle('open')});
-  nv.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){nv.classList.remove('open')})});
-  document.querySelectorAll('a[data-placeholder]').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();alert('Channel link goes live at launch — paste your Spotify/YouTube URL here.');})});
+  function setMenu(open){nv.classList.toggle('open',open);mb.setAttribute('aria-expanded',String(open));mb.setAttribute('aria-label',open?'Close menu':'Open menu');}mb.addEventListener('click',function(){setMenu(!nv.classList.contains('open'))});
+  nv.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){setMenu(false)})});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')setMenu(false)});window.addEventListener('resize',function(){if(window.innerWidth>860)setMenu(false)});
 </script>
 </body>
 </html>
