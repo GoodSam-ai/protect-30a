@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://protect30a.org/sitemap.xml
