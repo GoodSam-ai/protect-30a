@@ -28,6 +28,18 @@ describe("site config", () => {
     );
   });
 
+  it("enables TikTok and Instagram when env flags are true", () => {
+    const providers = getEnabledAuthProviders({
+      ENABLE_TIKTOK_LOGIN: "true",
+      ENABLE_INSTAGRAM_LOGIN: "true"
+    });
+
+    expect(providers.map((provider) => provider.id)).toContain("custom:tiktok");
+    expect(providers.map((provider) => provider.id)).toContain(
+      "custom:instagram"
+    );
+  });
+
   it("disables TikTok and Instagram when env flags are false", () => {
     const providers = getEnabledAuthProviders({
       ENABLE_TIKTOK_LOGIN: "false",
