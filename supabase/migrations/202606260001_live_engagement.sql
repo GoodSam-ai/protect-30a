@@ -211,6 +211,102 @@ as $$
   );
 $$;
 
+create or replace function public.can_create_comment(
+  target_event_id uuid,
+  target_parent_comment_id uuid
+)
+returns boolean
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  select exists (
+    select 1
+    from public.podcast_events pe
+    where pe.id = target_event_id
+      and pe.status in ('upcoming', 'live')
+      and pe.comments_enabled = true
+      and (
+        target_parent_comment_id is null
+        or (
+          pe.replies_enabled = true
+          and exists (
+            select 1
+            from public.comments parent
+            where parent.id = target_parent_comment_id
+              and parent.event_id = target_event_id
+              and parent.moderation_status = 'visible'
+              and parent.is_hidden = false
+          )
+        )
+      )
+  );
+$$;
+
+create or replace function public.can_engage_with_comment(target_comment_id uuid)
+returns boolean
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  select exists (
+    select 1
+    from public.comments c
+    join public.podcast_events pe on pe.id = c.event_id
+    where c.id = target_comment_id
+      and c.moderation_status = 'visible'
+      and c.is_hidden = false
+      and pe.status in ('upcoming', 'live', 'replay')
+  );
+$$;
+
+create or replace function public.can_share_event(target_event_id uuid)
+returns boolean
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  select exists (
+    select 1
+    from public.podcast_events pe
+    where pe.id = target_event_id
+      and pe.status in ('upcoming', 'live', 'replay')
+  );
+$$;
+
+create or replace function public.enforce_profile_update_permissions()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  if public.is_admin() then
+    return new;
+  end if;
+
+  if new.id is distinct from old.id
+    or new.role is distinct from old.role
+    or new.is_candidate is distinct from old.is_candidate
+    or new.is_potential_guest is distinct from old.is_potential_guest
+    or new.is_restricted is distinct from old.is_restricted
+    or new.created_at is distinct from old.created_at then
+    raise exception 'Only admins can update protected profile fields.'
+      using errcode = '42501';
+  end if;
+
+  return new;
+end;
+$$;
+
+create trigger enforce_profile_update_permissions
+before update on public.profiles
+for each row
+execute function public.enforce_profile_update_permissions();
+
 alter table public.districts enable row level security;
 alter table public.profiles enable row level security;
 alter table public.podcast_events enable row level security;
@@ -242,6 +338,7 @@ grant select, insert, update, delete on table public.comments to authenticated;
 create policy "users read own comments" on public.comments for select using (auth.uid() = user_id);
 create policy "logged in users create own comments" on public.comments for insert with check (
   auth.uid() = user_id
+  and public.can_create_comment(event_id, parent_comment_id)
   and source = 'site'
   and moderation_status = 'visible'
   and is_hidden = false
@@ -254,13 +351,28 @@ grant select, insert, delete on table public.comment_likes to authenticated;
 
 create policy "users read own likes" on public.comment_likes for select using (auth.uid() = user_id);
 create policy "moderators read likes" on public.comment_likes for select using (public.is_admin_or_moderator());
-create policy "users like as themselves" on public.comment_likes for insert with check (auth.uid() = user_id);
+create policy "users like as themselves" on public.comment_likes for insert with check (
+  auth.uid() = user_id
+  and public.can_engage_with_comment(comment_id)
+);
 create policy "users unlike as themselves" on public.comment_likes for delete using (auth.uid() = user_id);
 
-create policy "users report as themselves" on public.comment_reports for insert with check (auth.uid() = reporter_user_id);
+revoke all on table public.comment_reports from anon, authenticated;
+grant insert, select on table public.comment_reports to authenticated;
+
+create policy "users report as themselves" on public.comment_reports for insert with check (
+  auth.uid() = reporter_user_id
+  and public.can_engage_with_comment(comment_id)
+);
 create policy "moderators read reports" on public.comment_reports for select using (public.is_admin_or_moderator());
 
-create policy "users track own shares" on public.event_shares for insert with check (auth.uid() = user_id);
+revoke all on table public.event_shares from anon, authenticated;
+grant insert, select on table public.event_shares to authenticated;
+
+create policy "users track own shares" on public.event_shares for insert with check (
+  auth.uid() = user_id
+  and public.can_share_event(event_id)
+);
 create policy "admins read shares" on public.event_shares for select using (public.is_admin_or_moderator());
 
 create policy "public read influencer scores" on public.district_influencer_scores for select using (true);
@@ -446,34 +558,41 @@ begin
     from public.event_shares es
     join public.podcast_events pe on pe.id = es.event_id
     where pe.district_id is not null
+      and es.user_id is not null
       and es.created_at >= target_week
       and es.created_at < target_week + interval '7 days'
     group by pe.district_id, es.user_id
   ),
+  active_users as (
+    select district_id, user_id from comment_stats
+    union
+    select district_id, user_id from share_stats
+  ),
   score_base as (
     select
-      cs.district_id,
-      cs.user_id,
+      au.district_id,
+      au.user_id,
       coalesce(p.display_name, 'Community member') as display_name,
-      cs.comments_count,
+      coalesce(cs.comments_count, 0)::int as comments_count,
       coalesce(ls.likes_received_count, 0)::int as likes_received_count,
       coalesce(ss.shares_count, 0)::int as shares_count,
-      cs.featured_comments_count,
+      coalesce(cs.featured_comments_count, 0)::int as featured_comments_count,
       (
         coalesce(ls.likes_received_count, 0) * 3 +
-        cs.comments_count * 1 +
+        coalesce(cs.comments_count, 0) * 1 +
         coalesce(ss.shares_count, 0) * 2 +
-        cs.featured_comments_count * 10
+        coalesce(cs.featured_comments_count, 0) * 10
       )::numeric as engagement_score
-    from comment_stats cs
-    join public.profiles p on p.id = cs.user_id
-    left join like_stats ls on ls.district_id = cs.district_id and ls.user_id = cs.user_id
-    left join share_stats ss on ss.district_id = cs.district_id and ss.user_id = cs.user_id
+    from active_users au
+    join public.profiles p on p.id = au.user_id
+    left join comment_stats cs on cs.district_id = au.district_id and cs.user_id = au.user_id
+    left join like_stats ls on ls.district_id = au.district_id and ls.user_id = au.user_id
+    left join share_stats ss on ss.district_id = au.district_id and ss.user_id = au.user_id
   ),
   ranked as (
     select
       score_base.*,
-      row_number() over (partition by score_base.district_id order by score_base.engagement_score desc, score_base.display_name asc) as rank
+      row_number() over (partition by score_base.district_id order by score_base.engagement_score desc, score_base.display_name asc, score_base.user_id asc) as rank
     from score_base
   )
   select
@@ -491,4 +610,4 @@ end;
 $$;
 
 revoke execute on function public.refresh_weekly_district_influencer_scores(date) from public, anon, authenticated;
-grant execute on function public.refresh_weekly_district_influencer_scores(date) to authenticated, service_role;
+grant execute on function public.refresh_weekly_district_influencer_scores(date) to authenticated;

@@ -24,7 +24,11 @@ export function rankScores<T extends RankableScore>(scores: T[]) {
   return [...scores]
     .sort((left, right) => {
       if (right.score !== left.score) return right.score - left.score;
-      return left.displayName.localeCompare(right.displayName);
+      const displayNameComparison = left.displayName.localeCompare(
+        right.displayName
+      );
+      if (displayNameComparison !== 0) return displayNameComparison;
+      return left.userId.localeCompare(right.userId);
     })
     .map((score, index) => ({
       ...score,

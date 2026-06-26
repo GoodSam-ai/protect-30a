@@ -26,4 +26,16 @@ describe("leaderboard scoring", () => {
       { userId: "c", displayName: "Charlie", score: 5, rank: 3 }
     ]);
   });
+
+  it("uses user id as a final deterministic tie-breaker", () => {
+    const ranked = rankScores([
+      { userId: "user-2", displayName: "Resident", score: 20 },
+      { userId: "user-1", displayName: "Resident", score: 20 }
+    ]);
+
+    expect(ranked).toEqual([
+      { userId: "user-1", displayName: "Resident", score: 20, rank: 1 },
+      { userId: "user-2", displayName: "Resident", score: 20, rank: 2 }
+    ]);
+  });
 });
