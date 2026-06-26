@@ -515,6 +515,7 @@ select
   coalesce(likes.like_count, 0)::int as like_count,
   coalesce(replies.reply_count, 0)::int as reply_count
 from public.comments c
+join public.podcast_events pe on pe.id = c.event_id
 left join public.public_profiles p on p.id = c.user_id
 left join public.districts d on d.id = c.district_id
 left join (
@@ -523,12 +524,22 @@ left join (
   group by comment_id
 ) likes on likes.comment_id = c.id
 left join (
-  select parent_comment_id, count(*)::int as reply_count
-  from public.comments
-  where moderation_status = 'visible' and is_hidden = false and parent_comment_id is not null
-  group by parent_comment_id
+  select replies.parent_comment_id, count(*)::int as reply_count
+  from public.comments replies
+  join public.comments parent on parent.id = replies.parent_comment_id
+    and parent.event_id = replies.event_id
+    and parent.moderation_status = 'visible'
+    and parent.is_hidden = false
+  join public.podcast_events reply_events on reply_events.id = replies.event_id
+  where replies.moderation_status = 'visible'
+    and replies.is_hidden = false
+    and replies.parent_comment_id is not null
+    and reply_events.status in ('upcoming', 'live', 'replay')
+  group by replies.parent_comment_id
 ) replies on replies.parent_comment_id = c.id
-where c.moderation_status = 'visible' and c.is_hidden = false;
+where c.moderation_status = 'visible'
+  and c.is_hidden = false
+  and pe.status in ('upcoming', 'live', 'replay');
 
 create or replace view public.top_comments_for_event as
 select
@@ -553,9 +564,11 @@ with comment_stats as (
     count(*)::int as comments_count,
     count(*) filter (where c.is_featured)::int as featured_comments_count
   from public.comments c
+  join public.podcast_events pe on pe.id = c.event_id
   where c.moderation_status = 'visible'
     and c.is_hidden = false
     and c.user_id is not null
+    and pe.status in ('upcoming', 'live', 'replay')
   group by c.event_id, c.user_id
 ),
 like_stats as (
@@ -564,10 +577,12 @@ like_stats as (
     c.user_id,
     count(cl.id)::int as likes_received_count
   from public.comments c
+  join public.podcast_events pe on pe.id = c.event_id
   left join public.comment_likes cl on cl.comment_id = c.id
   where c.moderation_status = 'visible'
     and c.is_hidden = false
     and c.user_id is not null
+    and pe.status in ('upcoming', 'live', 'replay')
   group by c.event_id, c.user_id
 ),
 share_stats as (
@@ -576,7 +591,9 @@ share_stats as (
     es.user_id,
     count(*)::int as shares_count
   from public.event_shares es
+  join public.podcast_events pe on pe.id = es.event_id
   where es.user_id is not null
+    and pe.status in ('upcoming', 'live', 'replay')
   group by es.event_id, es.user_id
 )
 select
@@ -599,7 +616,27 @@ join public.public_profiles p on p.id = cs.user_id
 left join like_stats ls on ls.event_id = cs.event_id and ls.user_id = cs.user_id
 left join share_stats ss on ss.event_id = cs.event_id and ss.user_id = cs.user_id;
 
-grant select on public.visible_comments, public.top_comments_for_event, public.top_commenters_for_event to anon, authenticated;
+create or replace view public.weekly_district_influencers as
+select
+  scores.week_start,
+  scores.district_id,
+  districts.name as district_name,
+  districts.slug as district_slug,
+  scores.user_id,
+  profiles.display_name,
+  profiles.avatar_url,
+  scores.comments_count,
+  scores.likes_received_count,
+  scores.shares_count,
+  scores.featured_comments_count,
+  scores.engagement_score,
+  scores.rank,
+  scores.updated_at
+from public.district_influencer_scores scores
+join public.districts districts on districts.id = scores.district_id
+join public.public_profiles profiles on profiles.id = scores.user_id;
+
+grant select on public.visible_comments, public.top_comments_for_event, public.top_commenters_for_event, public.weekly_district_influencers to anon, authenticated;
 
 create or replace function public.refresh_weekly_district_influencer_scores(target_week date default date_trunc('week', now())::date)
 returns void
