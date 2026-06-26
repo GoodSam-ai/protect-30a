@@ -15,25 +15,52 @@ export type AuthProviderConfig = {
 type EnvLike = Record<string, string | undefined>;
 
 const defaultSiteUrl = "https://protect30a.org";
+const defaultPollingIntervalMs = 5000;
 
 function readBoolean(value: string | undefined, fallback: boolean) {
   if (value === undefined) return fallback;
-  return value.toLowerCase() === "true";
+  const normalized = value.trim().toLowerCase();
+  if (normalized === "true") return true;
+  if (normalized === "false") return false;
+  return fallback;
 }
 
-export const siteConfig = {
-  brandName: process.env.NEXT_PUBLIC_BRAND_NAME || "Protect30A",
-  siteUrl: process.env.NEXT_PUBLIC_SITE_URL || defaultSiteUrl,
-  canonicalDomain:
-    process.env.NEXT_PUBLIC_CANONICAL_DOMAIN || "protect30a.org",
-  supportEmail: process.env.NEXT_PUBLIC_SUPPORT_EMAIL || "doug@goodsam.ai",
-  defaultRealtimeMode: process.env.DEFAULT_REALTIME_MODE || "auto",
-  pollingIntervalMs: Number(process.env.POLLING_INTERVAL_MS || 5000),
-  bootstrapAdminEmail: process.env.BOOTSTRAP_ADMIN_EMAIL || "doug@goodsam.ai"
-} as const;
+export function parsePollingIntervalMs(
+  value: string | undefined,
+  fallback = defaultPollingIntervalMs
+) {
+  if (value === undefined) return fallback;
+  const normalized = value.trim();
+  if (!/^\d+$/.test(normalized)) return fallback;
+  const parsed = Number(normalized);
+  if (!Number.isSafeInteger(parsed) || parsed <= 0) return fallback;
+  return parsed;
+}
 
-export function getCanonicalUrl(pathname: string) {
-  const base = siteConfig.siteUrl.replace(/\/$/, "");
+export function buildPublicSiteConfig(env: EnvLike = process.env) {
+  return {
+    brandName: env.NEXT_PUBLIC_BRAND_NAME || "Protect30A",
+    siteUrl: env.NEXT_PUBLIC_SITE_URL || defaultSiteUrl,
+    canonicalDomain: env.NEXT_PUBLIC_CANONICAL_DOMAIN || "protect30a.org",
+    supportEmail: env.NEXT_PUBLIC_SUPPORT_EMAIL || "doug@goodsam.ai"
+  } as const;
+}
+
+export function buildServerConfig(env: EnvLike = process.env) {
+  return {
+    defaultRealtimeMode: env.DEFAULT_REALTIME_MODE || "auto",
+    pollingIntervalMs: parsePollingIntervalMs(env.POLLING_INTERVAL_MS),
+    bootstrapAdminEmail: env.BOOTSTRAP_ADMIN_EMAIL || "doug@goodsam.ai"
+  } as const;
+}
+
+export const siteConfig = buildPublicSiteConfig();
+
+export const serverConfig = buildServerConfig();
+
+export function getCanonicalUrl(pathname: string, env?: EnvLike) {
+  const config = env ? buildPublicSiteConfig(env) : siteConfig;
+  const base = config.siteUrl.replace(/\/$/, "");
   if (pathname === "/") return `${base}/`;
   const normalized = pathname.startsWith("/") ? pathname : `/${pathname}`;
   return `${base}${normalized}`;
