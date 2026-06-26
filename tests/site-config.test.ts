@@ -19,13 +19,25 @@ describe("site config", () => {
     expect(getCanonicalUrl("/")).toBe("https://protect30a.org/");
   });
 
-  it("enables TikTok and Instagram from env defaults", () => {
-    const providers = getEnabledAuthProviders({
-      ENABLE_TIKTOK_LOGIN: "true",
-      ENABLE_INSTAGRAM_LOGIN: "true"
-    });
+  it("enables TikTok and Instagram when env flags are absent", () => {
+    const providers = getEnabledAuthProviders({});
+
     expect(providers.map((provider) => provider.id)).toContain("custom:tiktok");
     expect(providers.map((provider) => provider.id)).toContain(
+      "custom:instagram"
+    );
+  });
+
+  it("disables TikTok and Instagram when env flags are false", () => {
+    const providers = getEnabledAuthProviders({
+      ENABLE_TIKTOK_LOGIN: "false",
+      ENABLE_INSTAGRAM_LOGIN: "false"
+    });
+
+    expect(providers.map((provider) => provider.id)).not.toContain(
+      "custom:tiktok"
+    );
+    expect(providers.map((provider) => provider.id)).not.toContain(
       "custom:instagram"
     );
   });
