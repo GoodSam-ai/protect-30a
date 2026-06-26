@@ -491,12 +491,10 @@ create or replace view public.public_profiles as
 select
   id,
   display_name,
-  avatar_url,
-  primary_district_id,
-  bio
+  avatar_url
 from public.profiles;
 
-grant select on public.public_profiles to anon, authenticated;
+revoke all on table public.public_profiles from public, anon, authenticated;
 
 create or replace view public.visible_comments as
 select
