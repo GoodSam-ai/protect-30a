@@ -345,6 +345,28 @@ as $$
   );
 $$;
 
+create or replace function public.can_report_comment(
+  target_comment_id uuid,
+  target_reporter_user_id uuid
+)
+returns boolean
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  select exists (
+    select 1
+    from public.comments c
+    join public.podcast_events pe on pe.id = c.event_id
+    where c.id = target_comment_id
+      and c.moderation_status = 'visible'
+      and c.is_hidden = false
+      and c.user_id is distinct from target_reporter_user_id
+      and pe.status in ('upcoming', 'live', 'replay')
+  );
+$$;
+
 create or replace function public.can_share_event(target_event_id uuid)
 returns boolean
 language sql
@@ -446,7 +468,7 @@ grant insert, select on table public.comment_reports to authenticated;
 
 create policy "users report as themselves" on public.comment_reports for insert with check (
   auth.uid() = reporter_user_id
-  and public.can_engage_with_comment(comment_id)
+  and public.can_report_comment(comment_id, reporter_user_id)
 );
 create policy "moderators read reports" on public.comment_reports for select using (public.is_admin_or_moderator());
 
