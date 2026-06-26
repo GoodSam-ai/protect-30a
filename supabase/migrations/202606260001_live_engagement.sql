@@ -670,10 +670,12 @@ begin
       count(*)::int as comments_count,
       count(*) filter (where c.is_featured)::int as featured_comments_count
     from public.comments c
+    join public.podcast_events pe on pe.id = c.event_id
     where c.moderation_status = 'visible'
       and c.is_hidden = false
       and c.district_id is not null
       and c.user_id is not null
+      and pe.status in ('upcoming', 'live', 'replay')
       and c.created_at >= target_week
       and c.created_at < target_week + interval '7 days'
     group by c.district_id, c.user_id
@@ -684,11 +686,13 @@ begin
       c.user_id,
       count(cl.id)::int as likes_received_count
     from public.comments c
+    join public.podcast_events pe on pe.id = c.event_id
     join public.comment_likes cl on cl.comment_id = c.id
     where c.moderation_status = 'visible'
       and c.is_hidden = false
       and c.district_id is not null
       and c.user_id is not null
+      and pe.status in ('upcoming', 'live', 'replay')
       and cl.created_at >= target_week
       and cl.created_at < target_week + interval '7 days'
     group by c.district_id, c.user_id
@@ -702,6 +706,7 @@ begin
     join public.podcast_events pe on pe.id = es.event_id
     where pe.district_id is not null
       and es.user_id is not null
+      and pe.status in ('upcoming', 'live', 'replay')
       and es.created_at >= target_week
       and es.created_at < target_week + interval '7 days'
     group by pe.district_id, es.user_id
