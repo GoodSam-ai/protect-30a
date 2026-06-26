@@ -224,7 +224,11 @@ alter table public.audit_log enable row level security;
 create policy "public read districts" on public.districts for select using (true);
 create policy "admins manage districts" on public.districts for all using (public.is_admin()) with check (public.is_admin());
 
-create policy "public read profiles" on public.profiles for select using (true);
+revoke all on table public.profiles from anon, authenticated;
+grant select, insert, update, delete on table public.profiles to authenticated;
+
+create policy "users read own profile" on public.profiles for select using (id = auth.uid());
+create policy "moderators read profiles" on public.profiles for select using (public.is_admin_or_moderator());
 create policy "users insert own profile" on public.profiles for insert with check (id = auth.uid() and role = 'user' and is_candidate = false and is_potential_guest = false and is_restricted = false);
 create policy "users update own profile" on public.profiles for update using (id = auth.uid()) with check (id = auth.uid() and role = 'user' and is_candidate = false and is_potential_guest = false and is_restricted = false);
 create policy "admins manage profiles" on public.profiles for all using (public.is_admin()) with check (public.is_admin());
@@ -249,7 +253,7 @@ create policy "users unlike as themselves" on public.comment_likes for delete us
 create policy "users report as themselves" on public.comment_reports for insert with check (auth.uid() = reporter_user_id);
 create policy "moderators read reports" on public.comment_reports for select using (public.is_admin_or_moderator());
 
-create policy "users track own shares" on public.event_shares for insert with check (auth.uid() = user_id or (auth.uid() is not null and user_id is null));
+create policy "users track own shares" on public.event_shares for insert with check (auth.uid() = user_id);
 create policy "admins read shares" on public.event_shares for select using (public.is_admin_or_moderator());
 
 create policy "public read influencer scores" on public.district_influencer_scores for select using (true);
@@ -257,6 +261,17 @@ create policy "admins manage influencer scores" on public.district_influencer_sc
 
 create policy "admins read audit log" on public.audit_log for select using (public.is_admin());
 create policy "moderators insert audit log" on public.audit_log for insert with check (public.is_admin_or_moderator());
+
+create or replace view public.public_profiles as
+select
+  id,
+  display_name,
+  avatar_url,
+  primary_district_id,
+  bio
+from public.profiles;
+
+grant select on public.public_profiles to anon, authenticated;
 
 create or replace view public.top_comments_for_event
 with (security_invoker = true)
@@ -274,7 +289,7 @@ select
   coalesce(likes.like_count, 0)::int as like_count,
   coalesce(replies.reply_count, 0)::int as reply_count
 from public.comments c
-left join public.profiles p on p.id = c.user_id
+left join public.public_profiles p on p.id = c.user_id
 left join public.districts d on d.id = c.district_id
 left join (
   select comment_id, count(*)::int as like_count
@@ -339,9 +354,11 @@ select
     cs.featured_comments_count * 10
   )::numeric as engagement_score
 from comment_stats cs
-join public.profiles p on p.id = cs.user_id
+join public.public_profiles p on p.id = cs.user_id
 left join like_stats ls on ls.event_id = cs.event_id and ls.user_id = cs.user_id
 left join share_stats ss on ss.event_id = cs.event_id and ss.user_id = cs.user_id;
+
+grant select on public.top_comments_for_event, public.top_commenters_for_event to anon, authenticated;
 
 create or replace function public.refresh_weekly_district_influencer_scores(target_week date default date_trunc('week', now())::date)
 returns void
@@ -350,6 +367,11 @@ security definer
 set search_path = public
 as $$
 begin
+  if not public.is_admin() then
+    raise exception 'Only admins can refresh district influencer scores.'
+      using errcode = '42501';
+  end if;
+
   delete from public.district_influencer_scores where week_start = target_week;
 
   insert into public.district_influencer_scores (
@@ -444,3 +466,6 @@ begin
   from ranked;
 end;
 $$;
+
+revoke execute on function public.refresh_weekly_district_influencer_scores(date) from public, anon, authenticated;
+grant execute on function public.refresh_weekly_district_influencer_scores(date) to authenticated, service_role;
