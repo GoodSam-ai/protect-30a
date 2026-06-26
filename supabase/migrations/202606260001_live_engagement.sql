@@ -236,7 +236,10 @@ create policy "admins manage profiles" on public.profiles for all using (public.
 create policy "public read public events" on public.podcast_events for select using (status in ('upcoming', 'live', 'replay'));
 create policy "admins manage events" on public.podcast_events for all using (public.is_admin()) with check (public.is_admin());
 
-create policy "public read visible comments" on public.comments for select using (moderation_status = 'visible' and is_hidden = false);
+revoke all on table public.comments from anon, authenticated;
+grant select, insert, update, delete on table public.comments to authenticated;
+
+create policy "users read own comments" on public.comments for select using (auth.uid() = user_id);
 create policy "logged in users create own comments" on public.comments for insert with check (
   auth.uid() = user_id
   and source = 'site'
@@ -246,7 +249,11 @@ create policy "logged in users create own comments" on public.comments for inser
 );
 create policy "admins moderate comments" on public.comments for all using (public.is_admin_or_moderator()) with check (public.is_admin_or_moderator());
 
-create policy "public read likes" on public.comment_likes for select using (true);
+revoke all on table public.comment_likes from anon, authenticated;
+grant select, insert, delete on table public.comment_likes to authenticated;
+
+create policy "users read own likes" on public.comment_likes for select using (auth.uid() = user_id);
+create policy "moderators read likes" on public.comment_likes for select using (public.is_admin_or_moderator());
 create policy "users like as themselves" on public.comment_likes for insert with check (auth.uid() = user_id);
 create policy "users unlike as themselves" on public.comment_likes for delete using (auth.uid() = user_id);
 
@@ -273,16 +280,17 @@ from public.profiles;
 
 grant select on public.public_profiles to anon, authenticated;
 
-create or replace view public.top_comments_for_event
-with (security_invoker = true)
-as
+create or replace view public.visible_comments as
 select
   c.id,
   c.event_id,
+  c.district_id,
+  c.user_id,
+  c.parent_comment_id,
   c.body,
   c.topic,
-  c.created_at,
   c.is_featured,
+  c.created_at,
   p.display_name,
   p.avatar_url,
   d.name as district_name,
@@ -303,6 +311,21 @@ left join (
   group by parent_comment_id
 ) replies on replies.parent_comment_id = c.id
 where c.moderation_status = 'visible' and c.is_hidden = false;
+
+create or replace view public.top_comments_for_event as
+select
+  id,
+  event_id,
+  body,
+  topic,
+  created_at,
+  is_featured,
+  display_name,
+  avatar_url,
+  district_name,
+  like_count,
+  reply_count
+from public.visible_comments;
 
 create or replace view public.top_commenters_for_event as
 with comment_stats as (
@@ -358,7 +381,7 @@ join public.public_profiles p on p.id = cs.user_id
 left join like_stats ls on ls.event_id = cs.event_id and ls.user_id = cs.user_id
 left join share_stats ss on ss.event_id = cs.event_id and ss.user_id = cs.user_id;
 
-grant select on public.top_comments_for_event, public.top_commenters_for_event to anon, authenticated;
+grant select on public.visible_comments, public.top_comments_for_event, public.top_commenters_for_event to anon, authenticated;
 
 create or replace function public.refresh_weekly_district_influencer_scores(target_week date default date_trunc('week', now())::date)
 returns void
