@@ -213,7 +213,8 @@ $$;
 
 create or replace function public.can_create_comment(
   target_event_id uuid,
-  target_parent_comment_id uuid
+  target_parent_comment_id uuid,
+  target_district_id uuid
 )
 returns boolean
 language sql
@@ -227,6 +228,7 @@ as $$
     where pe.id = target_event_id
       and pe.status in ('upcoming', 'live')
       and pe.comments_enabled = true
+      and pe.district_id is not distinct from target_district_id
       and (
         target_parent_comment_id is null
         or (
@@ -243,6 +245,87 @@ as $$
       )
   );
 $$;
+
+create or replace function public.prepare_comment_insert()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  new.created_at = now();
+  new.updated_at = now();
+
+  if new.source = 'site' then
+    select pe.district_id
+    into new.district_id
+    from public.podcast_events pe
+    where pe.id = new.event_id;
+
+    new.external_source_url = null;
+    new.external_source_author = null;
+    new.is_hidden = false;
+    new.is_featured = false;
+    new.is_reported = false;
+    new.moderation_status = 'visible';
+  end if;
+
+  return new;
+end;
+$$;
+
+create trigger prepare_comment_insert
+before insert on public.comments
+for each row
+execute function public.prepare_comment_insert();
+
+create or replace function public.prepare_comment_like_insert()
+returns trigger
+language plpgsql
+set search_path = public
+as $$
+begin
+  new.created_at = now();
+  return new;
+end;
+$$;
+
+create trigger prepare_comment_like_insert
+before insert on public.comment_likes
+for each row
+execute function public.prepare_comment_like_insert();
+
+create or replace function public.prepare_comment_report_insert()
+returns trigger
+language plpgsql
+set search_path = public
+as $$
+begin
+  new.created_at = now();
+  return new;
+end;
+$$;
+
+create trigger prepare_comment_report_insert
+before insert on public.comment_reports
+for each row
+execute function public.prepare_comment_report_insert();
+
+create or replace function public.prepare_event_share_insert()
+returns trigger
+language plpgsql
+set search_path = public
+as $$
+begin
+  new.created_at = now();
+  return new;
+end;
+$$;
+
+create trigger prepare_event_share_insert
+before insert on public.event_shares
+for each row
+execute function public.prepare_event_share_insert();
 
 create or replace function public.can_engage_with_comment(target_comment_id uuid)
 returns boolean
@@ -338,11 +421,12 @@ grant select, insert, update, delete on table public.comments to authenticated;
 create policy "users read own comments" on public.comments for select using (auth.uid() = user_id);
 create policy "logged in users create own comments" on public.comments for insert with check (
   auth.uid() = user_id
-  and public.can_create_comment(event_id, parent_comment_id)
+  and public.can_create_comment(event_id, parent_comment_id, district_id)
   and source = 'site'
   and moderation_status = 'visible'
   and is_hidden = false
   and is_featured = false
+  and is_reported = false
 );
 create policy "admins moderate comments" on public.comments for all using (public.is_admin_or_moderator()) with check (public.is_admin_or_moderator());
 
@@ -541,13 +625,13 @@ begin
       c.user_id,
       count(cl.id)::int as likes_received_count
     from public.comments c
-    left join public.comment_likes cl on cl.comment_id = c.id
+    join public.comment_likes cl on cl.comment_id = c.id
     where c.moderation_status = 'visible'
       and c.is_hidden = false
       and c.district_id is not null
       and c.user_id is not null
-      and c.created_at >= target_week
-      and c.created_at < target_week + interval '7 days'
+      and cl.created_at >= target_week
+      and cl.created_at < target_week + interval '7 days'
     group by c.district_id, c.user_id
   ),
   share_stats as (
@@ -565,6 +649,8 @@ begin
   ),
   active_users as (
     select district_id, user_id from comment_stats
+    union
+    select district_id, user_id from like_stats
     union
     select district_id, user_id from share_stats
   ),
