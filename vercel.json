@@ -3,73 +3,73 @@
   "redirects": [
     {
       "source": "/",
-      "has": [{ "type": "host", "value": "protect30a.com" }],
+      "has": [{ "type": "header", "key": "host", "value": "protect30a.com" }],
       "destination": "https://protect30a.org/",
       "permanent": true
     },
     {
       "source": "/",
-      "has": [{ "type": "host", "value": "www.protect30a.com" }],
+      "has": [{ "type": "header", "key": "host", "value": "www.protect30a.com" }],
       "destination": "https://protect30a.org/",
       "permanent": true
     },
     {
       "source": "/",
-      "has": [{ "type": "host", "value": "www.protect30a.org" }],
+      "has": [{ "type": "header", "key": "host", "value": "www.protect30a.org" }],
       "destination": "https://protect30a.org/",
       "permanent": true
     },
     {
       "source": "/",
-      "has": [{ "type": "host", "value": "protect-30a.vercel.app" }],
+      "has": [{ "type": "header", "key": "host", "value": "protect-30a.vercel.app" }],
       "destination": "https://protect30a.org/",
       "permanent": true
     },
     {
       "source": "/",
-      "has": [{ "type": "host", "value": "protect-30a-team-good-sam.vercel.app" }],
+      "has": [{ "type": "header", "key": "host", "value": "protect-30a-team-good-sam.vercel.app" }],
       "destination": "https://protect30a.org/",
       "permanent": true
     },
     {
       "source": "/",
-      "has": [{ "type": "host", "value": "protect-30a-git-main-team-good-sam.vercel.app" }],
+      "has": [{ "type": "header", "key": "host", "value": "protect-30a-git-main-team-good-sam.vercel.app" }],
       "destination": "https://protect30a.org/",
       "permanent": true
     },
     {
       "source": "/:path*",
-      "has": [{ "type": "host", "value": "protect30a.com" }],
+      "has": [{ "type": "header", "key": "host", "value": "protect30a.com" }],
       "destination": "https://protect30a.org/:path*",
       "permanent": true
     },
     {
       "source": "/:path*",
-      "has": [{ "type": "host", "value": "www.protect30a.com" }],
+      "has": [{ "type": "header", "key": "host", "value": "www.protect30a.com" }],
       "destination": "https://protect30a.org/:path*",
       "permanent": true
     },
     {
       "source": "/:path*",
-      "has": [{ "type": "host", "value": "www.protect30a.org" }],
+      "has": [{ "type": "header", "key": "host", "value": "www.protect30a.org" }],
       "destination": "https://protect30a.org/:path*",
       "permanent": true
     },
     {
       "source": "/:path*",
-      "has": [{ "type": "host", "value": "protect-30a.vercel.app" }],
+      "has": [{ "type": "header", "key": "host", "value": "protect-30a.vercel.app" }],
       "destination": "https://protect30a.org/:path*",
       "permanent": true
     },
     {
       "source": "/:path*",
-      "has": [{ "type": "host", "value": "protect-30a-team-good-sam.vercel.app" }],
+      "has": [{ "type": "header", "key": "host", "value": "protect-30a-team-good-sam.vercel.app" }],
       "destination": "https://protect30a.org/:path*",
       "permanent": true
     },
     {
       "source": "/:path*",
-      "has": [{ "type": "host", "value": "protect-30a-git-main-team-good-sam.vercel.app" }],
+      "has": [{ "type": "header", "key": "host", "value": "protect-30a-git-main-team-good-sam.vercel.app" }],
       "destination": "https://protect30a.org/:path*",
       "permanent": true
     }
