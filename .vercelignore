@@ -1,0 +1,18 @@
+.DS_Store
+.git/
+.gitignore
+.vercel/
+*.pdf
+*.docx
+*.xlsx
+Drafts/
+Research/
+Source Docs/
+Correspondence/
+Commission/
+Grants/
+Final/
+CBA Water Quaity Data/
+\# Protect30A Community Districts/
+Brand/
+Local Magic Sundays/

@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,7 +19,10 @@
 <meta property="og:title" content="Protect 30A — The South Walton Stormwater Plan">
 <meta property="og:description" content="A community plan to stop flooding, protect our rare coastal dune lakes, and keep money raised on 30A working on 30A. Learn the plan, the timeline, and how to help.">
 <meta property="og:url" content="https://protect30a.org/">
-<meta property="og:image" content="https://protect30a.org/og-image.jpg"><!-- [UNVERIFIED] create & upload 1200x630 og-image.jpg before sharing links -->
+<meta property="og:image" content="https://protect30a.org/og-image.jpg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Protect 30A — coastal dune lake illustration with the South Walton stormwater plan headline">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Protect 30A — The South Walton Stormwater Plan">
@@ -51,10 +53,39 @@
         {"@type": "Question", "name": "Is the 30A stormwater plan a new tax?", "acceptedAnswer": {"@type": "Answer", "text": "It's a special assessment, not a general tax. An assessment can only fund improvements that specially benefit the properties paying it, is set in public hearings, and every dollar is legally tied to stormwater work inside the 30A benefit area."}},
         {"@type": "Question", "name": "How much will the 30A stormwater assessment cost me?", "acceptedAnswer": {"@type": "Answer", "text": "Per-property numbers don't exist yet — they depend on engineering studies and a project list developed with community input. By law, costs must be fairly apportioned by benefit, published in advance, mailed to every affected owner, and adopted only after public hearings."}},
         {"@type": "Question", "name": "Who decides what stormwater projects get built on 30A?", "acceptedAnswer": {"@type": "Answer", "text": "The project list is developed through engineering studies and community input, then adopted by the County Commission in noticed public hearings. Phase 3 offers the option of a locally elected district board."}},
-        {"@type": "Question", "name": "Why not use existing county funds or wait for federal grants?", "acceptedAnswer": {"@type": "Answer", "text": "County-wide funds compete with every other county priority, and federal mitigation grants have been unreliable. This plan builds on local capital plus Florida's Resilient Florida grant program."}},
+        {"@type": "Question", "name": "Why not use existing county funds or wait for federal grants?", "acceptedAnswer": {"@type": "Answer", "text": "County-wide funds compete with every other county priority, and federal mitigation grants have proven volatile (FEMA's BRIC program was terminated in 2025 and reinstated under a 2026 federal court order). This plan builds on local capital plus Florida's Resilient Florida grant program."}},
         {"@type": "Question", "name": "What happens if nothing is done about 30A stormwater?", "acceptedAnswer": {"@type": "Answer", "text": "Repair costs keep landing on everyone through emergency fixes, property damage, and degraded dune lakes. If the county doesn't adopt its funding resolution before January 1, 2027, the program slips at least a year."}},
         {"@type": "Question", "name": "Does the 30A stormwater plan create a new layer of government?", "acceptedAnswer": {"@type": "Answer", "text": "Not in Phase 1 — an MSBU is a funding boundary administered by existing county government through the existing tax bill. A new governance body only enters in Phase 3, and only if the community chooses it through a public legislative process."}}
       ]
+    },
+    {
+      "@type": "VideoObject",
+      "name": "30A's Dune Lakes and Stormwater",
+      "description": "A Protect30A explainer on why South Walton's globally rare coastal dune lakes and stormwater runoff are the shared stakes for the 30A corridor.",
+      "thumbnailUrl": "https://i.ytimg.com/vi/GmHWqOlbNNE/hqdefault.jpg",
+      "embedUrl": "https://www.youtube-nocookie.com/embed/GmHWqOlbNNE",
+      "url": "https://www.youtube.com/watch?v=GmHWqOlbNNE",
+      "publisher": {"@type": "Organization", "name": "Protect 30A", "url": "https://protect30a.org/"},
+      "inLanguage": "en-US"
+    },
+    {
+      "@type": "VideoObject",
+      "name": "Fish Kill Video",
+      "description": "A Protect30A context video on visible water-quality impacts that make stormwater and dune-lake protection urgent.",
+      "thumbnailUrl": "https://i.ytimg.com/vi/XEF95a7Scp0/hqdefault.jpg",
+      "embedUrl": "https://www.youtube-nocookie.com/embed/XEF95a7Scp0",
+      "url": "https://www.youtube.com/watch?v=XEF95a7Scp0",
+      "publisher": {"@type": "Organization", "name": "Protect 30A", "url": "https://protect30a.org/"},
+      "inLanguage": "en-US"
+    },
+    {
+      "@type": "PodcastSeries",
+      "name": "Common Water",
+      "description": "Protect30A's neighbor-to-neighbor podcast series for South Walton's eight 30A community districts, focused on shared water, stormwater, and coastal dune lake stewardship.",
+      "url": "https://open.spotify.com/show/033BT9WKfiVI2mrFWc75yS",
+      "sameAs": ["https://open.spotify.com/show/033BT9WKfiVI2mrFWc75yS"],
+      "publisher": {"@type": "Organization", "name": "Protect 30A", "url": "https://protect30a.org/"},
+      "inLanguage": "en-US"
     }
   ]
 }
@@ -83,13 +114,16 @@
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
-#top,#why,#plan,#timeline,#lakes,#wq-explorer,#faq,#help{scroll-margin-top:84px}
+#top,#why,#plan,#timeline,#lakes,#media,#wq-explorer,#faq,#help{scroll-margin-top:84px}
 body{font-family:var(--font-body);color:var(--ink);background:var(--cream);line-height:1.65;-webkit-font-smoothing:antialiased}
 h1,h2,h3,.display{font-family:var(--font-display)}
 img{max-width:100%}
 a{color:var(--teal)}
 section{padding:88px 24px}
 .wrap{max-width:1100px;margin:0 auto}
+.skip-link{position:fixed;top:12px;left:12px;z-index:500;background:var(--white);color:var(--teal-deep);padding:10px 14px;border-radius:8px;box-shadow:var(--shadow);transform:translateY(-140%);transition:transform .2s;text-decoration:none;font-weight:700}
+.skip-link:focus{transform:none}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 .eyebrow{display:inline-block;font-size:.78rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--teal-soft);margin-bottom:14px}
 .section-title{font-size:clamp(1.9rem,4vw,2.7rem);font-weight:700;color:var(--teal-deep);line-height:1.15;margin-bottom:18px}
 .lede{font-size:1.13rem;color:var(--ink-soft);max-width:680px}
@@ -115,11 +149,11 @@ nav.menu-open .nav-burger span:nth-child(1){transform:translateY(7px) rotate(45d
 nav.menu-open .nav-burger span:nth-child(2){opacity:0}
 nav.menu-open .nav-burger span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
 @media(max-width:820px){
-  .nav-links{display:none}  .nav-links li:not(.keep){display:none}
+  nav:not(.menu-open) .nav-links{display:none}
   .nav-burger{display:flex}
   nav.menu-open{background:rgba(251,248,241,.97);backdrop-filter:blur(10px);box-shadow:0 2px 18px rgba(14,59,56,.10)}
   nav.menu-open .nav-logo{color:var(--teal-deep)}
-  nav.menu-open .nav-links{display:flex;position:absolute;top:100%;left:0;right:0;flex-direction:column;align-items:stretch;gap:0;background:rgba(251,248,241,.97);backdrop-filter:blur(10px);box-shadow:0 14px 24px rgba(14,59,56,.12);padding:6px 0 16px;border-top:1px solid rgba(14,59,56,.08)}
+  nav.menu-open .nav-links{position:absolute;top:100%;left:0;right:0;flex-direction:column;align-items:stretch;gap:0;background:rgba(251,248,241,.97);backdrop-filter:blur(10px);box-shadow:0 14px 24px rgba(14,59,56,.12);padding:6px 0 16px;border-top:1px solid rgba(14,59,56,.08)}
   nav.menu-open .nav-links li{display:block}
   nav.menu-open .nav-links a{display:block;padding:13px 28px;color:var(--ink-soft)}
   nav.menu-open .nav-links li.keep{padding:12px 28px 0}
@@ -226,6 +260,7 @@ nav.menu-open .nav-burger span:nth-child(3){transform:translateY(-7px) rotate(-4
 .tl-item h3{font-size:1.22rem;color:var(--teal-deep);margin:3px 0 4px}
 .tl-item .tl-more{max-height:0;overflow:hidden;transition:max-height .45s ease}
 .tl-item.open .tl-more{max-height:240px}
+.tl-item .tl-more[hidden]{display:none}
 .tl-item .tl-more p{font-size:.93rem;color:var(--ink-soft);background:var(--white);border-radius:12px;padding:14px 18px;box-shadow:var(--shadow);margin-top:8px}
 .tl-item .hint{font-size:.78rem;color:var(--teal-soft);font-weight:600}
 .tl-item.key h3::after{content:"  ★ the key date";font-family:var(--font-body);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);font-weight:700}
@@ -256,6 +291,22 @@ nav.menu-open .nav-burger span:nth-child(3){transform:translateY(-7px) rotate(-4
 .lake-body p{font-size:.92rem;color:var(--ink-soft);margin-top:10px}
 .lake-meta{display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:16px;padding-top:14px;border-top:1px solid var(--aqua-pale);font-size:.78rem;font-weight:600;color:var(--earth-deep)}
 
+/* ---------- MEDIA ---------- */
+.media{background:linear-gradient(180deg,var(--cream),var(--sand-light))}
+.media-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(340px,100%),1fr));gap:24px;margin-top:42px}
+.media-card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;border-top:5px solid var(--teal)}
+.media-body{padding:24px 26px 28px}
+.media-body h3{font-size:1.25rem;color:var(--teal-deep);line-height:1.2;margin-bottom:8px}
+.media-body p{font-size:.93rem;color:var(--ink-soft);margin-top:10px}
+.media-frame{position:relative;aspect-ratio:16/9;background:var(--teal-deep)}
+.media-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.media-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.media-meta span{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--earth-deep);background:var(--sand-light);border-radius:999px;padding:5px 10px}
+.media-note{margin-top:20px;background:var(--aqua-pale);border-left:4px solid var(--teal);border-radius:0 12px 12px 0;padding:16px 18px;color:var(--teal-deep);font-size:.92rem}
+.media-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.media-frame--spotify{aspect-ratio:auto;padding:0;background:var(--teal-deep)}
+.media-frame--spotify iframe{position:static;display:block;width:100%;height:232px;border:0}
+
 /* ---------- FAQ ---------- */
 .faq{background:var(--cream)}
 .faq-list{margin-top:40px;display:grid;gap:14px;max-width:820px}
@@ -265,6 +316,7 @@ nav.menu-open .nav-burger span:nth-child(3){transform:translateY(-7px) rotate(-4
 .faq-item.open .faq-q::after{transform:translateY(-50%) rotate(45deg)}
 .faq-a{max-height:0;overflow:hidden;transition:max-height .45s ease}
 .faq-item.open .faq-a{max-height:400px}
+.faq-a[hidden]{display:none}
 .faq-a p{padding:0 24px 22px;font-size:.95rem;color:var(--ink-soft)}
 
 /* ---------- CTA ---------- */
@@ -278,8 +330,8 @@ nav.menu-open .nav-burger span:nth-child(3){transform:translateY(-7px) rotate(-4
 .cta-card h3{font-size:1.15rem;margin-bottom:8px;color:var(--sand)}
 .cta-card p{font-size:.9rem;color:rgba(255,255,255,.78);margin-bottom:16px}
 .cta-card a.btn{padding:10px 20px;font-size:.88rem}
-#copied-toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(120px);opacity:0;pointer-events:none;background:var(--teal-deep);color:var(--white);padding:13px 26px;border-radius:999px;font-weight:600;box-shadow:var(--shadow-lg);transition:transform .35s,opacity .35s;z-index:200}
-#copied-toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+#copied-toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--teal-deep);color:var(--white);padding:13px 26px;border-radius:999px;font-weight:600;box-shadow:var(--shadow-lg);transition:transform .35s;z-index:200}
+#copied-toast.show{transform:translateX(-50%) translateY(0)}
 
 
 /* ---------- WATER QUALITY EXPLORER ---------- */
@@ -406,6 +458,11 @@ nav.menu-open .nav-burger span:nth-child(3){transform:translateY(-7px) rotate(-4
   font-style:italic;
   min-height:1.1em;
 }
+.wq-chart-summary{
+  font-size:.9rem;
+  color:var(--ink-soft);
+  margin-top:12px;
+}
 .wq-empty[hidden]{display:none!important}
 .wq-empty{
   position:absolute;
@@ -421,15 +478,15 @@ nav.menu-open .nav-burger span:nth-child(3){transform:translateY(-7px) rotate(-4
   text-align:center;
 }
 
-/* reduced motion: skip chart animation */
+/* reduced motion */
 @media(prefers-reduced-motion:reduce){
   .wq-pill,.wq-select{transition:none}
-  .bob,.floaty{animation:none}
+  .scroll-hint,.shimmer{animation:none}
   .reveal{opacity:1;transform:none;transition:none}
   .phase-panel{animation:none}
   html{scroll-behavior:auto}
 }
-a:focus-visible,button:focus-visible,select:focus-visible,.btn:focus-visible,.nav-cta:focus-visible{outline:3px solid var(--gold);outline-offset:2px;border-radius:4px}
+a:focus-visible,button:focus-visible,select:focus-visible,.btn:focus-visible,.nav-cta:focus-visible{outline:3px solid var(--teal-deep);box-shadow:0 0 0 5px rgba(217,164,65,.45);outline-offset:2px;border-radius:4px}
 /* ---------- mobile touch targets (≥44px) ---------- */
 @media(max-width:820px){
   .nav-cta{padding:12px 22px}
@@ -474,42 +531,44 @@ footer a:hover{text-decoration:underline}
 </head>
 <body>
 
-<nav id="nav">
-  <a class="nav-logo" href="#top">
-    <svg width="26" height="26" viewBox="0 0 26 26" fill="none"><circle cx="13" cy="13" r="12" stroke="currentColor" stroke-width="2"/><path d="M4 15c3-2.5 6-2.5 9 0s6 2.5 9 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M6 10c2.5-2 5-2 7.5 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<nav id="nav" aria-label="Primary">
+  <a class="nav-logo" href="#top" data-track-event="district_navigation" data-track-label="Protect 30A home" data-track-section="nav">
+    <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden="true" focusable="false"><circle cx="13" cy="13" r="12" stroke="currentColor" stroke-width="2"/><path d="M4 15c3-2.5 6-2.5 9 0s6 2.5 9 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M6 10c2.5-2 5-2 7.5 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
     Protect 30A
   </a>
   <ul class="nav-links" id="nav-menu">
-    <li><a href="#why">Why Now</a></li>
-    <li><a href="#plan">The Plan</a></li>
-    <li><a href="#timeline">Timeline</a></li>
-    <li><a href="#lakes">Our Dune Lakes</a></li>
-    <li><a href="#wq-explorer">Water Quality</a></li>
-    <li><a href="#faq">FAQ</a></li>
-    <li><a href="/districts/">Districts</a></li>
-    <li><a href="/show">The Show</a></li>
-    <li class="keep"><a class="nav-cta" href="#help">Show Support</a></li>
+    <li><a href="#why" data-track-event="district_navigation" data-track-label="Why Now" data-track-section="nav">Why Now</a></li>
+    <li><a href="#plan" data-track-event="district_navigation" data-track-label="The Plan" data-track-section="nav">The Plan</a></li>
+    <li><a href="#timeline" data-track-event="district_navigation" data-track-label="Timeline" data-track-section="nav">Timeline</a></li>
+    <li><a href="#lakes" data-track-event="district_navigation" data-track-label="Our Dune Lakes" data-track-section="nav">Our Dune Lakes</a></li>
+    <li><a href="#media" data-track-event="district_navigation" data-track-label="Videos and Podcast" data-track-section="nav">Videos</a></li>
+    <li><a href="#wq-explorer" data-track-event="district_navigation" data-track-label="Water Quality" data-track-section="nav">Water Quality</a></li>
+    <li><a href="#faq" data-track-event="district_navigation" data-track-label="FAQ" data-track-section="nav">FAQ</a></li>
+    <li class="keep"><a class="nav-cta" href="#help" data-track-event="district_navigation" data-track-label="Show Support" data-track-section="nav">Show Support</a></li>
   </ul>
   <button class="nav-burger" id="nav-burger" aria-label="Open menu" aria-expanded="false" aria-controls="nav-menu">
     <span></span><span></span><span></span>
   </button>
 </nav>
 
+<main id="main">
 <header class="hero" id="top">
-  <div class="shimmer" style="width:220px;height:220px;top:18%;left:8%"></div>
-  <div class="shimmer" style="width:140px;height:140px;top:60%;left:78%;animation-delay:2s"></div>
-  <div class="shimmer" style="width:90px;height:90px;top:30%;left:70%;animation-delay:4s"></div>
+  <div class="shimmer" style="width:220px;height:220px;top:18%;left:8%" aria-hidden="true"></div>
+  <div class="shimmer" style="width:140px;height:140px;top:60%;left:78%;animation-delay:2s" aria-hidden="true"></div>
+  <div class="shimmer" style="width:90px;height:90px;top:30%;left:70%;animation-delay:4s" aria-hidden="true"></div>
   <div class="hero-inner">
     <span class="eyebrow">A Community Initiative · South Walton, Florida</span>
     <h1>Our water. Our 30A.<br><em>Our moment to act.</em></h1>
     <p>A practical, locally controlled plan to stop the flooding, protect our rare coastal dune lakes, and make sure every dollar raised on 30A goes to work on 30A — starting now.</p>
     <div class="hero-btns">
-      <a class="btn btn-gold" href="#plan">See the Plan</a>
-      <a class="btn btn-ghost" href="#help">Show Your Support</a>
+      <a class="btn btn-gold" href="#plan" data-track-event="district_navigation" data-track-label="See the Plan" data-track-section="hero">See the Plan</a>
+      <a class="btn btn-ghost" href="#help" data-track-event="district_navigation" data-track-label="Show Your Support" data-track-section="hero">Show Your Support</a>
     </div>
   </div>
-  <div class="scroll-hint">Scroll ↓</div>
-  <svg class="hero-wave" viewBox="0 0 1440 110" preserveAspectRatio="none"><path d="M0,60 C240,110 480,10 720,45 C960,80 1200,30 1440,65 L1440,110 L0,110 Z" fill="#fbf8f1"/></svg>
+  <div class="scroll-hint" aria-hidden="true">Scroll ↓</div>
+  <svg class="hero-wave" viewBox="0 0 1440 110" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M0,60 C240,110 480,10 720,45 C960,80 1200,30 1440,65 L1440,110 L0,110 Z" fill="#fbf8f1"/></svg>
 </header>
 
 <div class="count-band">
@@ -530,10 +589,10 @@ footer a:hover{text-decoration:underline}
     <h2 class="section-title reveal">The water is rising faster than the fixes.</h2>
     <p class="lede reveal">South Walton has grown faster than its drainage. Every big storm sends more runoff into our streets, our yards, and our irreplaceable dune lakes. We can keep reacting — or we can fund real infrastructure, together.</p>
     <div class="stat-grid">
-      <div class="stat-card reveal"><div class="num" data-count="15">0</div><div class="unit">coastal dune lakes</div><p>South Walton's named coastal dune lakes are a globally rare treasure — found in only a handful of places on Earth.</p></div>
-      <div class="stat-card reveal"><div class="num" data-count="100">0</div><div class="unit">% of runoff flows somewhere</div><p>Rain that falls on pavement doesn't disappear — it flows downhill. Untreated, it carries sediment, nutrients, and pollutants with it, and on 30A, downhill means our lakes and the Gulf.</p></div>
-      <div class="stat-card reveal"><div class="num" data-count="2027">0</div><div class="unit">first projects funded</div><p>If we act this year, the first locally funded stormwater projects can begin with the November 2027 cycle.</p></div>
-      <div class="stat-card reveal"><div class="num" data-count="1">0</div><div class="unit">year lost if we wait</div><p>Miss the January 1, 2027 deadline and the whole program slips to 2028 — another year of flooding without funded fixes.</p></div>
+      <div class="stat-card reveal"><div class="num" data-count="15">15</div><div class="unit">coastal dune lakes</div><p>South Walton's named coastal dune lakes are a globally rare treasure — found in only a handful of places on Earth.</p></div>
+      <div class="stat-card reveal"><div class="num" data-count="100">100</div><div class="unit">% of runoff flows somewhere</div><p>Rain that falls on pavement doesn't disappear — it flows downhill. Untreated, it carries sediment, nutrients, and pollutants with it, and on 30A, downhill means our lakes and the Gulf.</p></div>
+      <div class="stat-card reveal"><div class="num" data-count="2027">2027</div><div class="unit">first projects funded</div><p>If we act this year, the first locally funded stormwater projects can begin with the November 2027 cycle.</p></div>
+      <div class="stat-card reveal"><div class="num" data-count="1">1</div><div class="unit">year lost if we wait</div><p>Miss the January 1, 2027 deadline and the whole program slips to 2028 — another year of flooding without funded fixes.</p></div>
     </div>
   </div>
 </section>
@@ -675,7 +734,7 @@ footer a:hover{text-decoration:underline}
         </div>
         <div><h4>How it's grounded</h4>
           <ul>
-            <li>Florida's Special District Accountability Act</li>
+            <li>Florida's Uniform Special District Accountability Act (1989)</li>
             <li>Requires a special act of the Legislature — a deliberate, public process</li>
             <li>Entirely optional: the community decides if and when</li>
           </ul>
@@ -2872,6 +2931,57 @@ footer a:hover{text-decoration:underline}
     <div class="lake-meta"><span>📍 Camp Helen State Park, Walton–Bay county line</span><span>≈800 acres — largest coastal dune lake in North America · Outstanding Florida Waters</span></div>
   </div>
 </article>
+	    </div>
+	  </div>
+</section>
+
+<!-- MEDIA -->
+<section class="media" id="media">
+  <div class="wrap">
+    <span class="eyebrow reveal">Watch and listen</span>
+    <h2 class="section-title reveal">The water story, in plain language.</h2>
+    <p class="lede reveal">These Protect30A explainers pair the stormwater plan with the neighbor-to-neighbor Common Water podcast series on Spotify and YouTube.</p>
+    <div class="media-grid">
+      <article class="media-card reveal">
+        <div class="media-frame">
+          <iframe title="30A's Dune Lakes and Stormwater video" src="https://www.youtube-nocookie.com/embed/GmHWqOlbNNE" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        </div>
+        <div class="media-body">
+          <h3>30A's Dune Lakes and Stormwater</h3>
+          <p>This is the core stormwater explainer: why South Walton's rare coastal dune lakes are the shared stakes, how runoff moves through the corridor, and why clean infrastructure has to start upstream.</p>
+          <div class="media-meta"><span>YouTube explainer</span><span>Dune lakes</span><span>Stormwater</span></div>
+          <div class="media-actions">
+            <a class="btn btn-teal" href="https://www.youtube.com/watch?v=GmHWqOlbNNE" target="_blank" rel="noopener" data-track-event="youtube_click" data-track-label="30A's Dune Lakes and Stormwater" data-track-section="media">Open on YouTube</a>
+          </div>
+        </div>
+      </article>
+      <article class="media-card reveal">
+        <div class="media-frame">
+          <iframe title="Fish Kill Video" src="https://www.youtube-nocookie.com/embed/XEF95a7Scp0" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        </div>
+        <div class="media-body">
+          <h3>Fish Kill Video</h3>
+          <p>A supporting context video for visible water-quality impacts. Use it as a prompt to look at the data, ask better questions, and keep the discussion grounded in observed conditions.</p>
+          <div class="media-meta"><span>YouTube context</span><span>Water quality</span><span>Source video</span></div>
+          <div class="media-actions">
+            <a class="btn btn-teal" href="https://www.youtube.com/watch?v=XEF95a7Scp0" target="_blank" rel="noopener" data-track-event="youtube_click" data-track-label="Fish Kill Video" data-track-section="media">Open on YouTube</a>
+          </div>
+        </div>
+      </article>
+      <article class="media-card reveal">
+        <div class="media-frame media-frame--spotify">
+          <iframe title="Common Water on Spotify" src="https://open.spotify.com/embed/show/033BT9WKfiVI2mrFWc75yS" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
+        </div>
+        <div class="media-body">
+          <h3>Common Water on Spotify</h3>
+          <p>Common Water is the Protect30A neighbor-to-neighbor podcast series about eight 30A communities, one road, one shoreline, and the rare dune lakes that connect them.</p>
+          <div class="media-meta"><span>Spotify show</span><span>Common Water</span><span>Protect30A</span></div>
+          <p class="media-note">Source: the canonical Protect30A Spotify show page.</p>
+          <div class="media-actions">
+            <a class="btn btn-gold" id="spotify-btn" href="https://open.spotify.com/show/033BT9WKfiVI2mrFWc75yS" target="_blank" rel="noopener" data-track-event="spotify_click" data-track-label="Common Water Spotify show" data-track-section="media">Open on Spotify</a>
+          </div>
+        </div>
+      </article>
     </div>
   </div>
 </section>
@@ -2883,7 +2993,7 @@ footer a:hover{text-decoration:underline}
     <span class="eyebrow reveal">The data behind the concern</span>
     <h2 class="section-title reveal">Twenty-plus years of water quality — right here in our lakes.</h2>
     <p class="lede reveal">
-      Volunteers from the <a href="https://www.basinalliance.org" target="_blank" rel="noopener">Choctawhatchee Basin Alliance</a>
+      Volunteers from the <a href="https://www.basinalliance.org" target="_blank" rel="noopener" data-track-event="source_link_click" data-track-label="Choctawhatchee Basin Alliance" data-track-section="water_quality">Choctawhatchee Basin Alliance</a>
       have been wading into our dune lakes every quarter since the early 1990s — testing the water and recording what they find.
       More than 240,000 readings later, the data tells a clear story about what healthy looks like, where it's slipping, and why
       stormwater management is the best protection we have.
@@ -2944,8 +3054,9 @@ footer a:hover{text-decoration:underline}
     </div>
 
     <div class="wq-chart-wrap reveal" aria-live="polite" aria-label="Water quality chart">
-      <canvas id="wq-chart" role="img" aria-label="Line chart of quarterly water quality medians"></canvas>
+      <canvas id="wq-chart" role="img" aria-label="Line chart of quarterly water quality medians" aria-describedby="wq-n-note wq-chart-summary"></canvas>
       <p class="wq-n-note" id="wq-n-note" aria-live="polite"></p>
+      <p class="wq-chart-summary" id="wq-chart-summary">Choose a lake and measurement to generate a text summary of the chart.</p>
       <p class="wq-empty" id="wq-empty" hidden>
         No quarterly data available for this lake and measurement combination.
       </p>
@@ -2967,7 +3078,7 @@ footer a:hover{text-decoration:underline}
       <div class="faq-item reveal"><button class="faq-q">Is this a new tax?</button><div class="faq-a"><p>It's a special assessment, not a general tax — and the difference matters. A tax can be spent anywhere; an assessment can only fund improvements that specially benefit the properties paying it. The amount is set in public hearings, apportioned by benefit, and every dollar is legally tied to stormwater work inside the 30A benefit area.</p></div></div>
       <div class="faq-item reveal"><button class="faq-q">How much will it cost me?</button><div class="faq-a"><p>Honest answer: the per-property numbers don't exist yet, because they depend on the engineering studies and project list developed with community input over the coming year. What's already fixed by law is the process — costs must be fairly apportioned by benefit, published in advance, mailed to every affected owner, and adopted only after public hearings where you can speak.</p></div></div>
       <div class="faq-item reveal"><button class="faq-q">Who decides what gets built?</button><div class="faq-a"><p>The project list is developed through engineering studies and community input, then adopted by the County Commission in noticed public hearings. Longer term, Phase 3 offers the option of a locally elected district board — putting those decisions even closer to home.</p></div></div>
-      <div class="faq-item reveal"><button class="faq-q">Why not just use existing county funds or wait for federal grants?</button><div class="faq-a"><p>County-wide funds are spread county-wide — 30A's drainage needs compete with every other priority. And federal mitigation grants have been unreliable: the main FEMA program was terminated in 2025 and only partially restored. This plan deliberately builds on what we control — local capital plus Florida's well-funded Resilient Florida grant program — so the projects don't hinge on Washington.</p></div></div>
+      <div class="faq-item reveal"><button class="faq-q">Why not just use existing county funds or wait for federal grants?</button><div class="faq-a"><p>County-wide funds are spread county-wide — 30A's drainage needs compete with every other priority. And federal mitigation grants have proven volatile: FEMA's main resilience program (BRIC) was terminated in April 2025, then reinstated under a federal court order, with a new $1 billion funding round opening in March 2026. That whiplash is exactly why this plan builds on what we control — local capital plus Florida's well-funded Resilient Florida grant program — so the projects don't hinge on Washington.</p></div></div>
       <div class="faq-item reveal"><button class="faq-q">What happens if we do nothing?</button><div class="faq-a"><p>The flooding doesn't pause while we deliberate. Repair costs keep landing on everyone through emergency fixes, property damage, and degraded lakes. And there's a hard deadline: if the county doesn't adopt its funding resolution before January 1, 2027, the entire program slips at least a year.</p></div></div>
       <div class="faq-item reveal"><button class="faq-q">Does this create a new layer of government?</button><div class="faq-a"><p>Not in Phase 1 — an MSBU is a funding boundary administered by the existing county government, collected through the existing tax bill. A new governance body only enters the picture in Phase 3, and only if the community chooses it through a deliberate, public legislative process.</p></div></div>
     </div>
@@ -2979,28 +3090,34 @@ footer a:hover{text-decoration:underline}
   <div class="wrap">
     <span class="eyebrow reveal" style="color:var(--aqua)">Make it happen</span>
     <h2 class="section-title reveal">This only works if 30A shows up.</h2>
-    <p class="lede reveal">Deadlines like January 1, 2027 are met by communities that make themselves heard. Three ways to help this week:</p>
+    <p class="lede reveal">Deadlines like January 1, 2027 are met by communities that make themselves heard. Four ways to help this week:</p>
     <div class="cta-grid">
       <div class="cta-card reveal">
         <div class="cico">✉️</div><h3>Send a note of support</h3>
         <p>A short email to the County Commission saying "30A needs this stormwater plan — please adopt the intent resolution in 2026" carries real weight.</p>
-        <a class="btn btn-gold" id="email-btn" href="mailto:dan.curry@mywaltonfl.gov,danny.glidewell@mywaltonfl.gov,brad.drake@mywaltonfl.gov,donna.johns@mywaltonfl.gov,tony.anderson@mywaltonfl.gov?subject=Please%20support%20the%2030A%20Stormwater%20Plan">Open a pre-written email</a>
+        <a class="btn btn-gold" id="email-btn" href="#" data-track-event="support_email_click" data-track-label="Open pre-written commissioner email" data-track-section="help">Open a pre-written email</a>
       </div>
       <div class="cta-card reveal">
         <div class="cico">🗣️</div><h3>Show up &amp; speak</h3>
         <p>Public hearings begin with the published notice this December. Three minutes at a podium from a real neighbor beats a hundred pages of staff reports.</p>
-        <a class="btn btn-teal" href="https://www.mywaltonfl.gov" target="_blank" rel="noopener">County meeting schedule ↗</a>
+        <a class="btn btn-teal" href="https://www.mywaltonfl.gov" target="_blank" rel="noopener" data-track-event="district_navigation" data-track-label="County meeting schedule" data-track-section="help">County meeting schedule ↗</a>
       </div>
       <div class="cta-card reveal">
         <div class="cico">🔗</div><h3>Share this page</h3>
         <p>Send it to your HOA, your neighborhood group, your rental guests who love this place. Support grows one share at a time.</p>
-        <a class="btn btn-gold" id="share-btn" href="https://protect30a.org/">Copy link to share</a>
+        <a class="btn btn-gold" id="share-btn" href="#" data-track-event="share_click" data-track-label="Copy link to share" data-track-section="help">Copy link to share</a>
+      </div>
+      <div class="cta-card reveal">
+        <div class="cico">🤝</div><h3>Sponsor community outreach</h3>
+        <p>Local businesses can help cover private community education, podcast production, and meeting-awareness materials. Sponsorship does not represent an official district or county position.</p>
+        <a class="btn btn-teal" id="sponsor-btn" href="mailto:doug@goodsamaritaninstitute.org?subject=Protect%2030A%20community%20sponsorship%20inquiry" data-track-event="sponsor_inquiry" data-track-label="Community sponsorship inquiry" data-track-section="help">Ask about sponsorship</a>
       </div>
     </div>
   </div>
 </section>
 
-<div id="copied-toast">Link copied — thank you for sharing! 🌊</div>
+<div id="copied-toast" role="status" aria-live="polite">Link copied — thank you for sharing! 🌊</div>
+</main>
 
 <footer>
   <div class="wrap">
@@ -3008,18 +3125,18 @@ footer a:hover{text-decoration:underline}
       <h4>The fine print, proudly cited</h4>
       <p>This plan is grounded in Florida law, verified to primary sources:</p>
       <ul class="src-list" style="margin-top:8px">
-        <li><a href="https://www.flsenate.gov/Laws/Statutes/2025/125.01" target="_blank" rel="noopener">FS § 125.01(1)(q) — county MSBU authority</a></li>
-        <li><a href="https://www.flsenate.gov/Laws/Statutes/2025/0197.3632" target="_blank" rel="noopener">FS § 197.3632 — uniform method of collection (the Jan 1, 2027 gate)</a></li>
-        <li><a href="https://www.flsenate.gov/Laws/Statutes/2018/0403.0893" target="_blank" rel="noopener">FS § 403.0893 — stormwater utilities &amp; benefit areas</a></li>
-        <li><a href="https://www.flsenate.gov/laws/statutes/2021/163.01" target="_blank" rel="noopener">FS § 163.01 — Interlocal Cooperation Act</a></li>
-        <li><a href="https://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0100-0199/0189/0189.html" target="_blank" rel="noopener">FS ch. 189 — Special District Accountability Act</a></li>
-        <li><a href="https://floridadep.gov/rcp/resilient-florida-program" target="_blank" rel="noopener">Resilient Florida grant program (FS § 380.093)</a></li>
-        <li><a href="https://www.mywaltonfl.gov/806/NPDES-Stormwater-Management-Program" target="_blank" rel="noopener">Walton County stormwater management program</a></li>
+        <li><a href="https://www.flsenate.gov/Laws/Statutes/2025/125.01" target="_blank" rel="noopener" data-track-event="source_link_click" data-track-label="FS 125.01 county MSBU authority" data-track-section="footer">FS § 125.01(1)(q) — county MSBU authority</a></li>
+        <li><a href="https://www.flsenate.gov/Laws/Statutes/2025/0197.3632" target="_blank" rel="noopener" data-track-event="source_link_click" data-track-label="FS 197.3632 uniform collection" data-track-section="footer">FS § 197.3632 — uniform method of collection (the Jan 1, 2027 gate)</a></li>
+        <li><a href="https://www.flsenate.gov/Laws/Statutes/2018/0403.0893" target="_blank" rel="noopener" data-track-event="source_link_click" data-track-label="FS 403.0893 stormwater utilities" data-track-section="footer">FS § 403.0893 — stormwater utilities &amp; benefit areas</a></li>
+        <li><a href="https://www.flsenate.gov/laws/statutes/2021/163.01" target="_blank" rel="noopener" data-track-event="source_link_click" data-track-label="FS 163.01 Interlocal Cooperation Act" data-track-section="footer">FS § 163.01 — Florida Interlocal Cooperation Act of 1969</a></li>
+        <li><a href="https://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0100-0199/0189/0189.html" target="_blank" rel="noopener" data-track-event="source_link_click" data-track-label="FS ch. 189 Special District Accountability Act" data-track-section="footer">FS ch. 189 — Uniform Special District Accountability Act of 1989</a></li>
+        <li><a href="https://floridadep.gov/rcp/resilient-florida-program" target="_blank" rel="noopener" data-track-event="source_link_click" data-track-label="Resilient Florida grant program" data-track-section="footer">Resilient Florida grant program (FS § 380.093)</a></li>
+        <li><a href="https://www.mywaltonfl.gov/806/NPDES-Stormwater-Management-Program" target="_blank" rel="noopener" data-track-event="source_link_click" data-track-label="Walton County stormwater management program" data-track-section="footer">Walton County stormwater management program</a></li>
       </ul>
     </div>
     <div class="foot-note">
       <p>A community initiative for the 30A corridor, South Walton County, Florida. Assessment amounts shown nowhere on this page because they don't exist yet — they will be set through the public process described above. Legal framework summarized in plain language; statutory text controls.</p>
-      <p style="margin-top:12px"><strong>Disclosure:</strong> This page is published by Doug Liles, a Santa Rosa Beach resident and property owner, as a community advocacy resource. It does not represent the official position of any special district, Walton County, or any other government body. Water quality data courtesy of the Choctawhatchee Basin Alliance volunteer monitoring program. Questions: <a href="mailto:doug@goodsamaritaninstitute.org">doug@goodsamaritaninstitute.org</a>.</p>
+      <p style="margin-top:12px"><strong>Disclosure:</strong> This page is published by Doug Liles, a Santa Rosa Beach resident and property owner, as a community advocacy resource. It does not represent the official position of any special district, Walton County, or any other government body. Water quality data courtesy of the Choctawhatchee Basin Alliance volunteer monitoring program. Questions: <a href="mailto:doug@goodsamaritaninstitute.org" data-track-event="support_email_click" data-track-label="Footer contact email" data-track-section="footer">doug@goodsamaritaninstitute.org</a>.</p>
     </div>
   </div>
 </footer>
@@ -3029,15 +3146,68 @@ footer a:hover{text-decoration:underline}
 const nav=document.getElementById('nav');
 addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>60),{passive:true});
 
+// ---------- lightweight analytics ----------
+function p30aTrack(eventName,props={}){
+  if(!eventName)return;
+  const payload={
+    event:eventName,
+    ts:new Date().toISOString(),
+    path:location.pathname,
+    url:location.href,
+    referrer:document.referrer||'',
+    ...props
+  };
+  window.dataLayer=window.dataLayer||[];
+  window.dataLayer.push(payload);
+  const endpoint=window.P30A_EVENT_ENDPOINT||'';
+  if(!endpoint)return;
+  try{
+    const body=JSON.stringify(payload);
+    if(navigator.sendBeacon){
+      navigator.sendBeacon(endpoint,new Blob([body],{type:'application/json'}));
+    }else{
+      fetch(endpoint,{method:'POST',headers:{'content-type':'application/json'},body,keepalive:true}).catch(()=>{});
+    }
+  }catch(_){}
+}
+window.p30aTrack=p30aTrack;
+
+document.addEventListener('click',e=>{
+  const target=e.target.closest('[data-track-event]');
+  if(!target)return;
+  p30aTrack(target.dataset.trackEvent,{
+    label:target.dataset.trackLabel||target.textContent.trim(),
+    section:target.dataset.trackSection||'',
+    target:target.dataset.trackTarget||target.getAttribute('href')||'',
+    href:target.href||''
+  });
+},true);
+
+document.querySelectorAll('.lake-chip').forEach(chip=>{
+  chip.dataset.trackEvent=chip.dataset.trackEvent||'district_navigation';
+  chip.dataset.trackLabel=chip.dataset.trackLabel||chip.textContent.trim();
+  chip.dataset.trackSection=chip.dataset.trackSection||'dune_lakes';
+});
+
 // ---------- mobile menu toggle ----------
 const burger=document.getElementById('nav-burger');
 if(burger&&nav){
+  const menu=document.getElementById('nav-menu');
   const setMenu=open=>{
     nav.classList.toggle('menu-open',open);
     burger.setAttribute('aria-expanded',String(open));
     burger.setAttribute('aria-label',open?'Close menu':'Open menu');
+    if(open&&menu&&innerWidth<=820){
+      requestAnimationFrame(()=>menu.querySelector('a')?.focus());
+    }else if(!open&&menu?.contains(document.activeElement)){
+      burger.focus();
+    }
   };
-  burger.addEventListener('click',()=>setMenu(!nav.classList.contains('menu-open')));
+  burger.addEventListener('click',()=>{
+    const open=!nav.classList.contains('menu-open');
+    p30aTrack('mobile_nav_toggle',{section:'nav',state:open?'open':'closed'});
+    setMenu(open);
+  });
   nav.querySelectorAll('.nav-links a').forEach(a=>a.addEventListener('click',()=>setMenu(false)));
   addEventListener('resize',()=>{if(innerWidth>820)setMenu(false)},{passive:true});
   document.addEventListener('keydown',e=>{if(e.key==='Escape')setMenu(false)});
@@ -3068,27 +3238,107 @@ const statIO=new IntersectionObserver(es=>es.forEach(e=>{
 document.querySelectorAll('[data-count]').forEach(el=>statIO.observe(el));
 
 // ---------- phase tabs ----------
-document.querySelectorAll('.phase-tab').forEach(tab=>tab.addEventListener('click',()=>{
-  document.querySelectorAll('.phase-tab').forEach(t=>t.classList.remove('active'));
-  document.querySelectorAll('.phase-panel').forEach(p=>p.classList.remove('active'));
-  tab.classList.add('active');
-  document.querySelector(`.phase-panel[data-panel="${tab.dataset.phase}"]`).classList.add('active');
-}));
+const phaseTabs=[...document.querySelectorAll('.phase-tab')];
+const phasePanels=[...document.querySelectorAll('.phase-panel')];
+function activatePhase(tab,track=true){
+  const phase=tab.dataset.phase;
+  phaseTabs.forEach(t=>{
+    const isActive=t===tab;
+    t.classList.toggle('active',isActive);
+    t.setAttribute('aria-selected',String(isActive));
+    t.tabIndex=isActive?0:-1;
+  });
+  phasePanels.forEach(panel=>{
+    const isActive=panel.dataset.panel===phase;
+    panel.classList.toggle('active',isActive);
+    panel.hidden=!isActive;
+  });
+  if(track)p30aTrack('district_navigation',{section:'plan_phase',label:tab.querySelector('.name')?.textContent.trim()||`Phase ${phase}`,target:`phase-${phase}`});
+}
+phaseTabs.forEach((tab,index)=>{
+  tab.id=tab.id||`phase-tab-${tab.dataset.phase}`;
+  tab.setAttribute('aria-controls',`phase-panel-${tab.dataset.phase}`);
+  tab.dataset.trackEvent=tab.dataset.trackEvent||'district_navigation';
+  tab.dataset.trackLabel=tab.dataset.trackLabel||tab.querySelector('.name')?.textContent.trim()||`Phase ${tab.dataset.phase}`;
+  tab.dataset.trackSection=tab.dataset.trackSection||'plan_phase';
+  const panel=phasePanels.find(p=>p.dataset.panel===tab.dataset.phase);
+  if(panel){
+    panel.id=panel.id||`phase-panel-${tab.dataset.phase}`;
+    panel.setAttribute('role','tabpanel');
+    panel.setAttribute('aria-labelledby',tab.id);
+  }
+  tab.addEventListener('click',()=>activatePhase(tab));
+  tab.addEventListener('keydown',e=>{
+    const keyMap={ArrowRight:1,ArrowDown:1,ArrowLeft:-1,ArrowUp:-1};
+    if(!(e.key in keyMap))return;
+    e.preventDefault();
+    const next=phaseTabs[(index+keyMap[e.key]+phaseTabs.length)%phaseTabs.length];
+    next.focus();
+    activatePhase(next);
+  });
+});
+if(phaseTabs.length)activatePhase(phaseTabs.find(t=>t.classList.contains('active'))||phaseTabs[0],false);
 
 // ---------- timeline expanders ----------
-document.querySelectorAll('.tl-item').forEach(it=>it.addEventListener('click',()=>it.classList.toggle('open')));
+document.querySelectorAll('.tl-item').forEach((item,index)=>{
+  const details=item.querySelector('.tl-more');
+  if(!details)return;
+  const detailsId=`timeline-detail-${index+1}`;
+  details.id=details.id||detailsId;
+  details.hidden=!item.classList.contains('open');
+  item.setAttribute('role','button');
+  item.tabIndex=0;
+  item.setAttribute('aria-controls',details.id);
+  item.setAttribute('aria-expanded',String(item.classList.contains('open')));
+  const toggle=()=>{
+    const isOpen=!item.classList.contains('open');
+    item.classList.toggle('open',isOpen);
+    details.hidden=!isOpen;
+    item.setAttribute('aria-expanded',String(isOpen));
+    p30aTrack('timeline_toggle',{section:'timeline',label:item.querySelector('h3')?.textContent.trim()||`Timeline item ${index+1}`,state:isOpen?'open':'closed'});
+  };
+  item.addEventListener('click',toggle);
+  item.addEventListener('keydown',e=>{
+    if(e.key!=='Enter'&&e.key!==' ')return;
+    e.preventDefault();
+    toggle();
+  });
+});
 
 // ---------- FAQ accordion ----------
-document.querySelectorAll('.faq-q').forEach(q=>q.addEventListener('click',()=>{
-  const item=q.parentElement,wasOpen=item.classList.contains('open');
-  document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));
-  if(!wasOpen)item.classList.add('open');
-}));
+document.querySelectorAll('.faq-item').forEach((item,index)=>{
+  const q=item.querySelector('.faq-q');
+  const answer=item.querySelector('.faq-a');
+  if(!q||!answer)return;
+  const qId=`faq-question-${index+1}`;
+  const answerId=`faq-answer-${index+1}`;
+  q.id=q.id||qId;
+  q.setAttribute('aria-controls',answer.id||answerId);
+  q.setAttribute('aria-expanded',String(item.classList.contains('open')));
+  answer.id=answer.id||answerId;
+  answer.hidden=!item.classList.contains('open');
+  q.addEventListener('click',()=>{
+    const wasOpen=item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i=>{
+      i.classList.remove('open');
+      i.querySelector('.faq-q')?.setAttribute('aria-expanded','false');
+      const panel=i.querySelector('.faq-a');
+      if(panel)panel.hidden=true;
+    });
+    if(!wasOpen){
+      item.classList.add('open');
+      q.setAttribute('aria-expanded','true');
+      answer.hidden=false;
+    }
+    p30aTrack('faq_toggle',{section:'faq',label:q.textContent.trim(),state:wasOpen?'closed':'open'});
+  });
+});
 
 // ---------- support email ----------
-<!-- BCC recipients verified 2026-06-10 from https://www.mywaltonfl.gov/112/Commissioners — D1 Dan Curry dan.curry@mywaltonfl.gov; D2 Danny Glidewell danny.glidewell@mywaltonfl.gov; D3 Brad Drake (Chairman) brad.drake@mywaltonfl.gov; D4 Donna Johns donna.johns@mywaltonfl.gov; D5 Tony Anderson (Vice Chairman) tony.anderson@mywaltonfl.gov -->
+// BCC recipients verified 2026-06-10 from https://www.mywaltonfl.gov/112/Commissioners.
 document.getElementById('email-btn').addEventListener('click',e=>{
   e.preventDefault();
+  p30aTrack('support_email_open',{section:'help',label:'Open pre-written commissioner email'});
   const subject=encodeURIComponent('Please support the 30A Stormwater Plan — adopt the intent resolution in 2026');
   const body=encodeURIComponent(
 `Dear Commissioners,
@@ -3108,12 +3358,19 @@ Respectfully,
 // ---------- share / copy link ----------
 document.getElementById('share-btn').addEventListener('click',async e=>{
   e.preventDefault();
-  const url='https://protect30a.org/';
+  const url=location.href;
+  p30aTrack('share_attempt',{section:'help',target:url});
   try{
-    if(navigator.share){await navigator.share({title:'Protect 30A — South Walton Stormwater Plan',url});return}
+    if(navigator.share){
+      await navigator.share({title:'Protect 30A — South Walton Stormwater Plan',url});
+      p30aTrack('share_success',{section:'help',method:'native'});
+      return;
+    }
     await navigator.clipboard.writeText(url);
+    p30aTrack('share_success',{section:'help',method:'clipboard'});
   }catch(_){
     const ta=document.createElement('textarea');ta.value=url;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();
+    p30aTrack('share_success',{section:'help',method:'fallback'});
   }
   const toast=document.getElementById('copied-toast');
   toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),2600);
@@ -3121,7 +3378,7 @@ document.getElementById('share-btn').addEventListener('click',async e=>{
 
 // ---------- WATER QUALITY EXPLORER ----------
 // Runs at DOMContentLoaded: the #wq-data JSON block sits after this script,
-// and Chart.js loads with defer - both are guaranteed available by then.
+// and the Chart.js bundle has already executed by this point.
 function initWqExplorer(){
   var wqScriptEl = document.getElementById('wq-data');
   if (!wqScriptEl || typeof Chart === 'undefined') return;
@@ -3145,7 +3402,10 @@ function initWqExplorer(){
     lakeSelect.appendChild(opt);
   });
   lakeSelect.value = 'Western'; // default
-  lakeSelect.addEventListener('change', function() { renderChart(lakeSelect.value, activeParam); });
+  lakeSelect.addEventListener('change', function() {
+    p30aTrack('wq_lake_change',{section:'water_quality',label:lakeSelect.value});
+    renderChart(lakeSelect.value, activeParam);
+  });
 
   // Render parameter pills
   var PARAMS = [
@@ -3171,7 +3431,10 @@ function initWqExplorer(){
     btn.setAttribute('aria-pressed', p.key === activeParam ? 'true' : 'false');
     btn.setAttribute('aria-label', 'Show ' + p.label + ' data');
     btn.textContent = p.label;
-    btn.addEventListener('click', function() { setParam(p.key); });
+    btn.addEventListener('click', function() {
+      p30aTrack('wq_metric_click',{section:'water_quality',label:p.label,target:p.key});
+      setParam(p.key);
+    });
     pillsContainer.appendChild(btn);
   });
 
@@ -3257,6 +3520,7 @@ function initWqExplorer(){
   function renderChart(lake, paramKey) {
     var emptyEl  = document.getElementById('wq-empty');
     var nNoteEl  = document.getElementById('wq-n-note');
+    var summaryEl = document.getElementById('wq-chart-summary');
     var canvasEl = document.getElementById('wq-chart');
 
     var cd = buildChartData(lake, paramKey);
@@ -3265,6 +3529,7 @@ function initWqExplorer(){
       emptyEl.hidden  = false;
       canvasEl.hidden = true;
       nNoteEl.textContent = '';
+      if (summaryEl) summaryEl.textContent = 'No chart data is available for ' + lake + ' and the selected measurement.';
       if (chart) { chart.destroy(); chart = null; }
       return;
     }
@@ -3281,6 +3546,12 @@ function initWqExplorer(){
     nNoteEl.textContent =
       'Quarterly medians · n ≥ ' + cd.medianMin + ' readings per point · ' +
       cd.totalN.toLocaleString() + ' total samples shown';
+    if (summaryEl) {
+      summaryEl.textContent =
+        cd.paramLabel + ' for ' + lake + ' Lake spans ' + cd.labels[0] + ' through ' +
+        cd.labels[cd.labels.length - 1] + ' with ' + cd.totalN.toLocaleString() +
+        ' samples shown. ' + (cd.hasBott ? 'Surface and bottom series are included.' : 'A surface series is shown.');
+    }
 
     var chartConfig = {
       type: 'line',
