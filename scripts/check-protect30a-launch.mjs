@@ -8,6 +8,7 @@ import process from 'node:process';
 const DEFAULT_CANONICAL = 'https://protect30a.org/';
 const DEFAULT_COM_URL = 'https://protect30a.com/';
 const DEFAULT_HTML_FILES = ['30a-stormwater-plan.html', 'index.html'];
+const VERIFICATION_HTML_PATTERN = /^google[a-z0-9]+\.html$/i;
 
 function makeReport(label) {
   return { label, passes: [], warnings: [], failures: [] };
@@ -581,6 +582,7 @@ async function collectHtmlFiles(rootDir, currentDir = rootDir, files = []) {
   const entries = await readdir(currentDir, { withFileTypes: true });
   for (const entry of entries) {
     if (entry.name === '.git' || entry.name === '.vercel' || entry.name === 'node_modules') continue;
+    if (entry.isFile() && VERIFICATION_HTML_PATTERN.test(entry.name)) continue;
     const fullPath = path.join(currentDir, entry.name);
     if (entry.isDirectory()) {
       await collectHtmlFiles(rootDir, fullPath, files);
