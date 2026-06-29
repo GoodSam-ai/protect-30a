@@ -11,7 +11,7 @@ export type RankableScore = {
   score: number;
 };
 
-export function calculateEngagementScore(input: ScoreInput) {
+export function calculateEngagementScore(input: ScoreInput): number {
   return (
     input.likesReceivedCount * 3 +
     input.commentsCount * 1 +
@@ -20,7 +20,9 @@ export function calculateEngagementScore(input: ScoreInput) {
   );
 }
 
-export function rankScores<T extends RankableScore>(scores: T[]) {
+export function rankScores<T extends RankableScore>(
+  scores: T[]
+): Array<T & { rank: number }> {
   return [...scores]
     .sort((left, right) => {
       if (right.score !== left.score) return right.score - left.score;

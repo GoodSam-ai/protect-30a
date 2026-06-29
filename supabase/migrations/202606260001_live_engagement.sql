@@ -90,7 +90,9 @@ create table public.comment_reports (
   reason text not null,
   details text,
   created_at timestamptz not null default now(),
-  unique (comment_id, reporter_user_id)
+  unique (comment_id, reporter_user_id),
+  constraint comment_reports_reason_check check (reason in ('spam', 'harassment', 'misinformation', 'off_topic', 'other')),
+  constraint comment_reports_details_length_check check (details is null or char_length(details) <= 1000)
 );
 
 create table public.event_shares (
@@ -98,7 +100,8 @@ create table public.event_shares (
   event_id uuid not null references public.podcast_events(id) on delete cascade,
   user_id uuid references public.profiles(id) on delete set null,
   platform text not null,
-  created_at timestamptz not null default now()
+  created_at timestamptz not null default now(),
+  constraint event_shares_platform_check check (platform in ('facebook', 'instagram', 'tiktok', 'x', 'email', 'copy_link', 'other'))
 );
 
 create table public.district_influencer_scores (
@@ -286,6 +289,8 @@ set search_path = public
 as $$
 begin
   new.created_at = now();
+  new.reason = lower(trim(new.reason));
+  new.details = nullif(trim(new.details), '');
   return new;
 end;
 $$;
@@ -302,6 +307,7 @@ set search_path = public
 as $$
 begin
   new.created_at = now();
+  new.platform = lower(trim(new.platform));
   return new;
 end;
 $$;
@@ -431,7 +437,7 @@ grant select, insert, update, delete on table public.profiles to authenticated;
 create policy "users read own profile" on public.profiles for select using (id = auth.uid());
 create policy "moderators read profiles" on public.profiles for select using (public.is_admin_or_moderator());
 create policy "users insert own profile" on public.profiles for insert with check (id = auth.uid() and role = 'user' and is_candidate = false and is_potential_guest = false and is_restricted = false);
-create policy "users update own profile" on public.profiles for update using (id = auth.uid()) with check (id = auth.uid() and role = 'user' and is_candidate = false and is_potential_guest = false and is_restricted = false);
+create policy "users update own profile" on public.profiles for update using (id = auth.uid() and is_restricted = false) with check (id = auth.uid() and is_restricted = false);
 create policy "admins manage profiles" on public.profiles for all using (public.is_admin()) with check (public.is_admin());
 
 create policy "public read public events" on public.podcast_events for select using (status in ('upcoming', 'live', 'replay'));
@@ -481,7 +487,10 @@ create policy "users track own shares" on public.event_shares for insert with ch
 );
 create policy "admins read shares" on public.event_shares for select using (public.is_admin_or_moderator());
 
-create policy "public read influencer scores" on public.district_influencer_scores for select using (true);
+revoke all on table public.district_influencer_scores from anon, authenticated;
+grant select, insert, update, delete on table public.district_influencer_scores to authenticated;
+
+create policy "moderators read influencer scores" on public.district_influencer_scores for select using (public.is_admin_or_moderator());
 create policy "admins manage influencer scores" on public.district_influencer_scores for all using (public.is_admin()) with check (public.is_admin());
 
 create policy "admins read audit log" on public.audit_log for select using (public.is_admin());
@@ -501,7 +510,6 @@ select
   c.id,
   c.event_id,
   c.district_id,
-  c.user_id,
   c.parent_comment_id,
   c.body,
   c.topic,
@@ -596,7 +604,6 @@ share_stats as (
 )
 select
   cs.event_id,
-  cs.user_id,
   p.display_name,
   p.avatar_url,
   cs.comments_count,
@@ -620,7 +627,6 @@ select
   scores.district_id,
   districts.name as district_name,
   districts.slug as district_slug,
-  scores.user_id,
   profiles.display_name,
   profiles.avatar_url,
   scores.comments_count,
@@ -634,6 +640,7 @@ from public.district_influencer_scores scores
 join public.districts districts on districts.id = scores.district_id
 join public.public_profiles profiles on profiles.id = scores.user_id;
 
+revoke all on table public.visible_comments, public.top_comments_for_event, public.top_commenters_for_event, public.weekly_district_influencers from public, anon, authenticated;
 grant select on public.visible_comments, public.top_comments_for_event, public.top_commenters_for_event, public.weekly_district_influencers to anon, authenticated;
 
 create or replace function public.refresh_weekly_district_influencer_scores(target_week date default date_trunc('week', now())::date)
