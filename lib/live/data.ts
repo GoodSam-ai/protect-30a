@@ -4,7 +4,7 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 import {
   fixtureComments,
   fixtureDistricts,
-  fixtureEvent,
+  fixtureEvent
 } from "./fixtures";
 import type { LiveComment } from "./types";
 
@@ -129,7 +129,12 @@ export function buildLiveMetricsFromComments(
         if (comment.topic) acc[comment.topic] = (acc[comment.topic] || 0) + 1;
         return acc;
       }, {})
-    ).map(([topic, count]) => ({ topic, count }))
+    )
+      .map(([topic, count]) => ({ topic, count }))
+      .sort((left, right) => {
+        if (right.count !== left.count) return right.count - left.count;
+        return left.topic.localeCompare(right.topic);
+      })
   };
 }
 

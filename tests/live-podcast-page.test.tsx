@@ -52,4 +52,23 @@ describe("LivePodcastPage", () => {
       screen.getByRole("heading", { name: /share this live room/i })
     ).toBeInTheDocument();
   });
+
+  it("renders a neutral leaderboard state when the event disables leaderboards", () => {
+    render(
+      <LivePodcastPage
+        event={{ ...fixtureEvent, leaderboard_enabled: false }}
+        districts={fixtureDistricts}
+        comments={fixtureComments}
+        metrics={fixtureMetrics}
+        profile={null}
+      />
+    );
+
+    expect(
+      screen.getByRole("heading", { name: /influencer leaderboard/i })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/leaderboard is paused for this event/i)
+    ).toBeInTheDocument();
+  });
 });

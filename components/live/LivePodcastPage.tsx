@@ -13,6 +13,7 @@ import type {
   LiveMetrics,
   PodcastEvent
 } from "@/lib/live/types";
+import { getCanonicalUrl } from "@/lib/site-config";
 import { CalendarDays, Mic2, Radio, UsersRound } from "lucide-react";
 
 function statusLabel(event: PodcastEvent) {
@@ -46,6 +47,25 @@ function buildCommentComposerProps(event: PodcastEvent, profile: PublicProfile) 
   };
 }
 
+function DisabledLeaderboard() {
+  return (
+    <section
+      className="py-1"
+      aria-labelledby="influencer-leaderboard-heading"
+    >
+      <h2
+        id="influencer-leaderboard-heading"
+        className="font-serif text-xl font-semibold text-protect-teal"
+      >
+        Influencer leaderboard
+      </h2>
+      <p className="mt-4 rounded border border-dashed border-protect-sand bg-white p-4 text-sm text-protect-ink/70 shadow-sm">
+        Leaderboard is paused for this event.
+      </p>
+    </section>
+  );
+}
+
 export function LivePodcastPage({
   event,
   districts,
@@ -72,6 +92,7 @@ export function LivePodcastPage({
   const composerProps = profile
     ? buildCommentComposerProps(event, profile)
     : null;
+  const canonicalShareUrl = getCanonicalUrl(`/live/${event.slug}`);
 
   return (
     <main className="min-h-screen bg-protect-cream text-protect-ink">
@@ -212,9 +233,17 @@ export function LivePodcastPage({
         </div>
 
         <aside className="grid content-start gap-5" aria-label="Live room tools">
-          <SharePanel event={event} />
+          <SharePanel
+            title={event.title}
+            slug={event.slug}
+            canonicalShareUrl={canonicalShareUrl}
+          />
           <EngagementDashboard metrics={metrics} />
-          <InfluencerLeaderboard comments={comments} />
+          {event.leaderboard_enabled ? (
+            <InfluencerLeaderboard comments={comments} />
+          ) : (
+            <DisabledLeaderboard />
+          )}
           <DistrictSelector
             districts={districts}
             selectedDistrictId={event.district_id}

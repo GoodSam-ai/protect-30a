@@ -41,7 +41,7 @@ export function LiveCommentFeed({
                 <header className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                   <div className="min-w-0">
                     <div className="flex flex-wrap items-center gap-2">
-                      <h3 className="font-semibold text-protect-teal">
+                      <h3 className="min-w-0 break-words font-semibold text-protect-teal">
                         {comment.author_display_name}
                       </h3>
                       {comment.is_featured ? (

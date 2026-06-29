@@ -50,7 +50,7 @@ export function CommentComposer({
           >
             Add your comment
           </h2>
-          <p className="mt-1 text-sm text-protect-ink/75">
+          <p className="mt-1 break-words text-sm text-protect-ink/75">
             Posting as {displayName}
           </p>
         </div>

@@ -1,15 +1,20 @@
 "use client";
 
-import type { PodcastEvent } from "@/lib/live/types";
-import { getCanonicalUrl } from "@/lib/site-config";
 import { Copy, Mail, Send, Share2 } from "lucide-react";
 import { useState } from "react";
 
-export function SharePanel({ event }: { event: PodcastEvent }) {
-  const fallbackPath = `/live/${event.slug}`;
+export function SharePanel({
+  title,
+  slug,
+  canonicalShareUrl
+}: {
+  title: string;
+  slug: string;
+  canonicalShareUrl: string;
+}) {
+  const fallbackPath = `/live/${slug}`;
   const [status, setStatus] = useState<string | null>(null);
-  const canonicalShareUrl = getCanonicalUrl(fallbackPath);
-  const shareText = `${event.title} - join the Protect30A live room`;
+  const shareText = `${title} - join the Protect30A live room`;
   const encodedShareUrl = encodeURIComponent(canonicalShareUrl);
   const encodedShareText = encodeURIComponent(shareText);
 
@@ -34,7 +39,7 @@ export function SharePanel({ event }: { event: PodcastEvent }) {
 
     try {
       await navigator.share({
-        title: event.title,
+        title,
         text: shareText,
         url: getShareUrl()
       });

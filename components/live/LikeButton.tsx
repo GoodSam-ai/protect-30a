@@ -46,10 +46,11 @@ export function LikeButton({
     }
   }
 
+  const likeNoun = count === 1 ? "like" : "likes";
   const actionLabel = liked ? "Unlike comment" : "Like comment";
   const accessibleLabel = commentAuthor
-    ? `${actionLabel} from ${commentAuthor}`
-    : actionLabel;
+    ? `${actionLabel} from ${commentAuthor}. ${count} ${likeNoun}`
+    : `${actionLabel}. ${count} ${likeNoun}`;
 
   return (
     <button

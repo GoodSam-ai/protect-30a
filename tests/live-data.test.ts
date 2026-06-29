@@ -164,4 +164,45 @@ describe("live data access", () => {
       topTopics: [{ topic: "Stormwater", count: 1 }]
     });
   });
+
+  it("sorts top topics by count and then topic name", () => {
+    const comments = [
+      {
+        ...fixtureComments[0],
+        id: "comment-traffic-1",
+        topic: "Traffic",
+        like_count: 1
+      },
+      {
+        ...fixtureComments[0],
+        id: "comment-stormwater-1",
+        topic: "Stormwater",
+        like_count: 1
+      },
+      {
+        ...fixtureComments[0],
+        id: "comment-beach-1",
+        topic: "Beach access",
+        like_count: 1
+      },
+      {
+        ...fixtureComments[0],
+        id: "comment-traffic-2",
+        topic: "Traffic",
+        like_count: 1
+      },
+      {
+        ...fixtureComments[0],
+        id: "comment-beach-2",
+        topic: "Beach access",
+        like_count: 1
+      }
+    ];
+
+    expect(buildLiveMetricsFromComments(comments).topTopics).toEqual([
+      { topic: "Beach access", count: 2 },
+      { topic: "Traffic", count: 2 },
+      { topic: "Stormwater", count: 1 }
+    ]);
+  });
 });
