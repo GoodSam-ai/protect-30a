@@ -235,7 +235,6 @@ export function LivePodcastPage({
         <aside className="grid content-start gap-5" aria-label="Live room tools">
           <SharePanel
             title={event.title}
-            slug={event.slug}
             canonicalShareUrl={canonicalShareUrl}
           />
           <EngagementDashboard metrics={metrics} />

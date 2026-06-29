@@ -1,4 +1,5 @@
 import { LivePodcastPage } from "@/components/live/LivePodcastPage";
+import type { PublicProfile } from "@/lib/auth/session";
 import {
   fixtureComments,
   fixtureDistricts,
@@ -7,6 +8,15 @@ import {
 } from "@/lib/live/fixtures";
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
+
+const unrestrictedProfile: PublicProfile = {
+  id: "40000000-0000-4000-8000-000000000001",
+  display_name: "Resident Voice",
+  avatar_url: null,
+  role: "user",
+  primary_district_id: fixtureDistricts[0].id,
+  is_restricted: false
+};
 
 describe("LivePodcastPage", () => {
   it("renders the public resident live room with logged-out engagement surfaces", () => {
@@ -70,5 +80,23 @@ describe("LivePodcastPage", () => {
     expect(
       screen.getByText(/leaderboard is paused for this event/i)
     ).toBeInTheDocument();
+  });
+
+  it("keeps like controls disabled for signed-in residents until mutations exist", () => {
+    render(
+      <LivePodcastPage
+        event={fixtureEvent}
+        districts={fixtureDistricts}
+        comments={fixtureComments}
+        metrics={fixtureMetrics}
+        profile={unrestrictedProfile}
+      />
+    );
+
+    expect(
+      screen.getByRole("button", {
+        name: /like comment from community member\. 8 likes/i
+      })
+    ).toBeDisabled();
   });
 });

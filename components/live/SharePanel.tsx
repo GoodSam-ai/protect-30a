@@ -1,31 +1,28 @@
 "use client";
 
-import { Copy, Mail, Send, Share2 } from "lucide-react";
+import { Copy, ExternalLink, Mail, Send, Share2 } from "lucide-react";
 import { useState } from "react";
 
 export function SharePanel({
   title,
-  slug,
   canonicalShareUrl
 }: {
   title: string;
-  slug: string;
   canonicalShareUrl: string;
 }) {
-  const fallbackPath = `/live/${slug}`;
   const [status, setStatus] = useState<string | null>(null);
   const shareText = `${title} - join the Protect30A live room`;
   const encodedShareUrl = encodeURIComponent(canonicalShareUrl);
   const encodedShareText = encodeURIComponent(shareText);
 
-  function getShareUrl() {
-    return new URL(fallbackPath, window.location.origin).toString();
-  }
-
-  async function copyLink() {
+  async function copyLink(platform?: "TikTok" | "Instagram") {
     try {
-      await navigator.clipboard.writeText(getShareUrl());
-      setStatus("Copied live room link.");
+      await navigator.clipboard.writeText(canonicalShareUrl);
+      setStatus(
+        platform
+          ? `Copied canonical live room link for ${platform}.`
+          : "Copied canonical live room link."
+      );
     } catch {
       setStatus("Copy is unavailable in this browser.");
     }
@@ -41,9 +38,9 @@ export function SharePanel({
       await navigator.share({
         title,
         text: shareText,
-        url: getShareUrl()
+        url: canonicalShareUrl
       });
-      setStatus("Share sheet opened.");
+      setStatus("Share sheet opened with canonical live room link.");
     } catch {
       setStatus("Share was canceled.");
     }
@@ -75,7 +72,7 @@ export function SharePanel({
         <button
           type="button"
           className="inline-flex min-h-11 items-center justify-center gap-2 rounded border border-protect-sand px-4 font-semibold text-protect-teal"
-          onClick={copyLink}
+          onClick={() => copyLink()}
         >
           <Copy size={18} aria-hidden="true" />
           Copy link
@@ -95,6 +92,40 @@ export function SharePanel({
         >
           <Send size={18} aria-hidden="true" />
           Post to X
+        </a>
+        <button
+          type="button"
+          className="inline-flex min-h-11 items-center justify-center gap-2 rounded border border-protect-sand px-4 text-sm font-semibold leading-tight text-protect-teal"
+          onClick={() => copyLink("TikTok")}
+        >
+          <Copy size={18} aria-hidden="true" />
+          Copy link for TikTok
+        </button>
+        <a
+          className="inline-flex min-h-11 items-center justify-center gap-2 rounded border border-protect-sand px-4 text-sm font-semibold leading-tight text-protect-teal"
+          href="https://www.tiktok.com/"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <ExternalLink size={18} aria-hidden="true" />
+          Open TikTok
+        </a>
+        <button
+          type="button"
+          className="inline-flex min-h-11 items-center justify-center gap-2 rounded border border-protect-sand px-4 text-sm font-semibold leading-tight text-protect-teal"
+          onClick={() => copyLink("Instagram")}
+        >
+          <Copy size={18} aria-hidden="true" />
+          Copy link for Instagram
+        </button>
+        <a
+          className="inline-flex min-h-11 items-center justify-center gap-2 rounded border border-protect-sand px-4 text-sm font-semibold leading-tight text-protect-teal"
+          href="https://www.instagram.com/"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <ExternalLink size={18} aria-hidden="true" />
+          Open Instagram
         </a>
       </div>
       {status ? (

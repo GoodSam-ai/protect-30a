@@ -5,13 +5,12 @@ import type { LiveComment } from "@/lib/live/types";
 import { MessageCircle, Star } from "lucide-react";
 
 export function LiveCommentFeed({
-  comments,
-  viewerProfile
+  comments
 }: {
   comments: LiveComment[];
   viewerProfile: PublicProfile | null;
 }) {
-  const likesDisabled = !viewerProfile || viewerProfile.is_restricted;
+  const likesDisabled = true;
 
   return (
     <section aria-labelledby="live-comment-feed-heading">
