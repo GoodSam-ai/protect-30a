@@ -38,7 +38,7 @@ export async function createComment(input: unknown) {
       parent_comment_id: parsed.parentCommentId ?? null,
       body: parsed.body,
       topic: parsed.topic ?? null,
-      source: "web",
+      source: "site",
       user_id: user.id
     })
     .select("*")

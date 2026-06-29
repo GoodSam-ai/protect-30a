@@ -238,7 +238,7 @@ describe("live engagement mutation actions", () => {
       body: "Please discuss stormwater planning.",
       topic: "Stormwater",
       user_id: user.id,
-      source: "web"
+      source: "site"
     };
     const commentsTable = insertReturningSingle(insertedComment);
     actionMocks.createSupabaseServerClient.mockResolvedValue({
@@ -263,7 +263,7 @@ describe("live engagement mutation actions", () => {
       parent_comment_id: null,
       body: "Please discuss stormwater planning.",
       topic: "Stormwater",
-      source: "web",
+      source: "site",
       user_id: user.id
     });
   });
