@@ -60,5 +60,5 @@ export function isRapidDuplicateComment(input: {
   const seconds =
     (input.now.getTime() - input.previousCreatedAt.getTime()) / 1000;
 
-  return sameBody && seconds <= 60;
+  return sameBody && seconds >= 0 && seconds <= 60;
 }

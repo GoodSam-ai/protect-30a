@@ -24,10 +24,16 @@ type VisibleCommentRow = {
 };
 
 function hasSupabaseEnv() {
-  return Boolean(
-    process.env.NEXT_PUBLIC_SUPABASE_URL &&
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-  );
+  const hasUrl = Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL);
+  const hasAnonKey = Boolean(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
+
+  if (hasUrl !== hasAnonKey) {
+    throw new Error(
+      "Supabase environment variables are partially configured."
+    );
+  }
+
+  return hasUrl && hasAnonKey;
 }
 
 export async function getDistricts() {

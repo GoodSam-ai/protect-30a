@@ -7,7 +7,8 @@ const supabaseMocks = vi.hoisted(() => ({
   from: vi.fn(),
   select: vi.fn(),
   eq: vi.fn(),
-  maybeSingle: vi.fn()
+  maybeSingle: vi.fn(),
+  order: vi.fn()
 }));
 
 vi.mock("server-only", () => ({}));
@@ -26,6 +27,21 @@ function useFixtureEnv() {
   vi.stubEnv("NEXT_PUBLIC_SUPABASE_ANON_KEY", "");
 }
 
+function usePartialSupabaseEnv(
+  presentKey: "NEXT_PUBLIC_SUPABASE_URL" | "NEXT_PUBLIC_SUPABASE_ANON_KEY"
+) {
+  vi.stubEnv(
+    "NEXT_PUBLIC_SUPABASE_URL",
+    presentKey === "NEXT_PUBLIC_SUPABASE_URL"
+      ? "https://example.supabase.co"
+      : ""
+  );
+  vi.stubEnv(
+    "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+    presentKey === "NEXT_PUBLIC_SUPABASE_ANON_KEY" ? "anon-key" : ""
+  );
+}
+
 describe("live data access", () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -37,7 +53,8 @@ describe("live data access", () => {
     supabaseMocks.from.mockReturnValue({ select: supabaseMocks.select });
     supabaseMocks.select.mockReturnValue({ eq: supabaseMocks.eq });
     supabaseMocks.eq.mockReturnValue({
-      maybeSingle: supabaseMocks.maybeSingle
+      maybeSingle: supabaseMocks.maybeSingle,
+      order: supabaseMocks.order
     });
   });
 
@@ -62,6 +79,67 @@ describe("live data access", () => {
     supabaseMocks.maybeSingle.mockResolvedValue({ data: null, error: dbError });
 
     await expect(getEventBySlug("live-event")).rejects.toThrow(dbError);
+  });
+
+  it("throws a configuration error when only the Supabase URL is configured", async () => {
+    usePartialSupabaseEnv("NEXT_PUBLIC_SUPABASE_URL");
+
+    await expect(getEventBySlug(fixtureEvent.slug)).rejects.toThrow(
+      "Supabase environment variables are partially configured."
+    );
+    expect(supabaseMocks.createSupabaseServerClient).not.toHaveBeenCalled();
+  });
+
+  it("throws a configuration error when only the Supabase anon key is configured", async () => {
+    usePartialSupabaseEnv("NEXT_PUBLIC_SUPABASE_ANON_KEY");
+
+    await expect(getEventBySlug(fixtureEvent.slug)).rejects.toThrow(
+      "Supabase environment variables are partially configured."
+    );
+    expect(supabaseMocks.createSupabaseServerClient).not.toHaveBeenCalled();
+  });
+
+  it("maps visible comment rows without exposing stable user ids", async () => {
+    useSupabaseEnv();
+    supabaseMocks.order.mockResolvedValue({
+      data: [
+        {
+          id: "30000000-0000-4000-8000-000000000099",
+          event_id: fixtureEvent.id,
+          district_id: null,
+          parent_comment_id: null,
+          body: "Please keep this discussion public and useful.",
+          topic: "Other",
+          is_featured: false,
+          created_at: "2026-06-26T13:00:00.000Z",
+          display_name: "Resident Voice",
+          avatar_url: null,
+          like_count: null
+        }
+      ],
+      error: null
+    });
+
+    await expect(getVisibleComments(fixtureEvent.id)).resolves.toEqual([
+      {
+        id: "30000000-0000-4000-8000-000000000099",
+        event_id: fixtureEvent.id,
+        district_id: null,
+        user_id: null,
+        parent_comment_id: null,
+        body: "Please keep this discussion public and useful.",
+        topic: "Other",
+        is_featured: false,
+        created_at: "2026-06-26T13:00:00.000Z",
+        like_count: 0,
+        liked_by_me: false,
+        author_display_name: "Resident Voice",
+        author_avatar_url: null
+      }
+    ]);
+    expect(supabaseMocks.from).toHaveBeenCalledWith("visible_comments");
+    expect(supabaseMocks.from).not.toHaveBeenCalledWith("comments");
+    expect(supabaseMocks.eq).toHaveBeenCalledWith("event_id", fixtureEvent.id);
   });
 
   it("filters fixture comments by event id", async () => {

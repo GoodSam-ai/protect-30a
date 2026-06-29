@@ -49,6 +49,17 @@ describe("comment validation", () => {
     ).toBe(false);
   });
 
+  it("does not treat future previous timestamps as rapid duplicates", () => {
+    expect(
+      isRapidDuplicateComment({
+        previousBody: "Same concern",
+        nextBody: " same concern ",
+        previousCreatedAt: new Date("2026-06-26T12:01:00Z"),
+        now: new Date("2026-06-26T12:00:20Z")
+      })
+    ).toBe(false);
+  });
+
   it("validates reports", () => {
     expect(
       reportInputSchema.parse({
