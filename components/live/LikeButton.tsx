@@ -19,9 +19,11 @@ export function LikeButton({
 
   async function toggleLike() {
     if (disabled) return;
+    const previousLiked = liked;
+    const previousCount = count;
     const nextLiked = !liked;
     setLiked(nextLiked);
-    setCount((current) => current + (nextLiked ? 1 : -1));
+    setCount(previousCount + (nextLiked ? 1 : -1));
 
     try {
       const response = await fetch(`/api/comments/${commentId}/like`, {
@@ -29,12 +31,12 @@ export function LikeButton({
       });
 
       if (!response.ok) {
-        setLiked(liked);
-        setCount(initialCount);
+        setLiked(previousLiked);
+        setCount(previousCount);
       }
     } catch {
-      setLiked(liked);
-      setCount(initialCount);
+      setLiked(previousLiked);
+      setCount(previousCount);
     }
   }
 

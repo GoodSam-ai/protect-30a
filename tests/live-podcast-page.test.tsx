@@ -25,6 +25,12 @@ describe("LivePodcastPage", () => {
     ).toBeInTheDocument();
     expect(screen.getByText(fixtureEvent.title)).toBeInTheDocument();
     expect(
+      screen.getByRole("heading", { name: /podcast player/i })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/livestream or replay will appear here/i)
+    ).toBeInTheDocument();
+    expect(
       screen.getByRole("heading", { name: /sign in to join the conversation/i })
     ).toBeInTheDocument();
     expect(screen.getByText(fixtureComments[0].body)).toBeInTheDocument();

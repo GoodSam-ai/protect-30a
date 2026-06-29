@@ -34,6 +34,12 @@ function statusLabel(event: PodcastEvent) {
   return "Upcoming";
 }
 
+function playerLabel(event: PodcastEvent) {
+  if (event.livestream_url) return "Livestream";
+  if (event.replay_url) return "Replay";
+  return "Player pending";
+}
+
 export function LivePodcastPage({
   event,
   districts,
@@ -56,6 +62,7 @@ export function LivePodcastPage({
     event.advocate_name,
     ...event.guest_names
   ].filter(Boolean);
+  const playerUrl = event.livestream_url || event.replay_url;
 
   return (
     <main className="min-h-screen bg-protect-cream text-protect-ink">
@@ -140,6 +147,53 @@ export function LivePodcastPage({
 
       <section className="mx-auto grid max-w-7xl gap-6 px-4 py-6 sm:px-6 lg:grid-cols-[minmax(0,1fr)_23rem] lg:px-8">
         <div className="grid min-w-0 gap-6">
+          <section
+            className="overflow-hidden rounded border border-protect-sand bg-white shadow-sm"
+            aria-labelledby="podcast-player-heading"
+          >
+            <div className="flex flex-col gap-2 border-b border-protect-sand px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+              <h2
+                id="podcast-player-heading"
+                className="font-serif text-xl font-semibold text-protect-teal"
+              >
+                Podcast player
+              </h2>
+              <span className="w-fit rounded border border-protect-sand bg-protect-cream px-3 py-1 text-sm font-semibold text-protect-teal">
+                {playerLabel(event)}
+              </span>
+            </div>
+            <div
+              className="flex aspect-video min-h-56 items-center justify-center bg-protect-teal p-5 text-center text-white"
+              aria-label={`${event.title} player surface`}
+            >
+              {playerUrl ? (
+                <div className="grid max-w-xl gap-3">
+                  <p className="text-lg font-semibold">
+                    {event.livestream_url
+                      ? "The livestream is available."
+                      : "The replay is available."}
+                  </p>
+                  <a
+                    className="inline-flex min-h-11 items-center justify-center rounded bg-white px-4 font-semibold text-protect-teal"
+                    href={playerUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Open player
+                  </a>
+                </div>
+              ) : (
+                <div className="grid max-w-xl gap-2">
+                  <p className="text-lg font-semibold">
+                    Livestream or replay will appear here when the event starts.
+                  </p>
+                  <p className="text-sm text-white/80">
+                    You can still sign in and follow the public conversation below.
+                  </p>
+                </div>
+              )}
+            </div>
+          </section>
           {profile ? (
             <CommentComposer event={event} profile={profile} />
           ) : (
