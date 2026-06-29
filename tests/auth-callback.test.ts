@@ -56,6 +56,19 @@ describe("auth callback route", () => {
     expect(response.headers.get("location")).toBe("https://example.test/live");
   });
 
+  it("redirects to a safe auth error URL when the provider returns an error without a code", async () => {
+    const response = await GET(
+      new NextRequest(
+        "https://example.test/auth/callback?error=access_denied&next=%2Fadmin"
+      )
+    );
+
+    expect(supabaseMocks.createSupabaseServerClient).not.toHaveBeenCalled();
+    expect(response.headers.get("location")).toBe(
+      "https://example.test/live?auth_error=provider"
+    );
+  });
+
   it("exchanges an auth code before redirecting", async () => {
     const response = await GET(
       new NextRequest(
