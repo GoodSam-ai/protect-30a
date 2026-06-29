@@ -32,9 +32,44 @@ export function CommentComposer({
   const topicId = useId();
   const [body, setBody] = useState("");
   const [topic, setTopic] = useState<(typeof topics)[number]>("Stormwater");
+  const [message, setMessage] = useState(status);
+  const [pending, setPending] = useState(false);
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+
+    if (!canDraft || pending) return;
+
+    setPending(true);
+    setMessage("Submitting comment...");
+
+    try {
+      const response = await fetch("/api/comments", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          eventId,
+          districtId: districtId ?? undefined,
+          body,
+          topic
+        })
+      });
+      const result = (await response.json().catch(() => null)) as {
+        error?: string;
+      } | null;
+
+      if (!response.ok) {
+        setMessage(result?.error || "Unable to submit comment.");
+        return;
+      }
+
+      setBody("");
+      setMessage("Comment submitted.");
+    } catch {
+      setMessage("Unable to submit comment.");
+    } finally {
+      setPending(false);
+    }
   }
 
   return (
@@ -109,7 +144,7 @@ export function CommentComposer({
           />
           <div className="flex flex-col gap-2 text-sm text-protect-ink/70 sm:flex-row sm:items-center sm:justify-between">
             <p role="status" aria-live="polite">
-              {status}
+              {message}
             </p>
             <span>{body.length}/500</span>
           </div>
@@ -118,7 +153,7 @@ export function CommentComposer({
         <button
           type="submit"
           className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded bg-protect-teal px-4 font-semibold text-white transition disabled:cursor-not-allowed disabled:bg-protect-teal/45 sm:w-fit"
-          disabled
+          disabled={!canDraft || pending || body.trim().length === 0}
         >
           <Send size={18} aria-hidden="true" />
           Submit comment

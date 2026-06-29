@@ -4,20 +4,42 @@ import { Copy, ExternalLink, Mail, Send, Share2 } from "lucide-react";
 import { useState } from "react";
 
 export function SharePanel({
+  eventId,
   title,
-  canonicalShareUrl
+  canonicalShareUrl,
+  canTrackShare
 }: {
+  eventId: string;
   title: string;
   canonicalShareUrl: string;
+  canTrackShare: boolean;
 }) {
   const [status, setStatus] = useState<string | null>(null);
   const shareText = `${title} - join the Protect30A live room`;
   const encodedShareUrl = encodeURIComponent(canonicalShareUrl);
   const encodedShareText = encodeURIComponent(shareText);
 
-  async function copyLink(platform?: "TikTok" | "Instagram") {
+  async function trackShare(platform: string) {
+    if (!canTrackShare) return;
+
+    try {
+      await fetch("/api/shares", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ eventId, platform })
+      });
+    } catch {
+      // Share tracking is best-effort; never block the visible share action.
+    }
+  }
+
+  async function copyLink(
+    platform?: "TikTok" | "Instagram",
+    trackingPlatform = "copy_link"
+  ) {
     try {
       await navigator.clipboard.writeText(canonicalShareUrl);
+      await trackShare(trackingPlatform);
       setStatus(
         platform
           ? `Copied canonical live room link for ${platform}.`
@@ -40,6 +62,7 @@ export function SharePanel({
         text: shareText,
         url: canonicalShareUrl
       });
+      await trackShare("other");
       setStatus("Share sheet opened with canonical live room link.");
     } catch {
       setStatus("Share was canceled.");
@@ -80,6 +103,7 @@ export function SharePanel({
         <a
           className="inline-flex min-h-11 items-center justify-center gap-2 rounded border border-protect-sand px-4 font-semibold text-protect-teal"
           href={`mailto:?subject=${encodedShareText}&body=${encodedShareText}%0A${encodedShareUrl}`}
+          onClick={() => void trackShare("email")}
         >
           <Mail size={18} aria-hidden="true" />
           Email
@@ -89,6 +113,7 @@ export function SharePanel({
           href={`https://twitter.com/intent/tweet?text=${encodedShareText}&url=${encodedShareUrl}`}
           target="_blank"
           rel="noreferrer"
+          onClick={() => void trackShare("x")}
         >
           <Send size={18} aria-hidden="true" />
           Post to X
@@ -96,7 +121,7 @@ export function SharePanel({
         <button
           type="button"
           className="inline-flex min-h-11 items-center justify-center gap-2 rounded border border-protect-sand px-4 text-sm font-semibold leading-tight text-protect-teal"
-          onClick={() => copyLink("TikTok")}
+          onClick={() => copyLink("TikTok", "tiktok")}
         >
           <Copy size={18} aria-hidden="true" />
           Copy link for TikTok
@@ -106,6 +131,7 @@ export function SharePanel({
           href="https://www.tiktok.com/"
           target="_blank"
           rel="noreferrer"
+          onClick={() => void trackShare("tiktok")}
         >
           <ExternalLink size={18} aria-hidden="true" />
           Open TikTok
@@ -113,7 +139,7 @@ export function SharePanel({
         <button
           type="button"
           className="inline-flex min-h-11 items-center justify-center gap-2 rounded border border-protect-sand px-4 text-sm font-semibold leading-tight text-protect-teal"
-          onClick={() => copyLink("Instagram")}
+          onClick={() => copyLink("Instagram", "instagram")}
         >
           <Copy size={18} aria-hidden="true" />
           Copy link for Instagram
@@ -123,6 +149,7 @@ export function SharePanel({
           href="https://www.instagram.com/"
           target="_blank"
           rel="noreferrer"
+          onClick={() => void trackShare("instagram")}
         >
           <ExternalLink size={18} aria-hidden="true" />
           Open Instagram

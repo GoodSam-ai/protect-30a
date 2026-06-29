@@ -5,14 +5,17 @@ import { join } from "node:path";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const canonicalShareUrl = "https://protect30a.org/live/protect30a-live";
+const eventId = "20000000-0000-4000-8000-000000000001";
 const writeTextMock = vi.fn();
 const shareMock = vi.fn();
 
-function renderSharePanel() {
+function renderSharePanel(canTrackShare = false) {
   return render(
     <SharePanel
+      eventId={eventId}
       title="Protect30A Live"
       canonicalShareUrl={canonicalShareUrl}
+      canTrackShare={canTrackShare}
     />
   );
 }
@@ -30,6 +33,12 @@ describe("SharePanel", () => {
       configurable: true,
       value: shareMock
     });
+    vi.spyOn(globalThis, "fetch").mockResolvedValue(
+      new Response(JSON.stringify({ ok: true }), {
+        status: 200,
+        headers: { "Content-Type": "application/json" }
+      })
+    );
   });
 
   it("renders share links from plain share props", () => {
@@ -101,6 +110,44 @@ describe("SharePanel", () => {
     expect(screen.getByRole("status")).toHaveTextContent(
       "Copied canonical live room link for Instagram."
     );
+  });
+
+  it("tracks share options for signed-in users without blocking canonical behavior", async () => {
+    const fetchMock = vi.mocked(globalThis.fetch);
+    renderSharePanel(true);
+
+    fireEvent.click(screen.getByRole("button", { name: "Copy link" }));
+    await waitFor(() =>
+      expect(writeTextMock).toHaveBeenCalledWith(canonicalShareUrl)
+    );
+    await waitFor(() =>
+      expect(fetchMock).toHaveBeenCalledWith("/api/shares", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ eventId, platform: "copy_link" })
+      })
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "Copy link for TikTok" }));
+    await waitFor(() =>
+      expect(fetchMock).toHaveBeenLastCalledWith("/api/shares", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ eventId, platform: "tiktok" })
+      })
+    );
+  });
+
+  it("does not track share options for anonymous users", async () => {
+    const fetchMock = vi.mocked(globalThis.fetch);
+    renderSharePanel(false);
+
+    fireEvent.click(screen.getByRole("button", { name: "Copy link" }));
+
+    await waitFor(() =>
+      expect(writeTextMock).toHaveBeenCalledWith(canonicalShareUrl)
+    );
+    expect(fetchMock).not.toHaveBeenCalled();
   });
 
   it("does not import the mixed site config module into the client bundle", () => {
