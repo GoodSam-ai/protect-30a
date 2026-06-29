@@ -1,5 +1,9 @@
 import { z } from "zod";
 
+function normalizeEnumInput(value: unknown) {
+  return typeof value === "string" ? value.trim().toLowerCase() : value;
+}
+
 export const topicSchema = z.enum([
   "Stormwater",
   "Traffic",
@@ -20,14 +24,24 @@ export const commentInputSchema = z.object({
   topic: topicSchema.optional()
 });
 
+export const reportReasonSchema = z.preprocess(
+  normalizeEnumInput,
+  z.enum(["spam", "harassment", "misinformation", "off_topic", "other"])
+);
+
 export const reportInputSchema = z.object({
-  reason: z.string().trim().min(3).max(80),
-  details: z.string().trim().max(500).optional()
+  reason: reportReasonSchema,
+  details: z.string().trim().max(1000).optional()
 });
+
+export const sharePlatformSchema = z.preprocess(
+  normalizeEnumInput,
+  z.enum(["facebook", "instagram", "tiktok", "x", "email", "copy_link", "other"])
+);
 
 export const shareInputSchema = z.object({
   eventId: z.string().uuid(),
-  platform: z.string().trim().min(2).max(40)
+  platform: sharePlatformSchema
 });
 
 export function normalizeCommentBody(body: string) {

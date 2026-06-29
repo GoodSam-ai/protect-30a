@@ -1,3 +1,5 @@
+import "server-only";
+
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import {
   fixtureComments,
@@ -67,16 +69,18 @@ export async function getEventBySlug(slug: string) {
     .from("podcast_events")
     .select("*")
     .eq("slug", slug)
-    .single();
+    .maybeSingle();
 
-  if (error) return null;
+  if (error) throw error;
   return data;
 }
 
 export async function getVisibleComments(
   eventId: string
 ): Promise<LiveComment[]> {
-  if (!hasSupabaseEnv()) return fixtureComments;
+  if (!hasSupabaseEnv()) {
+    return fixtureComments.filter((comment) => comment.event_id === eventId);
+  }
 
   const supabase = await createSupabaseServerClient();
   const { data, error } = await supabase
