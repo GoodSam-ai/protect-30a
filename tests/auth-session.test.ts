@@ -46,6 +46,26 @@ describe("auth session helpers", () => {
     expect(supabaseMocks.createSupabaseServerClient).not.toHaveBeenCalled();
   });
 
+  it("throws a configuration error when only the Supabase URL is configured", async () => {
+    vi.stubEnv("NEXT_PUBLIC_SUPABASE_URL", "https://example.supabase.co");
+    vi.stubEnv("NEXT_PUBLIC_SUPABASE_ANON_KEY", "");
+
+    await expect(getCurrentUserAndProfile()).rejects.toThrow(
+      "Supabase environment variables are partially configured."
+    );
+    expect(supabaseMocks.createSupabaseServerClient).not.toHaveBeenCalled();
+  });
+
+  it("throws a configuration error when only the Supabase anon key is configured", async () => {
+    vi.stubEnv("NEXT_PUBLIC_SUPABASE_URL", "");
+    vi.stubEnv("NEXT_PUBLIC_SUPABASE_ANON_KEY", "anon-key");
+
+    await expect(getCurrentUserAndProfile()).rejects.toThrow(
+      "Supabase environment variables are partially configured."
+    );
+    expect(supabaseMocks.createSupabaseServerClient).not.toHaveBeenCalled();
+  });
+
   it("allows unrestricted moderators and admins to moderate", () => {
     expect(canModerate(profile({ role: "moderator" }))).toBe(true);
     expect(canModerate(profile({ role: "admin" }))).toBe(true);

@@ -1,7 +1,5 @@
 "use client";
 
-import type { PublicProfile } from "@/lib/auth/session";
-import type { PodcastEvent } from "@/lib/live/types";
 import { Send } from "lucide-react";
 import { useId, useState } from "react";
 
@@ -18,26 +16,22 @@ const topics = [
 ] as const;
 
 export function CommentComposer({
-  event,
-  profile
+  eventId,
+  districtId,
+  displayName,
+  canDraft,
+  status
 }: {
-  event: PodcastEvent;
-  profile: PublicProfile | null;
+  eventId: string;
+  districtId: string | null;
+  displayName: string;
+  canDraft: boolean;
+  status: string;
 }) {
   const bodyId = useId();
   const topicId = useId();
   const [body, setBody] = useState("");
   const [topic, setTopic] = useState<(typeof topics)[number]>("Stormwater");
-
-  const canDraft = Boolean(
-    profile && event.comments_enabled && !profile.is_restricted
-  );
-  const displayName = profile?.display_name?.trim() || "Community member";
-  const status = !event.comments_enabled
-    ? "Comments are closed for this event."
-    : profile?.is_restricted
-      ? "Your profile cannot post comments right now."
-      : "Comment posting opens in the next release. You can draft your thought here now.";
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -66,9 +60,9 @@ export function CommentComposer({
       </div>
 
       <form className="mt-4 grid gap-3" onSubmit={handleSubmit}>
-        <input type="hidden" name="eventId" value={event.id} />
-        {event.district_id ? (
-          <input type="hidden" name="districtId" value={event.district_id} />
+        <input type="hidden" name="eventId" value={eventId} />
+        {districtId ? (
+          <input type="hidden" name="districtId" value={districtId} />
         ) : null}
 
         <div className="grid gap-2">

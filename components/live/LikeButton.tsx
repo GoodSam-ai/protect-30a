@@ -7,21 +7,25 @@ export function LikeButton({
   commentId,
   initialLiked,
   initialCount,
-  disabled
+  disabled,
+  commentAuthor
 }: {
   commentId: string;
   initialLiked: boolean;
   initialCount: number;
   disabled: boolean;
+  commentAuthor?: string;
 }) {
   const [liked, setLiked] = useState(initialLiked);
   const [count, setCount] = useState(initialCount);
+  const [pending, setPending] = useState(false);
 
   async function toggleLike() {
-    if (disabled) return;
+    if (disabled || pending) return;
     const previousLiked = liked;
     const previousCount = count;
     const nextLiked = !liked;
+    setPending(true);
     setLiked(nextLiked);
     setCount(previousCount + (nextLiked ? 1 : -1));
 
@@ -37,16 +41,24 @@ export function LikeButton({
     } catch {
       setLiked(previousLiked);
       setCount(previousCount);
+    } finally {
+      setPending(false);
     }
   }
+
+  const actionLabel = liked ? "Unlike comment" : "Like comment";
+  const accessibleLabel = commentAuthor
+    ? `${actionLabel} from ${commentAuthor}`
+    : actionLabel;
 
   return (
     <button
       type="button"
       className="inline-flex min-h-10 items-center justify-center gap-2 rounded border border-protect-sand px-3 text-sm font-semibold text-protect-teal transition hover:bg-protect-cream disabled:cursor-not-allowed disabled:opacity-55"
-      aria-label={liked ? "Unlike comment" : "Like comment"}
+      aria-label={accessibleLabel}
       aria-pressed={liked}
-      disabled={disabled}
+      aria-busy={pending}
+      disabled={disabled || pending}
       onClick={toggleLike}
     >
       <Heart

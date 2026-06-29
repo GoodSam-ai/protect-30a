@@ -24,6 +24,7 @@ describe("LivePodcastPage", () => {
       screen.getByRole("heading", { name: /resident live room/i })
     ).toBeInTheDocument();
     expect(screen.getByText(fixtureEvent.title)).toBeInTheDocument();
+    expect(screen.getByText("Fri, Jul 3, 6:00 PM CDT")).toBeInTheDocument();
     expect(
       screen.getByRole("heading", { name: /podcast player/i })
     ).toBeInTheDocument();
@@ -34,6 +35,7 @@ describe("LivePodcastPage", () => {
       screen.getByRole("heading", { name: /sign in to join the conversation/i })
     ).toBeInTheDocument();
     expect(screen.getByText(fixtureComments[0].body)).toBeInTheDocument();
+    expect(screen.getByText("Jun 26, 7:00 AM")).toBeInTheDocument();
     expect(
       screen.getByRole("heading", { name: /district focus/i })
     ).toBeInTheDocument();

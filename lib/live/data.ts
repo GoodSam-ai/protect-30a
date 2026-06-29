@@ -5,7 +5,6 @@ import {
   fixtureComments,
   fixtureDistricts,
   fixtureEvent,
-  fixtureMetrics
 } from "./fixtures";
 import type { LiveComment } from "./types";
 
@@ -116,13 +115,14 @@ export async function getVisibleComments(
   }));
 }
 
-export async function getLiveMetrics(_eventId: string) {
-  if (!hasSupabaseEnv()) return fixtureMetrics;
-  const comments = await getVisibleComments(_eventId);
+export function buildLiveMetricsFromComments(
+  comments: LiveComment[],
+  totalShares = 0
+) {
   return {
     totalComments: comments.length,
     totalLikes: comments.reduce((sum, comment) => sum + comment.like_count, 0),
-    totalShares: 0,
+    totalShares,
     commentsPerMinute: 0,
     topTopics: Object.entries(
       comments.reduce<Record<string, number>>((acc, comment) => {
@@ -131,4 +131,9 @@ export async function getLiveMetrics(_eventId: string) {
       }, {})
     ).map(([topic, count]) => ({ topic, count }))
   };
+}
+
+export async function getLiveMetrics(_eventId: string) {
+  const comments = await getVisibleComments(_eventId);
+  return buildLiveMetricsFromComments(comments);
 }

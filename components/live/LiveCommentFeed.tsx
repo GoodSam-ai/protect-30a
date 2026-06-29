@@ -1,16 +1,8 @@
 import { LikeButton } from "@/components/live/LikeButton";
+import { formatLiveCommentTime } from "@/components/live/date-format";
 import type { PublicProfile } from "@/lib/auth/session";
 import type { LiveComment } from "@/lib/live/types";
 import { MessageCircle, Star } from "lucide-react";
-
-function formatCommentDate(value: string) {
-  return new Intl.DateTimeFormat("en-US", {
-    month: "short",
-    day: "numeric",
-    hour: "numeric",
-    minute: "2-digit"
-  }).format(new Date(value));
-}
 
 export function LiveCommentFeed({
   comments,
@@ -61,7 +53,7 @@ export function LiveCommentFeed({
                     </div>
                     <p className="mt-1 text-sm text-protect-ink/60">
                       <time dateTime={comment.created_at}>
-                        {formatCommentDate(comment.created_at)}
+                        {formatLiveCommentTime(comment.created_at)}
                       </time>
                       {comment.topic ? ` - ${comment.topic}` : null}
                     </p>
@@ -71,6 +63,7 @@ export function LiveCommentFeed({
                     initialLiked={comment.liked_by_me}
                     initialCount={comment.like_count}
                     disabled={likesDisabled}
+                    commentAuthor={comment.author_display_name}
                   />
                 </header>
                 <p className="mt-3 whitespace-pre-wrap break-words leading-7 text-protect-ink">

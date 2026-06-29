@@ -5,6 +5,7 @@ import { EngagementDashboard } from "@/components/live/EngagementDashboard";
 import { InfluencerLeaderboard } from "@/components/live/InfluencerLeaderboard";
 import { LiveCommentFeed } from "@/components/live/LiveCommentFeed";
 import { SharePanel } from "@/components/live/SharePanel";
+import { formatLiveEventTime } from "@/components/live/date-format";
 import type { PublicProfile } from "@/lib/auth/session";
 import type {
   District,
@@ -13,19 +14,6 @@ import type {
   PodcastEvent
 } from "@/lib/live/types";
 import { CalendarDays, Mic2, Radio, UsersRound } from "lucide-react";
-
-function formatEventTime(value: string | null) {
-  if (!value) return "Time to be announced";
-
-  return new Intl.DateTimeFormat("en-US", {
-    weekday: "short",
-    month: "short",
-    day: "numeric",
-    hour: "numeric",
-    minute: "2-digit",
-    timeZoneName: "short"
-  }).format(new Date(value));
-}
 
 function statusLabel(event: PodcastEvent) {
   if (event.status === "live") return "Live now";
@@ -38,6 +26,24 @@ function playerLabel(event: PodcastEvent) {
   if (event.livestream_url) return "Livestream";
   if (event.replay_url) return "Replay";
   return "Player pending";
+}
+
+function buildCommentComposerProps(event: PodcastEvent, profile: PublicProfile) {
+  const displayName = profile.display_name?.trim() || "Community member";
+  const canDraft = event.comments_enabled && !profile.is_restricted;
+  const status = !event.comments_enabled
+    ? "Comments are closed for this event."
+    : profile.is_restricted
+      ? "Your profile cannot post comments right now."
+      : "Comment posting opens in the next release. You can draft your thought here now.";
+
+  return {
+    eventId: event.id,
+    districtId: event.district_id,
+    displayName,
+    canDraft,
+    status
+  };
 }
 
 export function LivePodcastPage({
@@ -63,6 +69,9 @@ export function LivePodcastPage({
     ...event.guest_names
   ].filter(Boolean);
   const playerUrl = event.livestream_url || event.replay_url;
+  const composerProps = profile
+    ? buildCommentComposerProps(event, profile)
+    : null;
 
   return (
     <main className="min-h-screen bg-protect-cream text-protect-ink">
@@ -105,7 +114,7 @@ export function LivePodcastPage({
                   Event time
                 </p>
                 <p className="mt-1 font-semibold text-protect-teal">
-                  {formatEventTime(event.starts_at)}
+                  {formatLiveEventTime(event.starts_at)}
                 </p>
               </div>
             </div>
@@ -194,8 +203,8 @@ export function LivePodcastPage({
               )}
             </div>
           </section>
-          {profile ? (
-            <CommentComposer event={event} profile={profile} />
+          {composerProps ? (
+            <CommentComposer {...composerProps} />
           ) : (
             <SignInPanel redirectTo={`/live/${event.slug}`} />
           )}

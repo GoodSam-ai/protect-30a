@@ -1,9 +1,9 @@
 import { LivePodcastPage } from "@/components/live/LivePodcastPage";
 import { getCurrentUserAndProfile } from "@/lib/auth/session";
 import {
+  buildLiveMetricsFromComments,
   getActiveEvent,
   getDistricts,
-  getLiveMetrics,
   getVisibleComments
 } from "@/lib/live/data";
 
@@ -13,10 +13,8 @@ export default async function LivePage() {
     getDistricts(),
     getCurrentUserAndProfile()
   ]);
-  const [comments, metrics] = await Promise.all([
-    getVisibleComments(event.id),
-    getLiveMetrics(event.id)
-  ]);
+  const comments = await getVisibleComments(event.id);
+  const metrics = buildLiveMetricsFromComments(comments);
 
   return (
     <LivePodcastPage

@@ -1,5 +1,9 @@
-import { getEventBySlug, getVisibleComments } from "@/lib/live/data";
-import { fixtureEvent } from "@/lib/live/fixtures";
+import {
+  buildLiveMetricsFromComments,
+  getEventBySlug,
+  getVisibleComments
+} from "@/lib/live/data";
+import { fixtureComments, fixtureEvent } from "@/lib/live/fixtures";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const supabaseMocks = vi.hoisted(() => ({
@@ -149,5 +153,15 @@ describe("live data access", () => {
     await expect(
       getVisibleComments("99999999-9999-4999-8999-999999999999")
     ).resolves.toEqual([]);
+  });
+
+  it("builds live metrics from already-loaded comments", () => {
+    expect(buildLiveMetricsFromComments(fixtureComments, 3)).toEqual({
+      totalComments: 1,
+      totalLikes: 8,
+      totalShares: 3,
+      commentsPerMinute: 0,
+      topTopics: [{ topic: "Stormwater", count: 1 }]
+    });
   });
 });

@@ -2,6 +2,15 @@ import { LikeButton } from "@/components/live/LikeButton";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
+function deferredResponse() {
+  let resolve!: (value: Response) => void;
+  const promise = new Promise<Response>((resolver) => {
+    resolve = resolver;
+  });
+
+  return { promise, resolve };
+}
+
 describe("LikeButton", () => {
   afterEach(() => {
     vi.restoreAllMocks();
@@ -45,5 +54,37 @@ describe("LikeButton", () => {
       "aria-pressed",
       "true"
     );
+  });
+
+  it("ignores rapid clicks while a like request is pending", async () => {
+    const pending = deferredResponse();
+    const fetchMock = vi.spyOn(globalThis, "fetch").mockReturnValue(pending.promise);
+
+    render(
+      <LikeButton
+        commentId="comment-1"
+        initialLiked={false}
+        initialCount={8}
+        disabled={false}
+        commentAuthor="Community member"
+      />
+    );
+
+    const button = screen.getByRole("button", {
+      name: /like comment from community member/i
+    });
+
+    fireEvent.click(button);
+    fireEvent.click(button);
+
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(button).toBeDisabled();
+    expect(button).toHaveTextContent("9");
+
+    pending.resolve(new Response(null, { status: 500 }));
+
+    await waitFor(() => expect(button).not.toBeDisabled());
+    expect(button).toHaveTextContent("8");
+    expect(button).toHaveAttribute("aria-pressed", "false");
   });
 });

@@ -89,7 +89,7 @@ export function SharePanel({ event }: { event: PodcastEvent }) {
           rel="noreferrer"
         >
           <Send size={18} aria-hidden="true" />
-          Post
+          Post to X
         </a>
       </div>
       {status ? (
