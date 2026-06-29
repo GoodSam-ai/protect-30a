@@ -23,6 +23,20 @@ function extractViewSelectList(
   return migration.slice(selectStart, fromStart);
 }
 
+function extractFunctionBody(functionName: string): string {
+  const functionStart = migration.indexOf(
+    `create or replace function public.${functionName}()`
+  );
+  expect(functionStart).toBeGreaterThanOrEqual(0);
+
+  const bodyStart = migration.indexOf("as $$", functionStart);
+  const bodyEnd = migration.indexOf("$$;", bodyStart);
+  expect(bodyStart).toBeGreaterThan(functionStart);
+  expect(bodyEnd).toBeGreaterThan(bodyStart);
+
+  return migration.slice(bodyStart, bodyEnd);
+}
+
 describe("live engagement migration contracts", () => {
   it("does not expose stable auth user ids in public engagement view select lists", () => {
     expect(
@@ -85,5 +99,31 @@ describe("live engagement migration contracts", () => {
     expect(migration).toContain("constraint event_shares_platform_check");
     expect(migration).toContain("'spam', 'harassment', 'misinformation', 'off_topic', 'other'");
     expect(migration).toContain("'facebook', 'instagram', 'tiktok', 'x', 'email', 'copy_link', 'other'");
+  });
+
+  it("attaches engagement insert triggers to the matching field normalization bodies", () => {
+    const likeBody = extractFunctionBody("prepare_comment_like_insert");
+    expect(likeBody).toContain("new.created_at = now()");
+    expect(likeBody).not.toMatch(/new\.(reason|details|platform)\b/);
+    expect(migration).toContain(
+      "before insert on public.comment_likes\nfor each row\nexecute function public.prepare_comment_like_insert()"
+    );
+
+    const reportBody = extractFunctionBody("prepare_comment_report_insert");
+    expect(reportBody).toContain("new.created_at = now()");
+    expect(reportBody).toContain("new.reason = lower(trim(new.reason))");
+    expect(reportBody).toContain("new.details = nullif(trim(new.details), '')");
+    expect(reportBody).not.toMatch(/new\.platform\b/);
+    expect(migration).toContain(
+      "before insert on public.comment_reports\nfor each row\nexecute function public.prepare_comment_report_insert()"
+    );
+
+    const shareBody = extractFunctionBody("prepare_event_share_insert");
+    expect(shareBody).toContain("new.created_at = now()");
+    expect(shareBody).toContain("new.platform = lower(trim(new.platform))");
+    expect(shareBody).not.toMatch(/new\.(reason|details)\b/);
+    expect(migration).toContain(
+      "before insert on public.event_shares\nfor each row\nexecute function public.prepare_event_share_insert()"
+    );
   });
 });

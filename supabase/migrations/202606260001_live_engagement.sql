@@ -289,8 +289,6 @@ set search_path = public
 as $$
 begin
   new.created_at = now();
-  new.reason = lower(trim(new.reason));
-  new.details = nullif(trim(new.details), '');
   return new;
 end;
 $$;
@@ -307,7 +305,8 @@ set search_path = public
 as $$
 begin
   new.created_at = now();
-  new.platform = lower(trim(new.platform));
+  new.reason = lower(trim(new.reason));
+  new.details = nullif(trim(new.details), '');
   return new;
 end;
 $$;
@@ -324,6 +323,7 @@ set search_path = public
 as $$
 begin
   new.created_at = now();
+  new.platform = lower(trim(new.platform));
   return new;
 end;
 $$;
