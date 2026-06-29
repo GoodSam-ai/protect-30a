@@ -11,7 +11,24 @@ export type PublicProfile = {
   is_restricted: boolean;
 };
 
+function hasSupabaseEnv() {
+  const hasUrl = Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL);
+  const hasAnonKey = Boolean(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
+
+  if (hasUrl !== hasAnonKey) {
+    throw new Error(
+      "Supabase environment variables are partially configured."
+    );
+  }
+
+  return hasUrl && hasAnonKey;
+}
+
 export async function getCurrentUserAndProfile() {
+  if (!hasSupabaseEnv()) {
+    return { user: null, profile: null };
+  }
+
   const supabase = await createSupabaseServerClient();
   const {
     data: { user }

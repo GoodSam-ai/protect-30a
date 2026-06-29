@@ -1,5 +1,17 @@
-import { canModerate, type PublicProfile } from "@/lib/auth/session";
-import { describe, expect, it } from "vitest";
+import {
+  canModerate,
+  getCurrentUserAndProfile,
+  type PublicProfile
+} from "@/lib/auth/session";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+
+const supabaseMocks = vi.hoisted(() => ({
+  createSupabaseServerClient: vi.fn()
+}));
+
+vi.mock("@/lib/supabase/server", () => ({
+  createSupabaseServerClient: supabaseMocks.createSupabaseServerClient
+}));
 
 function profile(overrides: Partial<PublicProfile> = {}): PublicProfile {
   return {
@@ -14,6 +26,26 @@ function profile(overrides: Partial<PublicProfile> = {}): PublicProfile {
 }
 
 describe("auth session helpers", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.unstubAllEnvs();
+  });
+
+  afterEach(() => {
+    vi.unstubAllEnvs();
+  });
+
+  it("returns a logged-out session without Supabase environment variables", async () => {
+    vi.stubEnv("NEXT_PUBLIC_SUPABASE_URL", "");
+    vi.stubEnv("NEXT_PUBLIC_SUPABASE_ANON_KEY", "");
+
+    await expect(getCurrentUserAndProfile()).resolves.toEqual({
+      user: null,
+      profile: null
+    });
+    expect(supabaseMocks.createSupabaseServerClient).not.toHaveBeenCalled();
+  });
+
   it("allows unrestricted moderators and admins to moderate", () => {
     expect(canModerate(profile({ role: "moderator" }))).toBe(true);
     expect(canModerate(profile({ role: "admin" }))).toBe(true);
