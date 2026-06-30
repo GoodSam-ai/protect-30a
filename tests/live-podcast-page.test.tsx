@@ -99,4 +99,35 @@ describe("LivePodcastPage", () => {
       })
     ).toBeDisabled();
   });
+
+  it("renders accessible live engagement mode controls", () => {
+    render(
+      <LivePodcastPage
+        event={fixtureEvent}
+        districts={fixtureDistricts}
+        comments={fixtureComments}
+        metrics={fixtureMetrics}
+        profile={null}
+      />
+    );
+
+    expect(
+      screen.getByRole("group", { name: /live engagement update mode/i })
+    ).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Auto" })).toHaveAttribute(
+      "aria-pressed",
+      "true"
+    );
+    expect(screen.getByRole("button", { name: "Realtime" })).toHaveAttribute(
+      "aria-pressed",
+      "false"
+    );
+    expect(screen.getByRole("button", { name: "Polling" })).toHaveAttribute(
+      "aria-pressed",
+      "false"
+    );
+    expect(
+      screen.getByRole("button", { name: "Low bandwidth" })
+    ).toHaveAttribute("aria-pressed", "false");
+  });
 });
