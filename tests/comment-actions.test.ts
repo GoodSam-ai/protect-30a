@@ -64,6 +64,27 @@ function signOut() {
   });
 }
 
+function restrictProfile() {
+  actionMocks.getCurrentUserAndProfile.mockResolvedValue({
+    user,
+    profile: {
+      id: user.id,
+      display_name: "Resident",
+      avatar_url: null,
+      role: "user",
+      primary_district_id: districtId,
+      is_restricted: true
+    }
+  });
+}
+
+function removeProfile() {
+  actionMocks.getCurrentUserAndProfile.mockResolvedValue({
+    user,
+    profile: null
+  });
+}
+
 function requestJson(body: unknown) {
   return new Request("https://protect30a.test/api", {
     method: "POST",
@@ -229,6 +250,44 @@ describe("live engagement mutation actions", () => {
     );
   });
 
+  it("rejects restricted profile mutation attempts before Supabase writes", async () => {
+    restrictProfile();
+
+    await expect(
+      createComment({ eventId, body: "Please discuss stormwater." })
+    ).rejects.toThrow("Your profile cannot post comments right now.");
+    await expect(toggleCommentLike(commentId, true)).rejects.toThrow(
+      "Your profile cannot like comments right now."
+    );
+    await expect(
+      reportComment(commentId, { reason: "spam" })
+    ).rejects.toThrow("Your profile cannot report comments right now.");
+    await expect(trackShare({ eventId, platform: "instagram" })).rejects.toThrow(
+      "Your profile cannot track shares right now."
+    );
+    expect(actionMocks.createSupabaseServerClient).not.toHaveBeenCalled();
+    expect(actionMocks.createSupabaseAdminClient).not.toHaveBeenCalled();
+  });
+
+  it("rejects missing profile mutation attempts before Supabase writes", async () => {
+    removeProfile();
+
+    await expect(
+      createComment({ eventId, body: "Please discuss stormwater." })
+    ).rejects.toThrow("Your profile cannot post comments right now.");
+    await expect(toggleCommentLike(commentId, true)).rejects.toThrow(
+      "Your profile cannot like comments right now."
+    );
+    await expect(
+      reportComment(commentId, { reason: "spam" })
+    ).rejects.toThrow("Your profile cannot report comments right now.");
+    await expect(trackShare({ eventId, platform: "instagram" })).rejects.toThrow(
+      "Your profile cannot track shares right now."
+    );
+    expect(actionMocks.createSupabaseServerClient).not.toHaveBeenCalled();
+    expect(actionMocks.createSupabaseAdminClient).not.toHaveBeenCalled();
+  });
+
   it("validates and inserts a comment for the current user", async () => {
     const insertedComment = {
       id: commentId,
@@ -268,14 +327,14 @@ describe("live engagement mutation actions", () => {
     });
   });
 
-  it("inserts and deletes comment likes for the current user", async () => {
-    const insert = vi.fn().mockResolvedValue({ error: null });
+  it("upserts and deletes comment likes for the current user", async () => {
+    const upsert = vi.fn().mockResolvedValue({ error: null });
     const secondEq = vi.fn().mockResolvedValue({ error: null });
     const firstEq = vi.fn(() => ({ eq: secondEq }));
     const deleteLike = vi.fn(() => ({ eq: firstEq }));
     actionMocks.createSupabaseServerClient.mockResolvedValue({
       from: vi.fn(() => ({
-        insert,
+        upsert,
         delete: deleteLike
       }))
     });
@@ -283,10 +342,16 @@ describe("live engagement mutation actions", () => {
     await expect(toggleCommentLike(commentId, true)).resolves.toEqual({
       liked: true
     });
-    expect(insert).toHaveBeenCalledWith({
-      comment_id: commentId,
-      user_id: user.id
-    });
+    expect(upsert).toHaveBeenCalledWith(
+      {
+        comment_id: commentId,
+        user_id: user.id
+      },
+      {
+        onConflict: "comment_id,user_id",
+        ignoreDuplicates: true
+      }
+    );
 
     await expect(toggleCommentLike(commentId, false)).resolves.toEqual({
       liked: false
@@ -296,14 +361,14 @@ describe("live engagement mutation actions", () => {
     expect(secondEq).toHaveBeenCalledWith("user_id", user.id);
   });
 
-  it("creates a report and marks the comment reported through the admin client", async () => {
-    const insert = vi.fn().mockResolvedValue({ error: null });
+  it("upserts a report and marks the comment reported through the admin client", async () => {
+    const upsert = vi.fn().mockResolvedValue({ error: null });
     const secondEq = vi.fn().mockResolvedValue({ error: null });
     const update = vi.fn(() => ({ eq: secondEq }));
     actionMocks.createSupabaseServerClient.mockResolvedValue({
       from: vi.fn((table: string) => {
         expect(table).toBe("comment_reports");
-        return { insert };
+        return { upsert };
       })
     });
     actionMocks.createSupabaseAdminClient.mockReturnValue({
@@ -320,12 +385,57 @@ describe("live engagement mutation actions", () => {
       })
     ).resolves.toEqual({ ok: true });
 
-    expect(insert).toHaveBeenCalledWith({
-      comment_id: commentId,
-      reporter_user_id: user.id,
-      reason: "spam",
-      details: "Repeated unrelated link."
+    expect(upsert).toHaveBeenCalledWith(
+      {
+        comment_id: commentId,
+        reporter_user_id: user.id,
+        reason: "spam",
+        details: "Repeated unrelated link."
+      },
+      {
+        onConflict: "comment_id,reporter_user_id",
+        ignoreDuplicates: true
+      }
+    );
+    expect(update).toHaveBeenCalledWith({ is_reported: true });
+    expect(secondEq).toHaveBeenCalledWith("id", commentId);
+  });
+
+  it("still marks duplicate reports as reported", async () => {
+    const upsert = vi.fn().mockResolvedValue({ error: null });
+    const secondEq = vi.fn().mockResolvedValue({ error: null });
+    const update = vi.fn(() => ({ eq: secondEq }));
+    actionMocks.createSupabaseServerClient.mockResolvedValue({
+      from: vi.fn((table: string) => {
+        expect(table).toBe("comment_reports");
+        return { upsert };
+      })
     });
+    actionMocks.createSupabaseAdminClient.mockReturnValue({
+      from: vi.fn((table: string) => {
+        expect(table).toBe("comments");
+        return { update };
+      })
+    });
+
+    await expect(
+      reportComment(commentId, {
+        reason: "other"
+      })
+    ).resolves.toEqual({ ok: true });
+
+    expect(upsert).toHaveBeenCalledWith(
+      {
+        comment_id: commentId,
+        reporter_user_id: user.id,
+        reason: "other",
+        details: null
+      },
+      {
+        onConflict: "comment_id,reporter_user_id",
+        ignoreDuplicates: true
+      }
+    );
     expect(update).toHaveBeenCalledWith({ is_reported: true });
     expect(secondEq).toHaveBeenCalledWith("id", commentId);
   });
@@ -368,6 +478,7 @@ describe("live engagement route handlers", () => {
   it("returns JSON success shapes from mutation routes", async () => {
     const commentsTable = insertReturningSingle({ id: commentId, event_id: eventId });
     const insert = vi.fn().mockResolvedValue({ error: null });
+    const upsert = vi.fn().mockResolvedValue({ error: null });
     const secondEq = vi.fn().mockResolvedValue({ error: null });
     const firstEq = vi.fn(() => ({ eq: secondEq }));
     const deleteLike = vi.fn(() => ({ eq: firstEq }));
@@ -376,6 +487,7 @@ describe("live engagement route handlers", () => {
         if (table === "comments") return commentsTable;
         return {
           insert,
+          upsert,
           delete: deleteLike
         };
       })
