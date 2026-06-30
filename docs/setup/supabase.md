@@ -78,11 +78,12 @@ After deployment, sign in once as `doug@goodsam.ai` so Supabase creates the auth
 user and application profile. Then bootstrap that profile as admin:
 
 ```sql
-update profiles
+update public.profiles as profile
 set role = 'admin'
-where email = 'doug@goodsam.ai';
+from auth.users as auth_user
+where profile.id = auth_user.id
+  and lower(auth_user.email) = lower('doug@goodsam.ai');
 ```
 
 Run this from the Supabase SQL editor or another trusted server-side database
 connection. After the role update, `doug@goodsam.ai` can access `/admin`.
-

@@ -10,7 +10,7 @@ Official references:
 - [Supabase redirect URLs](https://supabase.com/docs/guides/auth/redirect-urls)
 - [Supabase custom OAuth/OIDC providers](https://supabase.com/docs/guides/auth/custom-oauth-providers)
 - [TikTok Login Kit for Web](https://developers.tiktok.com/doc/login-kit-web/)
-- [Instagram API with Instagram Login](https://developers.facebook.com/documentation/instagram-platform/instagram-api-with-instagram-login)
+- [Instagram API with Instagram Login](https://developers.facebook.com/docs/instagram-platform/instagram-api-with-instagram-login/)
 
 ## Callback URLs
 
@@ -132,4 +132,3 @@ behavior:
 Before release, test production and at least one Vercel preview callback for
 Google, Apple, Facebook, LinkedIn, email magic link, and any enabled custom
 providers.
-
