@@ -3,7 +3,18 @@ import {
   reduceEngagementMode
 } from "@/lib/live/realtime";
 import type { LiveComment } from "@/lib/live/types";
-import { describe, expect, it } from "vitest";
+import { GET } from "@/app/api/live/[eventId]/route";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
+const liveDataMocks = vi.hoisted(() => ({
+  buildLiveMetricsFromComments: vi.fn(),
+  getVisibleComments: vi.fn()
+}));
+
+vi.mock("@/lib/live/data", () => ({
+  buildLiveMetricsFromComments: liveDataMocks.buildLiveMetricsFromComments,
+  getVisibleComments: liveDataMocks.getVisibleComments
+}));
 
 const baseComment: LiveComment = {
   id: "comment-1",
@@ -70,5 +81,47 @@ describe("dedupeCommentsById", () => {
     expect(
       dedupeCommentsById([baseComment, secondComment], [updatedComment])
     ).toEqual([updatedComment, secondComment]);
+  });
+});
+
+describe("GET /api/live/[eventId]", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    liveDataMocks.buildLiveMetricsFromComments.mockReturnValue({
+      totalComments: 0,
+      totalLikes: 0,
+      totalShares: 0,
+      commentsPerMinute: 0,
+      topTopics: []
+    });
+  });
+
+  it("returns a controlled 400 JSON error for invalid event ids", async () => {
+    const response = await GET(new Request("http://localhost/api/live/nope"), {
+      params: Promise.resolve({ eventId: "nope" })
+    });
+
+    await expect(response.json()).resolves.toEqual({
+      error: "Invalid event id."
+    });
+    expect(response.status).toBe(400);
+    expect(liveDataMocks.getVisibleComments).not.toHaveBeenCalled();
+  });
+
+  it("returns a controlled 500 JSON error when live data loading fails", async () => {
+    liveDataMocks.getVisibleComments.mockRejectedValue(
+      new Error("database unavailable")
+    );
+
+    const response = await GET(new Request("http://localhost/api/live/event"), {
+      params: Promise.resolve({
+        eventId: "10000000-0000-4000-8000-000000000001"
+      })
+    });
+
+    await expect(response.json()).resolves.toEqual({
+      error: "Unable to load live engagement data."
+    });
+    expect(response.status).toBe(500);
   });
 });

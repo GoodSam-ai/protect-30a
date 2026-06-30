@@ -7,7 +7,7 @@ import {
   type EngagementModeState
 } from "@/lib/live/realtime";
 import type { EngagementMode, LiveComment, LiveMetrics } from "@/lib/live/types";
-import { useCallback, useEffect, useReducer, useState } from "react";
+import { useCallback, useEffect, useReducer, useRef, useState } from "react";
 
 const DEFAULT_POLLING_INTERVAL_MS = 5000;
 const LOW_BANDWIDTH_INTERVAL_MULTIPLIER = 3;
@@ -47,6 +47,8 @@ export function useLiveEngagement({
   initialMetrics: LiveMetrics;
   initialMode: EngagementMode;
 }) {
+  const isMountedRef = useRef(false);
+  const latestRefreshIdRef = useRef(0);
   const [comments, setComments] = useState(() =>
     dedupeCommentsById([], initialComments)
   );
@@ -57,7 +59,22 @@ export function useLiveEngagement({
     failures: 0
   } satisfies EngagementModeState);
 
+  useEffect(() => {
+    isMountedRef.current = true;
+
+    return () => {
+      isMountedRef.current = false;
+      latestRefreshIdRef.current += 1;
+    };
+  }, []);
+
+  useEffect(() => {
+    latestRefreshIdRef.current += 1;
+  }, [eventId]);
+
   const refreshLiveData = useCallback(async () => {
+    const refreshId = latestRefreshIdRef.current + 1;
+    latestRefreshIdRef.current = refreshId;
     const response = await fetch(`/api/live/${encodeURIComponent(eventId)}`, {
       headers: { Accept: "application/json" }
     });
@@ -67,6 +84,10 @@ export function useLiveEngagement({
     }
 
     const snapshot = (await response.json()) as LiveEngagementSnapshot;
+    if (!isMountedRef.current || refreshId !== latestRefreshIdRef.current) {
+      return;
+    }
+
     setComments(dedupeCommentsById([], snapshot.comments));
     setMetrics(snapshot.metrics);
   }, [eventId]);
@@ -133,6 +154,23 @@ export function useLiveEngagement({
       dispatchMode({ type: "realtime_failed" });
     }
   }, [eventId, modeState.activeMode, modeState.failures, refreshLiveData]);
+
+  useEffect(() => {
+    if (
+      modeState.requestedMode !== "auto" ||
+      modeState.activeMode !== "realtime"
+    ) {
+      return;
+    }
+
+    const intervalId = window.setInterval(() => {
+      void refreshLiveData().catch(() => undefined);
+    }, POLLING_INTERVAL_MS);
+
+    return () => {
+      window.clearInterval(intervalId);
+    };
+  }, [modeState.activeMode, modeState.requestedMode, refreshLiveData]);
 
   useEffect(() => {
     if (
