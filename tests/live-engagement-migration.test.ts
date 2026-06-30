@@ -62,6 +62,55 @@ describe("live engagement migration contracts", () => {
         "from public.district_influencer_scores scores"
       )
     ).not.toMatch(/\buser_id\b/);
+
+    expect(
+      extractViewSelectList(
+        "live_event_metrics",
+        "select\n  pe.id as event_id",
+        "from public.podcast_events pe"
+      )
+    ).not.toMatch(/\b(user_id|profile_id)\b/);
+
+    expect(
+      extractViewSelectList(
+        "event_district_engagement_scores",
+        "select\n  ranked.event_id",
+        "from ranked"
+      )
+    ).not.toMatch(/\b(user_id|profile_id)\b/);
+  });
+
+  it("exposes public event metrics and district aggregate views without raw ids", () => {
+    expect(migration).toContain(
+      "create or replace view public.live_event_metrics as"
+    );
+    expect(migration).toContain(
+      "create or replace view public.event_district_engagement_scores as"
+    );
+    expect(migration).toContain("count(es.id)::int as total_shares");
+    expect(migration).toContain(
+      "row_number() over (partition by district_base.event_id order by district_base.engagement_score desc, district_base.district_name asc)"
+    );
+    expect(migration).toContain(
+      "grant select on public.visible_comments, public.top_comments_for_event, public.top_commenters_for_event, public.weekly_district_influencers, public.live_event_metrics, public.event_district_engagement_scores to anon, authenticated"
+    );
+  });
+
+  it("exposes sanitized top comment text on public leaderboard views", () => {
+    expect(
+      extractViewSelectList(
+        "top_commenters_for_event",
+        "select\n  cs.event_id",
+        "from comment_stats cs"
+      )
+    ).toContain("top_comment_text");
+    expect(
+      extractViewSelectList(
+        "weekly_district_influencers",
+        "select\n  scores.week_start",
+        "from public.district_influencer_scores scores"
+      )
+    ).toContain("top_comment_text");
   });
 
   it("does not grant direct public access to raw profile or influencer score rows", () => {

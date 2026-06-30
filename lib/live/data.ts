@@ -55,6 +55,7 @@ type TopCommenterRow = {
   shares_count: number | null;
   featured_comments_count: number | null;
   engagement_score: number | string | null;
+  top_comment_text: string | null;
 };
 
 type WeeklyDistrictInfluencerRow = {
@@ -71,6 +72,27 @@ type WeeklyDistrictInfluencerRow = {
   engagement_score: number | string | null;
   rank: number | null;
   updated_at: string | null;
+  top_comment_text: string | null;
+};
+
+type LiveEventMetricsRow = {
+  event_id: string;
+  total_comments: number | null;
+  total_likes: number | null;
+  total_shares: number | null;
+};
+
+type EventDistrictEngagementScoreRow = {
+  event_id: string;
+  district_id: string | null;
+  district_name: string | null;
+  district_slug: string | null;
+  comments_count: number | null;
+  likes_received_count: number | null;
+  shares_count: number | null;
+  featured_comments_count: number | null;
+  engagement_score: number | string | null;
+  rank: number | null;
 };
 
 function hasSupabaseEnv() {
@@ -172,12 +194,9 @@ export function buildLiveMetricsFromComments(
 ): LiveMetrics {
   const topTopics = buildTopicLeaderboard(comments);
   const topComments = buildTopCommentsFromComments(comments);
-  const eventLeaders = buildEventLeadersFromComments(comments, totalShares);
-  const districtEngagementScores = buildDistrictScoresFromComments(
-    comments,
-    totalShares
-  );
-  const districtLeaders = buildDistrictLeadersFromComments(comments, totalShares);
+  const eventLeaders = buildEventLeadersFromComments(comments);
+  const districtEngagementScores = buildDistrictScoresFromComments(comments);
+  const districtLeaders = buildDistrictLeadersFromComments(comments);
 
   return {
     totalComments: comments.length,
@@ -208,7 +227,8 @@ export async function getLiveMetrics(
     topCommentsResult,
     eventLeadersResult,
     weeklyLeadersResult,
-    allCommentersResult
+    eventMetricsResult,
+    districtScoresResult
   ] =
     await Promise.all([
       supabase
@@ -224,7 +244,7 @@ export async function getLiveMetrics(
       supabase
         .from("top_commenters_for_event")
         .select(
-          "event_id, display_name, avatar_url, comments_count, likes_received_count, shares_count, featured_comments_count, engagement_score"
+          "event_id, display_name, avatar_url, comments_count, likes_received_count, shares_count, featured_comments_count, engagement_score, top_comment_text"
         )
         .eq("event_id", eventId)
         .order("engagement_score", { ascending: false })
@@ -232,48 +252,77 @@ export async function getLiveMetrics(
       supabase
         .from("weekly_district_influencers")
         .select(
-          "week_start, district_id, district_name, district_slug, display_name, avatar_url, comments_count, likes_received_count, shares_count, featured_comments_count, engagement_score, rank, updated_at"
+          "week_start, district_id, district_name, district_slug, display_name, avatar_url, comments_count, likes_received_count, shares_count, featured_comments_count, engagement_score, rank, updated_at, top_comment_text"
         )
         .eq("week_start", getCurrentWeekStartDate())
         .order("week_start", { ascending: false })
         .order("rank", { ascending: true })
         .limit(8),
       supabase
-        .from("top_commenters_for_event")
-        .select("event_id, shares_count")
+        .from("live_event_metrics")
+        .select("event_id, total_comments, total_likes, total_shares")
+        .eq("event_id", eventId),
+      supabase
+        .from("event_district_engagement_scores")
+        .select(
+          "event_id, district_id, district_name, district_slug, comments_count, likes_received_count, shares_count, featured_comments_count, engagement_score, rank"
+        )
         .eq("event_id", eventId)
+        .order("rank", { ascending: true })
+        .limit(8)
     ]);
 
   if (topCommentsResult.error) throw topCommentsResult.error;
   if (eventLeadersResult.error) throw eventLeadersResult.error;
   if (weeklyLeadersResult.error) throw weeklyLeadersResult.error;
-  if (allCommentersResult.error) throw allCommentersResult.error;
+  if (eventMetricsResult.error) throw eventMetricsResult.error;
+  if (districtScoresResult.error) throw districtScoresResult.error;
 
   const topComments = ((topCommentsResult.data ?? []) as TopCommentRow[]).map(
     mapTopCommentRow
   );
   const eventLeaders = ((eventLeadersResult.data ?? []) as TopCommenterRow[]).map(
-    (leader, index) => mapTopCommenterRow(leader, index, topComments)
+    (leader, index) => mapTopCommenterRow(leader, index)
   );
-  const totalShares = ((allCommentersResult.data ?? []) as TopCommenterRow[]).reduce(
-    (sum, leader) => sum + (leader.shares_count ?? 0),
-    0
-  );
+  const eventMetrics = (
+    (eventMetricsResult.data ?? []) as LiveEventMetricsRow[]
+  )[0];
+  const districtEngagementScores = (
+    (districtScoresResult.data ?? []) as EventDistrictEngagementScoreRow[]
+  ).map(mapEventDistrictEngagementScoreRow);
   const weeklyDistrictLeaders = (
     (weeklyLeadersResult.data ?? []) as WeeklyDistrictInfluencerRow[]
-  ).map((leader) => mapWeeklyDistrictInfluencerRow(leader, topComments));
+  ).map(mapWeeklyDistrictInfluencerRow);
 
   return {
     ...commentMetrics,
-    totalShares,
+    totalComments: eventMetrics?.total_comments ?? commentMetrics.totalComments,
+    totalLikes: eventMetrics?.total_likes ?? commentMetrics.totalLikes,
+    totalShares: eventMetrics?.total_shares ?? commentMetrics.totalShares,
     topComments,
     eventLeaders,
     weeklyDistrictLeaders,
     allTimeDistrictLeaders: [],
     districtEngagementScores:
-      weeklyDistrictLeaders.length > 0
-        ? buildDistrictScoresFromWeeklyLeaders(weeklyDistrictLeaders)
+      districtEngagementScores.length > 0
+        ? districtEngagementScores
         : commentMetrics.districtEngagementScores
+  };
+}
+
+function mapEventDistrictEngagementScoreRow(
+  row: EventDistrictEngagementScoreRow
+): LiveDistrictEngagementScore {
+  return {
+    districtId: row.district_id,
+    districtName: row.district_name || "District pending",
+    districtSlug: row.district_slug,
+    commentsCount: row.comments_count ?? 0,
+    likesReceivedCount: row.likes_received_count ?? 0,
+    sharesCount: row.shares_count ?? 0,
+    featuredCommentsCount: row.featured_comments_count ?? 0,
+    engagementScore: Number(row.engagement_score ?? 0),
+    rank: row.rank ?? 0
   };
 }
 
@@ -339,8 +388,7 @@ function buildTopCommentsFromComments(comments: LiveComment[]): LiveTopComment[]
 }
 
 function buildEventLeadersFromComments(
-  comments: LiveComment[],
-  totalShares: number
+  comments: LiveComment[]
 ): LiveInfluencerScore[] {
   const authors = new Map<
     string,
@@ -407,8 +455,7 @@ function buildEventLeadersFromComments(
 }
 
 function buildDistrictScoresFromComments(
-  comments: LiveComment[],
-  totalShares: number
+  comments: LiveComment[]
 ): LiveDistrictEngagementScore[] {
   const districts = new Map<
     string,
@@ -454,10 +501,9 @@ function buildDistrictScoresFromComments(
 }
 
 function buildDistrictLeadersFromComments(
-  comments: LiveComment[],
-  totalShares: number
+  comments: LiveComment[]
 ): LiveDistrictInfluencerScore[] {
-  const eventLeaders = buildEventLeadersFromComments(comments, totalShares);
+  const eventLeaders = buildEventLeadersFromComments(comments);
 
   return eventLeaders.map((leader) => {
     const comment = comments.find(
@@ -474,36 +520,6 @@ function buildDistrictLeadersFromComments(
       districtName: district?.name ?? "District pending",
       districtSlug: district?.slug ?? null
     };
-  });
-}
-
-function buildDistrictScoresFromWeeklyLeaders(
-  weeklyLeaders: LiveDistrictInfluencerScore[]
-): LiveDistrictEngagementScore[] {
-  const latestByDistrict = new Map<string, LiveDistrictEngagementScore>();
-
-  for (const leader of weeklyLeaders) {
-    const key = leader.districtId ?? leader.districtName;
-    if (latestByDistrict.has(key)) continue;
-
-    latestByDistrict.set(key, {
-      districtId: leader.districtId,
-      districtName: leader.districtName,
-      districtSlug: leader.districtSlug,
-      commentsCount: leader.commentsCount,
-      likesReceivedCount: leader.likesReceivedCount,
-      sharesCount: leader.sharesCount,
-      featuredCommentsCount: leader.featuredCommentsCount,
-      engagementScore: leader.engagementScore,
-      rank: leader.rank
-    });
-  }
-
-  return Array.from(latestByDistrict.values()).sort((left, right) => {
-    if (right.engagementScore !== left.engagementScore) {
-      return right.engagementScore - left.engagementScore;
-    }
-    return left.districtName.localeCompare(right.districtName);
   });
 }
 
@@ -525,8 +541,7 @@ function mapTopCommentRow(row: TopCommentRow): LiveTopComment {
 
 function mapTopCommenterRow(
   row: TopCommenterRow,
-  index: number,
-  topComments: LiveTopComment[]
+  index: number
 ): LiveInfluencerScore {
   const engagementScore = Number(row.engagement_score ?? 0);
   const displayName = row.display_name || "Community member";
@@ -540,16 +555,13 @@ function mapTopCommenterRow(
     featuredCommentsCount: row.featured_comments_count ?? 0,
     engagementScore,
     rank: index + 1,
-    topCommentText:
-      topComments.find((comment) => comment.displayName === displayName)?.body ??
-      null,
+    topCommentText: row.top_comment_text,
     podcastInvitationEligible: isPodcastInvitationEligible(engagementScore)
   };
 }
 
 function mapWeeklyDistrictInfluencerRow(
-  row: WeeklyDistrictInfluencerRow,
-  topComments: LiveTopComment[]
+  row: WeeklyDistrictInfluencerRow
 ): LiveDistrictInfluencerScore {
   const engagementScore = Number(row.engagement_score ?? 0);
   const displayName = row.display_name || "Community member";
@@ -568,9 +580,7 @@ function mapWeeklyDistrictInfluencerRow(
     engagementScore,
     rank: row.rank ?? 0,
     updatedAt: row.updated_at ?? undefined,
-    topCommentText:
-      topComments.find((comment) => comment.displayName === displayName)?.body ??
-      null,
+    topCommentText: row.top_comment_text,
     podcastInvitationEligible: isPodcastInvitationEligible(engagementScore)
   };
 }

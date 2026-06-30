@@ -601,6 +601,24 @@ share_stats as (
   where es.user_id is not null
     and pe.status in ('upcoming', 'live', 'replay')
   group by es.event_id, es.user_id
+),
+top_comment_stats as (
+  select distinct on (c.event_id, c.user_id)
+    c.event_id,
+    c.user_id,
+    c.body as top_comment_text
+  from public.comments c
+  join public.podcast_events pe on pe.id = c.event_id
+  left join (
+    select comment_id, count(*)::int as like_count
+    from public.comment_likes
+    group by comment_id
+  ) likes on likes.comment_id = c.id
+  where c.moderation_status = 'visible'
+    and c.is_hidden = false
+    and c.user_id is not null
+    and pe.status in ('upcoming', 'live', 'replay')
+  order by c.event_id, c.user_id, coalesce(likes.like_count, 0) desc, c.created_at desc
 )
 select
   cs.event_id,
@@ -615,13 +633,35 @@ select
     cs.comments_count * 1 +
     coalesce(ss.shares_count, 0) * 2 +
     cs.featured_comments_count * 10
-  )::numeric as engagement_score
+  )::numeric as engagement_score,
+  tcs.top_comment_text
 from comment_stats cs
 join public.public_profiles p on p.id = cs.user_id
 left join like_stats ls on ls.event_id = cs.event_id and ls.user_id = cs.user_id
-left join share_stats ss on ss.event_id = cs.event_id and ss.user_id = cs.user_id;
+left join share_stats ss on ss.event_id = cs.event_id and ss.user_id = cs.user_id
+left join top_comment_stats tcs on tcs.event_id = cs.event_id and tcs.user_id = cs.user_id;
 
 create or replace view public.weekly_district_influencers as
+with top_weekly_comments as (
+  select distinct on (c.district_id, c.user_id, date_trunc('week', c.created_at)::date)
+    date_trunc('week', c.created_at)::date as week_start,
+    c.district_id,
+    c.user_id,
+    c.body as top_comment_text
+  from public.comments c
+  join public.podcast_events pe on pe.id = c.event_id
+  left join (
+    select comment_id, count(*)::int as like_count
+    from public.comment_likes
+    group by comment_id
+  ) likes on likes.comment_id = c.id
+  where c.moderation_status = 'visible'
+    and c.is_hidden = false
+    and c.district_id is not null
+    and c.user_id is not null
+    and pe.status in ('upcoming', 'live', 'replay')
+  order by c.district_id, c.user_id, date_trunc('week', c.created_at)::date, coalesce(likes.like_count, 0) desc, c.created_at desc
+)
 select
   scores.week_start,
   scores.district_id,
@@ -635,13 +675,136 @@ select
   scores.featured_comments_count,
   scores.engagement_score,
   scores.rank,
-  scores.updated_at
+  scores.updated_at,
+  top_weekly_comments.top_comment_text
 from public.district_influencer_scores scores
 join public.districts districts on districts.id = scores.district_id
-join public.public_profiles profiles on profiles.id = scores.user_id;
+join public.public_profiles profiles on profiles.id = scores.user_id
+left join top_weekly_comments on top_weekly_comments.week_start = scores.week_start
+  and top_weekly_comments.district_id = scores.district_id
+  and top_weekly_comments.user_id = scores.user_id;
 
-revoke all on table public.visible_comments, public.top_comments_for_event, public.top_commenters_for_event, public.weekly_district_influencers from public, anon, authenticated;
-grant select on public.visible_comments, public.top_comments_for_event, public.top_commenters_for_event, public.weekly_district_influencers to anon, authenticated;
+create or replace view public.live_event_metrics as
+with comment_metrics as (
+  select
+    vc.event_id,
+    count(*)::int as total_comments,
+    coalesce(sum(vc.like_count), 0)::int as total_likes
+  from public.visible_comments vc
+  group by vc.event_id
+),
+share_metrics as (
+  select
+    es.event_id,
+    count(es.id)::int as total_shares
+  from public.event_shares es
+  join public.podcast_events pe on pe.id = es.event_id
+  where pe.status in ('upcoming', 'live', 'replay')
+  group by es.event_id
+)
+select
+  pe.id as event_id,
+  coalesce(comment_metrics.total_comments, 0)::int as total_comments,
+  coalesce(comment_metrics.total_likes, 0)::int as total_likes,
+  coalesce(share_metrics.total_shares, 0)::int as total_shares
+from public.podcast_events pe
+left join comment_metrics on comment_metrics.event_id = pe.id
+left join share_metrics on share_metrics.event_id = pe.id
+where pe.status in ('upcoming', 'live', 'replay');
+
+create or replace view public.event_district_engagement_scores as
+with comment_stats as (
+  select
+    c.event_id,
+    c.district_id,
+    count(*)::int as comments_count,
+    count(*) filter (where c.is_featured)::int as featured_comments_count
+  from public.comments c
+  join public.podcast_events pe on pe.id = c.event_id
+  where c.moderation_status = 'visible'
+    and c.is_hidden = false
+    and c.district_id is not null
+    and pe.status in ('upcoming', 'live', 'replay')
+  group by c.event_id, c.district_id
+),
+like_stats as (
+  select
+    c.event_id,
+    c.district_id,
+    count(cl.id)::int as likes_received_count
+  from public.comments c
+  join public.podcast_events pe on pe.id = c.event_id
+  left join public.comment_likes cl on cl.comment_id = c.id
+  where c.moderation_status = 'visible'
+    and c.is_hidden = false
+    and c.district_id is not null
+    and pe.status in ('upcoming', 'live', 'replay')
+  group by c.event_id, c.district_id
+),
+share_stats as (
+  select
+    es.event_id,
+    pe.district_id,
+    count(es.id)::int as shares_count
+  from public.event_shares es
+  join public.podcast_events pe on pe.id = es.event_id
+  where pe.district_id is not null
+    and pe.status in ('upcoming', 'live', 'replay')
+  group by es.event_id, pe.district_id
+),
+active_districts as (
+  select event_id, district_id from comment_stats
+  union
+  select event_id, district_id from like_stats
+  union
+  select event_id, district_id from share_stats
+),
+district_base as (
+  select
+    active_districts.event_id,
+    active_districts.district_id,
+    districts.name as district_name,
+    districts.slug as district_slug,
+    coalesce(comment_stats.comments_count, 0)::int as comments_count,
+    coalesce(like_stats.likes_received_count, 0)::int as likes_received_count,
+    coalesce(share_stats.shares_count, 0)::int as shares_count,
+    coalesce(comment_stats.featured_comments_count, 0)::int as featured_comments_count,
+    (
+      coalesce(like_stats.likes_received_count, 0) * 3 +
+      coalesce(comment_stats.comments_count, 0) * 1 +
+      coalesce(share_stats.shares_count, 0) * 2 +
+      coalesce(comment_stats.featured_comments_count, 0) * 10
+    )::numeric as engagement_score
+  from active_districts
+  join public.districts districts on districts.id = active_districts.district_id
+  left join comment_stats on comment_stats.event_id = active_districts.event_id
+    and comment_stats.district_id = active_districts.district_id
+  left join like_stats on like_stats.event_id = active_districts.event_id
+    and like_stats.district_id = active_districts.district_id
+  left join share_stats on share_stats.event_id = active_districts.event_id
+    and share_stats.district_id = active_districts.district_id
+),
+ranked as (
+  select
+    district_base.*,
+    row_number() over (partition by district_base.event_id order by district_base.engagement_score desc, district_base.district_name asc) as rank
+  from district_base
+)
+select
+  ranked.event_id,
+  ranked.district_id,
+  ranked.district_name,
+  ranked.district_slug,
+  ranked.comments_count,
+  ranked.likes_received_count,
+  ranked.shares_count,
+  ranked.featured_comments_count,
+  ranked.engagement_score,
+  ranked.rank
+from ranked;
+
+revoke all on table public.visible_comments, public.top_comments_for_event, public.top_commenters_for_event, public.weekly_district_influencers, public.live_event_metrics, public.event_district_engagement_scores from public, anon, authenticated;
+grant select on public.visible_comments, public.top_comments_for_event, public.top_commenters_for_event, public.weekly_district_influencers, public.live_event_metrics, public.event_district_engagement_scores to anon, authenticated;
 
 create or replace function public.refresh_weekly_district_influencer_scores(target_week date default date_trunc('week', now())::date)
 returns void

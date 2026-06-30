@@ -259,7 +259,8 @@ describe("live dashboard data", () => {
           likes_received_count: 12,
           shares_count: 2,
           featured_comments_count: 1,
-          engagement_score: 53
+          engagement_score: 53,
+          top_comment_text: "Direct event leader comment from the view."
         },
         {
           event_id: fixtureEvent.id,
@@ -269,7 +270,8 @@ describe("live dashboard data", () => {
           likes_received_count: 3,
           shares_count: 1,
           featured_comments_count: 0,
-          engagement_score: 14
+          engagement_score: 14,
+          top_comment_text: "Blake view-backed comment."
         },
         {
           event_id: fixtureEvent.id,
@@ -279,7 +281,8 @@ describe("live dashboard data", () => {
           likes_received_count: 2,
           shares_count: 1,
           featured_comments_count: 0,
-          engagement_score: 9
+          engagement_score: 9,
+          top_comment_text: "Casey view-backed comment."
         },
         {
           event_id: fixtureEvent.id,
@@ -289,7 +292,8 @@ describe("live dashboard data", () => {
           likes_received_count: 1,
           shares_count: 1,
           featured_comments_count: 0,
-          engagement_score: 6
+          engagement_score: 6,
+          top_comment_text: "Devon view-backed comment."
         },
         {
           event_id: fixtureEvent.id,
@@ -299,7 +303,8 @@ describe("live dashboard data", () => {
           likes_received_count: 0,
           shares_count: 1,
           featured_comments_count: 0,
-          engagement_score: 3
+          engagement_score: 3,
+          top_comment_text: "Emery view-backed comment."
         },
         {
           event_id: fixtureEvent.id,
@@ -309,7 +314,8 @@ describe("live dashboard data", () => {
           likes_received_count: 0,
           shares_count: 7,
           featured_comments_count: 0,
-          engagement_score: 2
+          engagement_score: 2,
+          top_comment_text: "Hidden display leader share-heavy comment."
         }
       ],
       weekly_district_influencers: [
@@ -326,7 +332,42 @@ describe("live dashboard data", () => {
           featured_comments_count: 1,
           engagement_score: 53,
           rank: 1,
-          updated_at: "2026-06-26T13:10:00.000Z"
+          updated_at: "2026-06-26T13:10:00.000Z",
+          top_comment_text: "Weekly influencer text from the view."
+        }
+      ],
+      live_event_metrics: [
+        {
+          event_id: fixtureEvent.id,
+          total_comments: 2,
+          total_likes: 16,
+          total_shares: 15
+        }
+      ],
+      event_district_engagement_scores: [
+        {
+          event_id: fixtureEvent.id,
+          district_id: "district-1",
+          district_name: "Inlet Beach",
+          district_slug: "inlet-beach",
+          comments_count: 4,
+          likes_received_count: 20,
+          shares_count: 3,
+          featured_comments_count: 1,
+          engagement_score: 80,
+          rank: 1
+        },
+        {
+          event_id: fixtureEvent.id,
+          district_id: "district-2",
+          district_name: "Grayton Beach",
+          district_slug: "grayton-beach",
+          comments_count: 2,
+          likes_received_count: 7,
+          shares_count: 1,
+          featured_comments_count: 0,
+          engagement_score: 25,
+          rank: 2
         }
       ]
     });
@@ -350,7 +391,8 @@ describe("live dashboard data", () => {
       "top_comments_for_event",
       "top_commenters_for_event",
       "weekly_district_influencers",
-      "top_commenters_for_event"
+      "live_event_metrics",
+      "event_district_engagement_scores"
     ]);
     expect(query.calls.eq).toEqual([
       {
@@ -369,7 +411,12 @@ describe("live dashboard data", () => {
         value: "2026-06-29"
       },
       {
-        table: "top_commenters_for_event",
+        table: "live_event_metrics",
+        column: "event_id",
+        value: fixtureEvent.id
+      },
+      {
+        table: "event_district_engagement_scores",
         column: "event_id",
         value: fixtureEvent.id
       }
@@ -404,14 +451,22 @@ describe("live dashboard data", () => {
         table: "weekly_district_influencers",
         column: "rank",
         options: { ascending: true }
+      },
+      {
+        table: "event_district_engagement_scores",
+        column: "rank",
+        options: { ascending: true }
       }
     ]);
     expect(query.calls.limit).toEqual([
       { table: "top_comments_for_event", count: 5 },
       { table: "top_commenters_for_event", count: 5 },
-      { table: "weekly_district_influencers", count: 8 }
+      { table: "weekly_district_influencers", count: 8 },
+      { table: "event_district_engagement_scores", count: 8 }
     ]);
-    expect(metrics.totalShares).toBe(13);
+    expect(metrics.totalComments).toBe(2);
+    expect(metrics.totalLikes).toBe(16);
+    expect(metrics.totalShares).toBe(15);
     expect(metrics.commentsPerMinute).toBe(0.2);
     expect(metrics.topComments[0]).toMatchObject({
       body: "Stormwater maps should stay visible.",
@@ -421,7 +476,7 @@ describe("live dashboard data", () => {
     expect(metrics.eventLeaders[0]).toMatchObject({
       displayName: "Avery Resident",
       engagementScore: 53,
-      topCommentText: "Stormwater maps should stay visible."
+      topCommentText: "Direct event leader comment from the view."
     });
     expect(metrics.eventLeaders).toHaveLength(5);
     expect(metrics.eventLeaders.map((leader) => leader.displayName)).not.toContain(
@@ -430,8 +485,33 @@ describe("live dashboard data", () => {
     expect(metrics.weeklyDistrictLeaders[0]).toMatchObject({
       districtName: "Inlet Beach",
       displayName: "Avery Resident",
-      engagementScore: 53
+      engagementScore: 53,
+      topCommentText: "Weekly influencer text from the view."
     });
+    expect(metrics.districtEngagementScores).toEqual([
+      {
+        districtId: "district-1",
+        districtName: "Inlet Beach",
+        districtSlug: "inlet-beach",
+        commentsCount: 4,
+        likesReceivedCount: 20,
+        sharesCount: 3,
+        featuredCommentsCount: 1,
+        engagementScore: 80,
+        rank: 1
+      },
+      {
+        districtId: "district-2",
+        districtName: "Grayton Beach",
+        districtSlug: "grayton-beach",
+        commentsCount: 2,
+        likesReceivedCount: 7,
+        sharesCount: 1,
+        featuredCommentsCount: 0,
+        engagementScore: 25,
+        rank: 2
+      }
+    ]);
   });
 
   it("derives leaderboard metrics from fixtures when Supabase is not configured", async () => {
