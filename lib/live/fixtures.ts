@@ -110,5 +110,82 @@ export const fixtureMetrics: LiveMetrics = {
   totalLikes: 8,
   totalShares: 0,
   commentsPerMinute: 0,
-  topTopics: [{ topic: "Stormwater", count: 1 }]
+  topTopics: [{ topic: "Stormwater", count: 1 }],
+  topicLeaderboard: [{ topic: "Stormwater", count: 1 }],
+  topComments: [
+    {
+      id: fixtureComments[0].id,
+      eventId: fixtureEvent.id,
+      body: fixtureComments[0].body,
+      topic: fixtureComments[0].topic,
+      createdAt: fixtureComments[0].created_at,
+      isFeatured: fixtureComments[0].is_featured,
+      displayName: fixtureComments[0].author_display_name,
+      avatarUrl: fixtureComments[0].author_avatar_url,
+      districtName: fixtureDistricts[0].name,
+      likeCount: fixtureComments[0].like_count,
+      replyCount: 0
+    }
+  ],
+  eventLeaders: [
+    {
+      displayName: fixtureComments[0].author_display_name,
+      avatarUrl: fixtureComments[0].author_avatar_url,
+      commentsCount: 1,
+      likesReceivedCount: 8,
+      sharesCount: 0,
+      featuredCommentsCount: 1,
+      engagementScore: 35,
+      rank: 1,
+      topCommentText: fixtureComments[0].body,
+      podcastInvitationEligible: true
+    }
+  ],
+  weeklyDistrictLeaders: [
+    {
+      districtId: fixtureDistricts[0].id,
+      districtName: fixtureDistricts[0].name,
+      districtSlug: fixtureDistricts[0].slug,
+      displayName: fixtureComments[0].author_display_name,
+      avatarUrl: fixtureComments[0].author_avatar_url,
+      commentsCount: 1,
+      likesReceivedCount: 8,
+      sharesCount: 0,
+      featuredCommentsCount: 1,
+      engagementScore: 35,
+      rank: 1,
+      topCommentText: fixtureComments[0].body,
+      podcastInvitationEligible: true
+    }
+  ],
+  allTimeDistrictLeaders: [
+    {
+      districtId: fixtureDistricts[0].id,
+      districtName: fixtureDistricts[0].name,
+      districtSlug: fixtureDistricts[0].slug,
+      displayName: fixtureComments[0].author_display_name,
+      avatarUrl: fixtureComments[0].author_avatar_url,
+      commentsCount: 1,
+      likesReceivedCount: 8,
+      sharesCount: 0,
+      featuredCommentsCount: 1,
+      engagementScore: 35,
+      rank: 1,
+      topCommentText: fixtureComments[0].body,
+      podcastInvitationEligible: true
+    }
+  ],
+  districtEngagementScores: [
+    {
+      districtId: fixtureDistricts[0].id,
+      districtName: fixtureDistricts[0].name,
+      districtSlug: fixtureDistricts[0].slug,
+      commentsCount: 1,
+      likesReceivedCount: 8,
+      sharesCount: 0,
+      featuredCommentsCount: 1,
+      engagementScore: 35,
+      rank: 1
+    }
+  ]
 };

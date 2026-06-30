@@ -156,12 +156,24 @@ describe("live data access", () => {
   });
 
   it("builds live metrics from already-loaded comments", () => {
-    expect(buildLiveMetricsFromComments(fixtureComments, 3)).toEqual({
+    const metrics = buildLiveMetricsFromComments(fixtureComments, 3);
+
+    expect(metrics).toMatchObject({
       totalComments: 1,
       totalLikes: 8,
       totalShares: 3,
       commentsPerMinute: 0,
-      topTopics: [{ topic: "Stormwater", count: 1 }]
+      topTopics: [{ topic: "Stormwater", count: 1 }],
+      topicLeaderboard: [{ topic: "Stormwater", count: 1 }]
+    });
+    expect(metrics.topComments[0]).toMatchObject({
+      body: fixtureComments[0].body,
+      likeCount: 8
+    });
+    expect(metrics.eventLeaders[0]).toMatchObject({
+      displayName: "Community member",
+      engagementScore: 35,
+      topCommentText: fixtureComments[0].body
     });
   });
 

@@ -156,7 +156,7 @@ export function LivePodcastEngagement({
         />
         <EngagementDashboard metrics={metrics} />
         {event.leaderboard_enabled ? (
-          <InfluencerLeaderboard comments={comments} />
+          <InfluencerLeaderboard metrics={metrics} comments={comments} />
         ) : (
           <DisabledLeaderboard />
         )}

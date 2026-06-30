@@ -57,4 +57,57 @@ export type LiveMetrics = {
   totalShares: number;
   commentsPerMinute: number;
   topTopics: Array<{ topic: string; count: number }>;
+  topicLeaderboard: Array<{ topic: string; count: number }>;
+  topComments: LiveTopComment[];
+  eventLeaders: LiveInfluencerScore[];
+  weeklyDistrictLeaders: LiveDistrictInfluencerScore[];
+  allTimeDistrictLeaders: LiveDistrictInfluencerScore[];
+  districtEngagementScores: LiveDistrictEngagementScore[];
+};
+
+export type LiveTopComment = {
+  id: string;
+  eventId: string;
+  body: string;
+  topic: string | null;
+  createdAt: string;
+  isFeatured: boolean;
+  displayName: string;
+  avatarUrl: string | null;
+  districtName: string | null;
+  likeCount: number;
+  replyCount: number;
+};
+
+export type LiveInfluencerScore = {
+  displayName: string;
+  avatarUrl: string | null;
+  commentsCount: number;
+  likesReceivedCount: number;
+  sharesCount: number;
+  featuredCommentsCount: number;
+  engagementScore: number;
+  rank: number;
+  topCommentText: string | null;
+  podcastInvitationEligible: boolean;
+};
+
+export type LiveDistrictEngagementScore = {
+  districtId: string | null;
+  districtName: string;
+  districtSlug: string | null;
+  commentsCount: number;
+  likesReceivedCount: number;
+  sharesCount: number;
+  featuredCommentsCount: number;
+  engagementScore: number;
+  rank: number;
+};
+
+export type LiveDistrictInfluencerScore = LiveInfluencerScore & {
+  districtId: string | null;
+  districtName: string;
+  districtSlug: string | null;
+  weekStart?: string;
+  updatedAt?: string;
 };

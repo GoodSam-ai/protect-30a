@@ -1,3 +1,5 @@
+"use client";
+
 import type { LiveMetrics } from "@/lib/live/types";
 import {
   BarChart3,
@@ -6,6 +8,7 @@ import {
   Share2,
   TrendingUp
 } from "lucide-react";
+import { useState, type ReactNode } from "react";
 
 function formatMetric(value: number) {
   return new Intl.NumberFormat("en-US", {
@@ -14,6 +17,7 @@ function formatMetric(value: number) {
 }
 
 export function EngagementDashboard({ metrics }: { metrics: LiveMetrics }) {
+  const [activeView, setActiveView] = useState<"simple" | "detailed">("simple");
   const metricItems = [
     {
       label: "Comments",
@@ -44,7 +48,58 @@ export function EngagementDashboard({ metrics }: { metrics: LiveMetrics }) {
         </h2>
       </div>
 
-      <dl className="mt-4 grid grid-cols-2 gap-3">
+      <div
+        className="mt-4 grid grid-cols-2 gap-2"
+        role="group"
+        aria-label="Engagement dashboard view"
+      >
+        {[
+          { id: "simple" as const, label: "Simple Trend View" },
+          { id: "detailed" as const, label: "Detailed Leaderboard View" }
+        ].map((view) => {
+          const selected = activeView === view.id;
+
+          return (
+            <button
+              key={view.id}
+              type="button"
+              className={
+                selected
+                  ? "min-h-11 rounded border border-protect-teal bg-protect-teal px-2 text-xs font-semibold text-white sm:text-sm"
+                  : "min-h-11 rounded border border-protect-sand bg-protect-cream px-2 text-xs font-semibold text-protect-teal hover:bg-white sm:text-sm"
+              }
+              aria-pressed={selected}
+              onClick={() => setActiveView(view.id)}
+            >
+              {view.label}
+            </button>
+          );
+        })}
+      </div>
+
+      {activeView === "simple" ? (
+        <SimpleTrendView metricItems={metricItems} metrics={metrics} />
+      ) : (
+        <DetailedLeaderboardView metrics={metrics} />
+      )}
+    </section>
+  );
+}
+
+function SimpleTrendView({
+  metricItems,
+  metrics
+}: {
+  metricItems: Array<{
+    label: string;
+    value: string;
+    icon: typeof MessageSquareText;
+  }>;
+  metrics: LiveMetrics;
+}) {
+  return (
+    <div className="mt-4 grid gap-4">
+      <dl className="grid grid-cols-2 gap-3">
         {metricItems.map((item) => {
           const Icon = item.icon;
 
@@ -65,30 +120,175 @@ export function EngagementDashboard({ metrics }: { metrics: LiveMetrics }) {
         })}
       </dl>
 
-      <div className="mt-4">
-        <h3 className="text-sm font-semibold text-protect-teal">Top topics</h3>
-        {metrics.topTopics.length > 0 ? (
+      <TopicList title="Top topics" topics={metrics.topTopics} />
+
+      <div>
+        <h3 className="text-sm font-semibold text-protect-teal">
+          Engagement score by district
+        </h3>
+        {metrics.districtEngagementScores.length > 0 ? (
           <ol className="mt-2 grid gap-2">
-            {metrics.topTopics.slice(0, 4).map((topic) => (
+            {metrics.districtEngagementScores.slice(0, 5).map((district) => (
               <li
-                key={topic.topic}
+                key={district.districtId ?? district.districtName}
                 className="flex items-center justify-between gap-3 rounded border border-protect-sand px-3 py-2 text-sm"
               >
                 <span className="min-w-0 truncate font-semibold text-protect-ink">
-                  {topic.topic}
+                  {district.districtName}
                 </span>
                 <span className="shrink-0 text-protect-teal">
-                  {formatMetric(topic.count)}
+                  {formatMetric(district.engagementScore)} pts
                 </span>
               </li>
             ))}
           </ol>
         ) : (
-          <p className="mt-2 text-sm text-protect-ink/70">
-            Topics will appear as residents comment.
-          </p>
+          <EmptyState>District scores will appear as residents participate.</EmptyState>
         )}
       </div>
-    </section>
+    </div>
+  );
+}
+
+function DetailedLeaderboardView({ metrics }: { metrics: LiveMetrics }) {
+  return (
+    <div className="mt-4 grid gap-4">
+      <div>
+        <h3 className="text-sm font-semibold text-protect-teal">Top comments</h3>
+        {metrics.topComments.length > 0 ? (
+          <ol className="mt-2 grid gap-2">
+            {metrics.topComments.slice(0, 5).map((comment) => (
+              <li
+                key={comment.id}
+                className="rounded border border-protect-sand bg-white px-3 py-2 text-sm shadow-sm"
+              >
+                <p className="line-clamp-2 font-semibold text-protect-ink">
+                  {comment.body}
+                </p>
+                <p className="mt-1 text-xs text-protect-ink/65">
+                  {comment.displayName} - {formatMetric(comment.likeCount)} likes
+                </p>
+              </li>
+            ))}
+          </ol>
+        ) : (
+          <EmptyState>Top comments will appear as residents comment.</EmptyState>
+        )}
+      </div>
+
+      <LeaderList title="Event leaders" leaders={metrics.eventLeaders} />
+      <LeaderList title="District leaders" leaders={metrics.weeklyDistrictLeaders} />
+      <LeaderList
+        title="Weekly influencers"
+        leaders={metrics.weeklyDistrictLeaders}
+      />
+
+      <div>
+        <h3 className="text-sm font-semibold text-protect-teal">
+          Running district leaderboard
+        </h3>
+        {metrics.districtEngagementScores.length > 0 ? (
+          <ol className="mt-2 grid gap-2">
+            {metrics.districtEngagementScores.slice(0, 8).map((district) => (
+              <li
+                key={district.districtId ?? district.districtName}
+                className="grid grid-cols-[2rem_minmax(0,1fr)_auto] items-center gap-2 rounded border border-protect-sand px-3 py-2 text-sm"
+              >
+                <span className="text-xs font-bold text-protect-terra">
+                  #{district.rank}
+                </span>
+                <span className="min-w-0 truncate font-semibold text-protect-ink">
+                  {district.districtName}
+                </span>
+                <span className="text-protect-teal">
+                  {formatMetric(district.engagementScore)} pts
+                </span>
+              </li>
+            ))}
+          </ol>
+        ) : (
+          <EmptyState>District rankings will appear as activity grows.</EmptyState>
+        )}
+      </div>
+
+      <TopicList title="Topic leaderboard" topics={metrics.topicLeaderboard} />
+    </div>
+  );
+}
+
+function LeaderList({
+  title,
+  leaders
+}: {
+  title: string;
+  leaders: LiveMetrics["eventLeaders"] | LiveMetrics["weeklyDistrictLeaders"];
+}) {
+  return (
+    <div>
+      <h3 className="text-sm font-semibold text-protect-teal">{title}</h3>
+      {leaders.length > 0 ? (
+        <ol className="mt-2 grid gap-2">
+          {leaders.slice(0, 5).map((leader) => (
+            <li
+              key={`${title}-${leader.rank}-${leader.displayName}`}
+              className="grid grid-cols-[2rem_minmax(0,1fr)_auto] items-center gap-2 rounded border border-protect-sand px-3 py-2 text-sm"
+            >
+              <span className="text-xs font-bold text-protect-terra">
+                #{leader.rank}
+              </span>
+              <span className="min-w-0 truncate font-semibold text-protect-ink">
+                {leader.displayName}
+              </span>
+              <span className="text-protect-teal">
+                {formatMetric(leader.engagementScore)} pts
+              </span>
+            </li>
+          ))}
+        </ol>
+      ) : (
+        <EmptyState>{title} will appear as residents participate.</EmptyState>
+      )}
+    </div>
+  );
+}
+
+function TopicList({
+  title,
+  topics
+}: {
+  title: string;
+  topics: LiveMetrics["topTopics"];
+}) {
+  return (
+    <div>
+      <h3 className="text-sm font-semibold text-protect-teal">{title}</h3>
+      {topics.length > 0 ? (
+        <ol className="mt-2 grid gap-2">
+          {topics.slice(0, 5).map((topic) => (
+            <li
+              key={topic.topic}
+              className="flex items-center justify-between gap-3 rounded border border-protect-sand px-3 py-2 text-sm"
+            >
+              <span className="min-w-0 truncate font-semibold text-protect-ink">
+                {topic.topic}
+              </span>
+              <span className="shrink-0 text-protect-teal">
+                {formatMetric(topic.count)}
+              </span>
+            </li>
+          ))}
+        </ol>
+      ) : (
+        <EmptyState>Topics will appear as residents comment.</EmptyState>
+      )}
+    </div>
+  );
+}
+
+function EmptyState({ children }: { children: ReactNode }) {
+  return (
+    <p className="mt-2 rounded border border-dashed border-protect-sand bg-white p-3 text-sm text-protect-ink/70">
+      {children}
+    </p>
   );
 }

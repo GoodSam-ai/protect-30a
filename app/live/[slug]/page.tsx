@@ -1,9 +1,9 @@
 import { LivePodcastPage } from "@/components/live/LivePodcastPage";
 import { getCurrentUserAndProfile } from "@/lib/auth/session";
 import {
-  buildLiveMetricsFromComments,
   getDistricts,
   getEventBySlug,
+  getLiveMetrics,
   getVisibleComments
 } from "@/lib/live/data";
 import { notFound } from "next/navigation";
@@ -22,7 +22,7 @@ export default async function EventPage({
     getCurrentUserAndProfile(),
     getVisibleComments(event.id)
   ]);
-  const metrics = buildLiveMetricsFromComments(comments);
+  const metrics = await getLiveMetrics(event.id, comments);
 
   return (
     <LivePodcastPage

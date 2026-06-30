@@ -44,7 +44,9 @@ describe("LivePodcastPage", () => {
     expect(
       screen.getByRole("heading", { name: /sign in to join the conversation/i })
     ).toBeInTheDocument();
-    expect(screen.getByText(fixtureComments[0].body)).toBeInTheDocument();
+    expect(screen.getAllByText(fixtureComments[0].body).length).toBeGreaterThan(
+      0
+    );
     expect(screen.getByText("Jun 26, 7:00 AM")).toBeInTheDocument();
     expect(
       screen.getByRole("heading", { name: /district focus/i })
