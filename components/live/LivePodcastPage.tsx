@@ -31,7 +31,7 @@ function buildCommentComposerProps(event: PodcastEvent, profile: PublicProfile) 
     ? "Comments are closed for this event."
     : profile.is_restricted
       ? "Your profile cannot post comments right now."
-      : "Comment posting opens in the next release. You can draft your thought here now.";
+      : "Ready to post.";
 
   return {
     eventId: event.id,

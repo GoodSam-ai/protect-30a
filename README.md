@@ -11,6 +11,8 @@ domains are configured in Vercel.
 
 - `/`: legacy Protect30A homepage served from `public/legacy/index.html`.
 - `/show`: legacy show page served from `public/legacy/show/index.html`.
+- `/districts` and `/districts/[slug]`: legacy district media pages served from
+  `public/districts/`.
 - `/live`: active live engagement experience for the current event.
 - `/live/[slug]`: live engagement experience for a specific event slug.
 - `/admin`: moderation, event, scoring, badge, export, and manual Facebook

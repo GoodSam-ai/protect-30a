@@ -72,12 +72,16 @@ supabase db push
 
 Review the SQL output before confirming. The initial live engagement migration
 creates the tables, policies, seed data, scoring settings, and admin support
-needed by `/live`, `/live/[slug]`, and `/admin`.
+needed by `/live`, `/live/[slug]`, and `/admin`. It also installs an
+`auth.users` trigger that creates a normal unrestricted `profiles` row for each
+new Supabase auth user. The application keeps a server-side fallback for users
+created before that trigger exists.
 
 ## 5. Bootstrap the First Admin
 
 After deployment, sign in once as `doug@goodsam.ai` so Supabase creates the auth
-user. Then bootstrap or update the application profile as admin:
+user and the matching application profile. Then bootstrap or update that profile
+as admin:
 
 ```sql
 insert into public.profiles (id, role)

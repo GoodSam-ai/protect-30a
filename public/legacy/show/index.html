@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<script src="/canonical-host.js"></script>
 <title>Protect 30A — The Show | Weekly Community Media for South Walton</title>
 <meta name="description" content="Protect30A is a weekly, district-by-district community show for the 30A corridor — a neutral Digest, a clearly-labeled local Opinion, and a featured resident voice, on Spotify, YouTube, and the web. Eight communities, one headlined every week." />
 <meta name="author" content="Protect 30A" />
@@ -89,7 +90,9 @@
   /* DISTRICTS */
   .districts .wrap{position:relative}
   .dist-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:8px}
-  .dist{display:flex;align-items:center;gap:16px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+  .dist{display:flex;align-items:center;gap:16px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 18px;text-decoration:none;transition:transform .15s,box-shadow .15s,border-color .15s}
+  .dist:hover{transform:translateY(-2px);box-shadow:var(--shadow);border-color:var(--sand-2)}
+  .dist:focus-visible{outline:3px solid var(--terra);outline-offset:3px}
   .dist .num{flex:none;width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:var(--teal-700);color:#fff;font-family:var(--serif);font-weight:600;font-size:1.15rem}
   .dist:first-child .num{background:var(--terra)}
   .dist .nm{font-weight:600;color:var(--teal-800);font-size:1.04rem}
@@ -166,7 +169,7 @@
     <nav class="navlinks" id="nav">
       <a class="back" href="https://protect30a.org/#plan">← The Stormwater Plan</a>
       <a href="#show">The Show</a>
-      <a href="#districts">Districts</a>
+      <a href="/districts/">Districts</a>
       <a href="#listen">Listen</a>
       <a href="#sponsor">Sponsor</a>
       <a href="#community">Community</a>
@@ -227,20 +230,22 @@
 <section id="districts" class="districts on-sand">
   <div class="wrap">
     <div class="sec-head">
-      <span class="kicker">Eight communities</span>
+      <span class="kicker">District media homes</span>
       <h2>One headlined every week, on rotation.</h2>
-      <p class="lead">An 8-week rotation headlines each district about six to seven times a year — and all eight stay refreshed on the site every week.</p>
+      <p class="lead">An 8-week rotation headlines each district about six to seven times a year — and all eight now have durable homes for videos, podcast episodes, show notes, and sources.</p>
     </div>
     <div class="dist-grid">
-      <div class="dist"><span class="num">1</span><span class="nm">Inlet Beach</span></div>
-      <div class="dist"><span class="num">2</span><span class="nm">Rosemary Beach</span></div>
-      <div class="dist"><span class="num">3</span><span class="nm">Alys Beach</span></div>
-      <div class="dist"><span class="num">4</span><span class="nm">Watersound <small>Seacrest · Prominence · Origins</small></span></div>
-      <div class="dist"><span class="num">5</span><span class="nm">Seagrove <small>Seaside · WaterColor</small></span></div>
-      <div class="dist"><span class="num">6</span><span class="nm">Grayton Beach <small>Blue Mountain Beach</small></span></div>
-      <div class="dist"><span class="num">7</span><span class="nm">Santa Rosa Beach <small>Gulf Place · Dune Allen</small></span></div>
-      <div class="dist"><span class="num">8</span><span class="nm">Sandestin <small>Miramar Beach · Seascape</small></span></div>
+      <a class="dist" href="/districts/inlet-beach/"><span class="num">1</span><span class="nm">Inlet Beach</span></a>
+      <a class="dist" href="/districts/rosemary-beach/"><span class="num">2</span><span class="nm">Rosemary Beach</span></a>
+      <a class="dist" href="/districts/alys-beach/"><span class="num">3</span><span class="nm">Alys Beach</span></a>
+      <a class="dist" href="/districts/watersound-seacrest-prominence-origins/"><span class="num">4</span><span class="nm">Watersound <small>Seacrest · Prominence · Origins</small></span></a>
+      <a class="dist" href="/districts/seagrove-seaside-watercolor/"><span class="num">5</span><span class="nm">Seagrove <small>Seaside · WaterColor</small></span></a>
+      <a class="dist" href="/districts/grayton-blue-mountain/"><span class="num">6</span><span class="nm">Grayton Beach <small>Blue Mountain Beach</small></span></a>
+      <a class="dist" href="/districts/santa-rosa-beach-gulf-place-dune-allen/"><span class="num">7</span><span class="nm">Santa Rosa Beach <small>Gulf Place · Dune Allen</small></span></a>
+      <a class="dist" href="/districts/sandestin-miramar-beach-seascape/"><span class="num">8</span><span class="nm">Sandestin <small>Miramar Beach · Seascape</small></span></a>
+      <a class="dist" href="/districts/30a-stormwater/"><span class="num">9</span><span class="nm">30A Stormwater <small>Common Water · corridor-wide series</small></span></a>
     </div>
+    <p style="margin-top:22px"><a class="btn btn-primary" href="/districts/">Open the district hub</a></p>
   </div>
 </section>
 
@@ -431,7 +436,7 @@
       <div class="foot-links">
         <a href="https://protect30a.org/#plan">The Stormwater Plan</a>
         <a href="#show">The Show</a>
-        <a href="#districts">Districts</a>
+        <a href="/districts/">Districts</a>
         <a href="#sponsor">Sponsor</a>
         <a href="mailto:doug@goodsamaritaninstitute.org">Contact</a>
       </div>

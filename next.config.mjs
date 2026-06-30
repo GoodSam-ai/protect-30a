@@ -5,7 +5,11 @@ const nextConfig = {
     return [
       { source: "/", destination: "/legacy/index.html" },
       { source: "/show", destination: "/legacy/show/index.html" },
-      { source: "/show/", destination: "/legacy/show/index.html" }
+      { source: "/show/", destination: "/legacy/show/index.html" },
+      { source: "/districts", destination: "/districts/index.html" },
+      { source: "/districts/", destination: "/districts/index.html" },
+      { source: "/districts/:slug", destination: "/districts/:slug/index.html" },
+      { source: "/districts/:slug/", destination: "/districts/:slug/index.html" }
     ];
   }
 };

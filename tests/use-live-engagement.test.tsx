@@ -40,6 +40,26 @@ function Harness({ initialMode = "auto" }: { initialMode?: EngagementMode }) {
         {live.comments.map((comment) => comment.body).join("|")}
       </p>
       <p data-testid="comment-count">{live.metrics.totalComments}</p>
+      <p data-testid="top-topics">
+        {live.metrics.topTopics
+          .map((topic) => `${topic.topic}:${topic.count}`)
+          .join("|")}
+      </p>
+      <button
+        type="button"
+        onClick={() =>
+          live.addComment({
+            ...fixtureComments[0],
+            id: "submitted-comment",
+            body: "Fresh submitted resident concern.",
+            topic: "Traffic",
+            like_count: 0,
+            liked_by_me: false
+          })
+        }
+      >
+        Add submitted comment
+      </button>
     </div>
   );
 }
@@ -198,5 +218,30 @@ describe("useLiveEngagement", () => {
     expect(screen.getByTestId("comment-count")).toHaveTextContent(
       String(fixtureMetrics.totalComments)
     );
+  });
+
+  it("adds a submitted comment immediately before realtime refresh returns", async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValue(makeResponse(fixtureComments, fixtureMetrics));
+    vi.stubGlobal("fetch", fetchMock);
+
+    render(<Harness />);
+
+    await act(async () => {
+      await Promise.resolve();
+    });
+
+    act(() => {
+      screen.getByRole("button", { name: "Add submitted comment" }).click();
+    });
+
+    expect(screen.getByTestId("comments")).toHaveTextContent(
+      "Fresh submitted resident concern."
+    );
+    expect(screen.getByTestId("comment-count")).toHaveTextContent(
+      String(fixtureMetrics.totalComments + 1)
+    );
+    expect(screen.getByTestId("top-topics")).toHaveTextContent("Traffic");
   });
 });

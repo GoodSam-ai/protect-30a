@@ -1,8 +1,9 @@
 import "server-only";
 
-import { getCurrentUserAndProfile } from "@/lib/auth/session";
+import { getCurrentUserAndProfile, type PublicProfile } from "@/lib/auth/session";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import type { LiveComment } from "@/lib/live/types";
 import {
   commentInputSchema,
   reportInputSchema,
@@ -14,6 +15,43 @@ const idSchema = z.string().uuid();
 
 function errorMessage(error: unknown, fallback: string) {
   return error instanceof Error ? error.message : fallback;
+}
+
+type CreatedCommentRow = {
+  id: string;
+  event_id: string;
+  district_id: string | null;
+  user_id: string | null;
+  parent_comment_id: string | null;
+  body: string;
+  topic: string | null;
+  is_featured: boolean | null;
+  created_at: string;
+};
+
+function displayName(profile: PublicProfile) {
+  return profile.display_name?.trim() || "Community member";
+}
+
+function toLiveComment(
+  comment: CreatedCommentRow,
+  profile: PublicProfile
+): LiveComment {
+  return {
+    id: comment.id,
+    event_id: comment.event_id,
+    district_id: comment.district_id,
+    user_id: comment.user_id,
+    parent_comment_id: comment.parent_comment_id,
+    body: comment.body,
+    topic: comment.topic,
+    is_featured: comment.is_featured ?? false,
+    created_at: comment.created_at,
+    like_count: 0,
+    liked_by_me: false,
+    author_display_name: displayName(profile),
+    author_avatar_url: profile.avatar_url
+  };
 }
 
 async function requireEngagementUser(
@@ -30,11 +68,11 @@ async function requireEngagementUser(
     throw new Error(restrictedProfileMessage);
   }
 
-  return user;
+  return { user, profile };
 }
 
 export async function createComment(input: unknown) {
-  const user = await requireEngagementUser(
+  const { user, profile } = await requireEngagementUser(
     "Sign in required to comment.",
     "Your profile cannot post comments right now."
   );
@@ -51,18 +89,20 @@ export async function createComment(input: unknown) {
       source: "site",
       user_id: user.id
     })
-    .select("*")
-    .single();
+    .select(
+      "id, event_id, district_id, user_id, parent_comment_id, body, topic, is_featured, created_at"
+    )
+    .single<CreatedCommentRow>();
 
   if (error) {
     throw new Error(errorMessage(error, "Unable to create comment."));
   }
 
-  return data;
+  return toLiveComment(data, profile);
 }
 
 export async function toggleCommentLike(commentId: string, liked: boolean) {
-  const user = await requireEngagementUser(
+  const { user } = await requireEngagementUser(
     "Sign in required to like comments.",
     "Your profile cannot like comments right now."
   );
@@ -102,7 +142,7 @@ export async function toggleCommentLike(commentId: string, liked: boolean) {
 }
 
 export async function reportComment(commentId: string, input: unknown) {
-  const user = await requireEngagementUser(
+  const { user } = await requireEngagementUser(
     "Sign in required to report comments.",
     "Your profile cannot report comments right now."
   );
@@ -142,7 +182,7 @@ export async function reportComment(commentId: string, input: unknown) {
 }
 
 export async function trackShare(input: unknown) {
-  const user = await requireEngagementUser(
+  const { user } = await requireEngagementUser(
     "Sign in required to track shares.",
     "Your profile cannot track shares right now."
   );

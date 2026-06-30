@@ -24,6 +24,7 @@ type CommentComposerProps = {
   displayName: string;
   canDraft: boolean;
   status: string;
+  onCommentSubmitted?: (comment: LiveComment) => void;
 };
 
 const modeOptions: Array<{ mode: EngagementMode; label: string }> = [
@@ -127,7 +128,7 @@ export function LivePodcastEngagement({
   signedOutSlot: ReactNode;
   canonicalShareUrl: string;
 }) {
-  const { comments, metrics, mode, setMode } = useLiveEngagement({
+  const { comments, metrics, mode, addComment, setMode } = useLiveEngagement({
     eventId: event.id,
     initialComments,
     initialMetrics,
@@ -139,7 +140,11 @@ export function LivePodcastEngagement({
       <div className="grid min-w-0 gap-6">
         <Fragment key="player-slot">{playerSlot}</Fragment>
         {composerProps ? (
-          <CommentComposer key="comment-composer" {...composerProps} />
+          <CommentComposer
+            key="comment-composer"
+            {...composerProps}
+            onCommentSubmitted={addComment}
+          />
         ) : (
           <Fragment key="signed-out-slot">{signedOutSlot}</Fragment>
         )}

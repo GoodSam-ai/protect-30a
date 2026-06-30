@@ -28,6 +28,57 @@ create table public.profiles (
   updated_at timestamptz not null default now()
 );
 
+create or replace function public.create_profile_for_auth_user()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  insert into public.profiles (
+    id,
+    display_name,
+    avatar_url,
+    role,
+    is_candidate,
+    is_potential_guest,
+    is_restricted
+  )
+  values (
+    new.id,
+    nullif(
+      trim(coalesce(
+        new.raw_user_meta_data->>'full_name',
+        new.raw_user_meta_data->>'name',
+        nullif(split_part(coalesce(new.email, ''), '@', 1), ''),
+        'Community member'
+      )),
+      ''
+    ),
+    nullif(
+      trim(coalesce(
+        new.raw_user_meta_data->>'avatar_url',
+        new.raw_user_meta_data->>'picture',
+        ''
+      )),
+      ''
+    ),
+    'user',
+    false,
+    false,
+    false
+  )
+  on conflict (id) do nothing;
+
+  return new;
+end;
+$$;
+
+create trigger create_profile_on_auth_user_insert
+after insert on auth.users
+for each row
+execute function public.create_profile_for_auth_user();
+
 create table public.podcast_events (
   id uuid primary key default gen_random_uuid(),
   district_id uuid references public.districts(id),

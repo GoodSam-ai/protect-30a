@@ -1,16 +1,19 @@
 import { LikeButton } from "@/components/live/LikeButton";
+import { ReportCommentButton } from "@/components/live/ReportCommentButton";
 import { formatLiveCommentTime } from "@/components/live/date-format";
 import type { PublicProfile } from "@/lib/auth/session";
 import type { LiveComment } from "@/lib/live/types";
 import { MessageCircle, Star } from "lucide-react";
 
 export function LiveCommentFeed({
-  comments
+  comments,
+  viewerProfile
 }: {
   comments: LiveComment[];
   viewerProfile: PublicProfile | null;
 }) {
-  const likesDisabled = true;
+  const canEngage =
+    viewerProfile !== null && viewerProfile.is_restricted === false;
 
   return (
     <section aria-labelledby="live-comment-feed-heading">
@@ -57,13 +60,20 @@ export function LiveCommentFeed({
                       {comment.topic ? ` - ${comment.topic}` : null}
                     </p>
                   </div>
-                  <LikeButton
-                    commentId={comment.id}
-                    initialLiked={comment.liked_by_me}
-                    initialCount={comment.like_count}
-                    disabled={likesDisabled}
-                    commentAuthor={comment.author_display_name}
-                  />
+                  <div className="flex shrink-0 flex-wrap gap-2 sm:justify-end">
+                    <LikeButton
+                      commentId={comment.id}
+                      initialLiked={comment.liked_by_me}
+                      initialCount={comment.like_count}
+                      disabled={!canEngage}
+                      commentAuthor={comment.author_display_name}
+                    />
+                    <ReportCommentButton
+                      commentId={comment.id}
+                      disabled={!canEngage}
+                      commentAuthor={comment.author_display_name}
+                    />
+                  </div>
                 </header>
                 <p className="mt-3 whitespace-pre-wrap break-words leading-7 text-protect-ink">
                   {comment.body}

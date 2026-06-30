@@ -33,8 +33,24 @@ describe("CommentComposer", () => {
   });
 
   it("posts comments, clears the textarea, and announces success", async () => {
+    const onCommentSubmitted = vi.fn();
+    const createdComment = {
+      id: "comment-1",
+      event_id: eventId,
+      district_id: districtId,
+      user_id: "40000000-0000-4000-8000-000000000001",
+      parent_comment_id: null,
+      body: "Please discuss stormwater planning.",
+      topic: "Stormwater",
+      is_featured: false,
+      created_at: "2026-06-26T12:00:00Z",
+      like_count: 0,
+      liked_by_me: false,
+      author_display_name: "Resident Voice",
+      author_avatar_url: null
+    };
     const fetchMock = vi.spyOn(globalThis, "fetch").mockResolvedValue(
-      new Response(JSON.stringify({ comment: { id: "comment-1" } }), {
+      new Response(JSON.stringify({ comment: createdComment }), {
         status: 200,
         headers: { "Content-Type": "application/json" }
       })
@@ -47,6 +63,7 @@ describe("CommentComposer", () => {
         displayName="Resident Voice"
         canDraft
         status="Ready to comment."
+        onCommentSubmitted={onCommentSubmitted}
       />
     );
 
@@ -72,6 +89,7 @@ describe("CommentComposer", () => {
     );
     expect(screen.getByLabelText("Comment")).toHaveValue("");
     expect(screen.getByRole("status")).toHaveTextContent("Comment submitted.");
+    expect(onCommentSubmitted).toHaveBeenCalledWith(createdComment);
   });
 
   it("exposes server validation errors in polite live content", async () => {

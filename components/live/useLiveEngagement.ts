@@ -36,6 +36,37 @@ function hasSupabaseBrowserEnv() {
   );
 }
 
+function bumpTopic(items: LiveMetrics["topTopics"], topic: string | null) {
+  const normalizedTopic = topic?.trim();
+
+  if (!normalizedTopic) {
+    return items;
+  }
+
+  const updated = new Map(items.map((item) => [item.topic, item.count]));
+  updated.set(normalizedTopic, (updated.get(normalizedTopic) ?? 0) + 1);
+
+  return Array.from(updated, ([topicName, count]) => ({
+    topic: topicName,
+    count
+  })).sort((first, second) => {
+    if (second.count !== first.count) return second.count - first.count;
+    return first.topic.localeCompare(second.topic);
+  });
+}
+
+function addSubmittedCommentToMetrics(
+  metrics: LiveMetrics,
+  comment: LiveComment
+) {
+  return {
+    ...metrics,
+    totalComments: metrics.totalComments + 1,
+    topTopics: bumpTopic(metrics.topTopics, comment.topic),
+    topicLeaderboard: bumpTopic(metrics.topicLeaderboard, comment.topic)
+  };
+}
+
 export function useLiveEngagement({
   eventId,
   initialComments,
@@ -91,6 +122,13 @@ export function useLiveEngagement({
     setComments(dedupeCommentsById([], snapshot.comments));
     setMetrics(snapshot.metrics);
   }, [eventId]);
+
+  const addComment = useCallback((comment: LiveComment) => {
+    setComments((currentComments) => dedupeCommentsById([comment], currentComments));
+    setMetrics((currentMetrics) =>
+      addSubmittedCommentToMetrics(currentMetrics, comment)
+    );
+  }, []);
 
   useEffect(() => {
     if (modeState.activeMode !== "realtime") return;
@@ -203,6 +241,7 @@ export function useLiveEngagement({
     metrics,
     mode: modeState.requestedMode,
     activeMode: modeState.activeMode,
+    addComment,
     setMode: (mode: EngagementMode) =>
       dispatchMode({ type: "manual_mode_selected", mode })
   };

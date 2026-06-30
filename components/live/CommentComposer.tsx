@@ -1,5 +1,6 @@
 "use client";
 
+import type { LiveComment } from "@/lib/live/types";
 import { Send } from "lucide-react";
 import { useId, useState } from "react";
 
@@ -20,13 +21,15 @@ export function CommentComposer({
   districtId,
   displayName,
   canDraft,
-  status
+  status,
+  onCommentSubmitted
 }: {
   eventId: string;
   districtId: string | null;
   displayName: string;
   canDraft: boolean;
   status: string;
+  onCommentSubmitted?: (comment: LiveComment) => void;
 }) {
   const bodyId = useId();
   const topicId = useId();
@@ -56,11 +59,16 @@ export function CommentComposer({
       });
       const result = (await response.json().catch(() => null)) as {
         error?: string;
+        comment?: LiveComment;
       } | null;
 
       if (!response.ok) {
         setMessage(result?.error || "Unable to submit comment.");
         return;
+      }
+
+      if (result?.comment) {
+        onCommentSubmitted?.(result.comment);
       }
 
       setBody("");
@@ -90,7 +98,7 @@ export function CommentComposer({
           </p>
         </div>
         <span className="w-fit rounded border border-protect-aqua bg-protect-cream px-2.5 py-1 text-xs font-semibold uppercase tracking-wide text-protect-teal">
-          Draft mode
+          {canDraft ? "Open" : "Closed"}
         </span>
       </div>
 

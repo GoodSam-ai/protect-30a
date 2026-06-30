@@ -215,6 +215,19 @@ describe("live engagement migration contracts", () => {
     expect(policy).not.toContain("role = 'user'");
   });
 
+  it("creates a normal resident profile when Supabase auth creates a user", () => {
+    const body = extractFunctionBody("create_profile_for_auth_user");
+
+    expect(body).toContain("insert into public.profiles");
+    expect(body).toContain("new.id");
+    expect(body).toContain("new.raw_user_meta_data->>'full_name'");
+    expect(body).toContain("'user'");
+    expect(body).toContain("on conflict (id) do nothing");
+    expect(migration).toContain(
+      "after insert on auth.users\nfor each row\nexecute function public.create_profile_for_auth_user()"
+    );
+  });
+
   it("validates direct report reasons/details and share platforms at the database layer", () => {
     expect(migration).toContain("constraint comment_reports_reason_check");
     expect(migration).toContain("constraint comment_reports_details_length_check");

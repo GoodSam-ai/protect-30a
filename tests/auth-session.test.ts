@@ -25,6 +25,41 @@ function profile(overrides: Partial<PublicProfile> = {}): PublicProfile {
   };
 }
 
+function profileTable({
+  existingProfile,
+  existingError,
+  createdProfile,
+  createdError
+}: {
+  existingProfile: PublicProfile | null;
+  existingError: { code?: string; message?: string } | null;
+  createdProfile?: PublicProfile | null;
+  createdError?: { code?: string; message?: string } | null;
+}) {
+  const selectSingle = vi.fn().mockResolvedValue({
+    data: existingProfile,
+    error: existingError
+  });
+  const selectEq = vi.fn(() => ({ single: selectSingle }));
+  const select = vi.fn(() => ({ eq: selectEq }));
+  const upsertSingle = vi.fn().mockResolvedValue({
+    data: createdProfile,
+    error: createdError ?? null
+  });
+  const upsertSelect = vi.fn(() => ({ single: upsertSingle }));
+  const upsert = vi.fn(() => ({ select: upsertSelect }));
+
+  return {
+    table: { select, upsert },
+    select,
+    selectEq,
+    selectSingle,
+    upsert,
+    upsertSelect,
+    upsertSingle
+  };
+}
+
 describe("auth session helpers", () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -64,6 +99,58 @@ describe("auth session helpers", () => {
       "Supabase environment variables are partially configured."
     );
     expect(supabaseMocks.createSupabaseServerClient).not.toHaveBeenCalled();
+  });
+
+  it("creates and returns a default resident profile when a signed-in user has none", async () => {
+    vi.stubEnv("NEXT_PUBLIC_SUPABASE_URL", "https://example.supabase.co");
+    vi.stubEnv("NEXT_PUBLIC_SUPABASE_ANON_KEY", "anon-key");
+    const createdProfile = profile({
+      id: "user-1",
+      display_name: "Resident Voice",
+      avatar_url: "https://example.com/avatar.png"
+    });
+    const profiles = profileTable({
+      existingProfile: null,
+      existingError: { code: "PGRST116", message: "No rows found" },
+      createdProfile
+    });
+    supabaseMocks.createSupabaseServerClient.mockResolvedValue({
+      auth: {
+        getUser: vi.fn().mockResolvedValue({
+          data: {
+            user: {
+              id: "user-1",
+              email: "resident@example.com",
+              user_metadata: {
+                full_name: " Resident Voice ",
+                avatar_url: "https://example.com/avatar.png"
+              }
+            }
+          }
+        })
+      },
+      from: vi.fn((tableName: string) => {
+        expect(tableName).toBe("profiles");
+        return profiles.table;
+      })
+    });
+
+    await expect(getCurrentUserAndProfile()).resolves.toEqual({
+      user: expect.objectContaining({ id: "user-1" }),
+      profile: createdProfile
+    });
+    expect(profiles.upsert).toHaveBeenCalledWith(
+      {
+        id: "user-1",
+        display_name: "Resident Voice",
+        avatar_url: "https://example.com/avatar.png",
+        role: "user",
+        is_candidate: false,
+        is_potential_guest: false,
+        is_restricted: false
+      },
+      { onConflict: "id" }
+    );
   });
 
   it("allows unrestricted moderators and admins to moderate", () => {

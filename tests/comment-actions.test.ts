@@ -296,6 +296,8 @@ describe("live engagement mutation actions", () => {
       parent_comment_id: null,
       body: "Please discuss stormwater planning.",
       topic: "Stormwater",
+      is_featured: false,
+      created_at: "2026-06-26T12:00:00Z",
       user_id: user.id,
       source: "site"
     };
@@ -314,7 +316,21 @@ describe("live engagement mutation actions", () => {
         body: "  Please discuss stormwater planning.  ",
         topic: "Stormwater"
       })
-    ).resolves.toEqual(insertedComment);
+    ).resolves.toEqual({
+      id: commentId,
+      event_id: eventId,
+      district_id: districtId,
+      parent_comment_id: null,
+      body: "Please discuss stormwater planning.",
+      topic: "Stormwater",
+      is_featured: false,
+      created_at: "2026-06-26T12:00:00Z",
+      user_id: user.id,
+      like_count: 0,
+      liked_by_me: false,
+      author_display_name: "Resident",
+      author_avatar_url: null
+    });
 
     expect(commentsTable.insert).toHaveBeenCalledWith({
       event_id: eventId,
@@ -476,7 +492,17 @@ describe("live engagement route handlers", () => {
   });
 
   it("returns JSON success shapes from mutation routes", async () => {
-    const commentsTable = insertReturningSingle({ id: commentId, event_id: eventId });
+    const commentsTable = insertReturningSingle({
+      id: commentId,
+      event_id: eventId,
+      district_id: null,
+      parent_comment_id: null,
+      body: "Route comment",
+      topic: null,
+      is_featured: false,
+      created_at: "2026-06-26T12:00:00Z",
+      user_id: user.id
+    });
     const insert = vi.fn().mockResolvedValue({ error: null });
     const upsert = vi.fn().mockResolvedValue({ error: null });
     const secondEq = vi.fn().mockResolvedValue({ error: null });
@@ -500,7 +526,23 @@ describe("live engagement route handlers", () => {
 
     await expect(
       (await createCommentRoute(requestJson({ eventId, body: "Route comment" }))).json()
-    ).resolves.toEqual({ comment: { id: commentId, event_id: eventId } });
+    ).resolves.toEqual({
+      comment: {
+        id: commentId,
+        event_id: eventId,
+        district_id: null,
+        parent_comment_id: null,
+        body: "Route comment",
+        topic: null,
+        is_featured: false,
+        created_at: "2026-06-26T12:00:00Z",
+        user_id: user.id,
+        like_count: 0,
+        liked_by_me: false,
+        author_display_name: "Resident",
+        author_avatar_url: null
+      }
+    });
     await expect(
       (await likeComment(nextRequest(), {
         params: Promise.resolve({ commentId })

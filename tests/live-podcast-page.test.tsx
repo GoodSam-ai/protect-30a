@@ -84,7 +84,7 @@ describe("LivePodcastPage", () => {
     ).toBeInTheDocument();
   });
 
-  it("keeps like controls disabled for signed-in residents until mutations exist", () => {
+  it("enables like and report controls for signed-in residents", () => {
     render(
       <LivePodcastPage
         event={fixtureEvent}
@@ -99,7 +99,12 @@ describe("LivePodcastPage", () => {
       screen.getByRole("button", {
         name: /like comment from community member\. 8 likes/i
       })
-    ).toBeDisabled();
+    ).toBeEnabled();
+    expect(
+      screen.getByRole("button", {
+        name: /report comment from community member/i
+      })
+    ).toBeEnabled();
   });
 
   it("renders accessible live engagement mode controls", () => {
