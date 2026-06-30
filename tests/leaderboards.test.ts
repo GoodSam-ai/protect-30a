@@ -56,8 +56,19 @@ function makeQueryClient(dataByTable: Record<string, unknown[]>) {
       }),
       limit: vi.fn((count: number) => {
         calls.limit.push({ table, count });
-        return Promise.resolve({ data: dataByTable[table] ?? [], error: null });
-      })
+        return Promise.resolve({
+          data: (dataByTable[table] ?? []).slice(0, count),
+          error: null
+        });
+      }),
+      then: (
+        resolve: (result: { data: unknown[]; error: null }) => unknown,
+        reject?: (reason: unknown) => unknown
+      ) =>
+        Promise.resolve({
+          data: dataByTable[table] ?? [],
+          error: null
+        }).then(resolve, reject)
     };
 
     return builder;
@@ -259,6 +270,46 @@ describe("live dashboard data", () => {
           shares_count: 1,
           featured_comments_count: 0,
           engagement_score: 14
+        },
+        {
+          event_id: fixtureEvent.id,
+          display_name: "Casey Resident",
+          avatar_url: null,
+          comments_count: 1,
+          likes_received_count: 2,
+          shares_count: 1,
+          featured_comments_count: 0,
+          engagement_score: 9
+        },
+        {
+          event_id: fixtureEvent.id,
+          display_name: "Devon Resident",
+          avatar_url: null,
+          comments_count: 1,
+          likes_received_count: 1,
+          shares_count: 1,
+          featured_comments_count: 0,
+          engagement_score: 6
+        },
+        {
+          event_id: fixtureEvent.id,
+          display_name: "Emery Resident",
+          avatar_url: null,
+          comments_count: 1,
+          likes_received_count: 0,
+          shares_count: 1,
+          featured_comments_count: 0,
+          engagement_score: 3
+        },
+        {
+          event_id: fixtureEvent.id,
+          display_name: "Finley Resident",
+          avatar_url: null,
+          comments_count: 1,
+          likes_received_count: 0,
+          shares_count: 7,
+          featured_comments_count: 0,
+          engagement_score: 2
         }
       ],
       weekly_district_influencers: [
@@ -298,7 +349,8 @@ describe("live dashboard data", () => {
     expect(query.calls.from).toEqual([
       "top_comments_for_event",
       "top_commenters_for_event",
-      "weekly_district_influencers"
+      "weekly_district_influencers",
+      "top_commenters_for_event"
     ]);
     expect(query.calls.eq).toEqual([
       {
@@ -315,6 +367,11 @@ describe("live dashboard data", () => {
         table: "weekly_district_influencers",
         column: "week_start",
         value: "2026-06-29"
+      },
+      {
+        table: "top_commenters_for_event",
+        column: "event_id",
+        value: fixtureEvent.id
       }
     ]);
     expect(query.calls.order).toEqual([
@@ -354,7 +411,7 @@ describe("live dashboard data", () => {
       { table: "top_commenters_for_event", count: 5 },
       { table: "weekly_district_influencers", count: 8 }
     ]);
-    expect(metrics.totalShares).toBe(3);
+    expect(metrics.totalShares).toBe(13);
     expect(metrics.commentsPerMinute).toBe(0.2);
     expect(metrics.topComments[0]).toMatchObject({
       body: "Stormwater maps should stay visible.",
@@ -366,6 +423,10 @@ describe("live dashboard data", () => {
       engagementScore: 53,
       topCommentText: "Stormwater maps should stay visible."
     });
+    expect(metrics.eventLeaders).toHaveLength(5);
+    expect(metrics.eventLeaders.map((leader) => leader.displayName)).not.toContain(
+      "Finley Resident"
+    );
     expect(metrics.weeklyDistrictLeaders[0]).toMatchObject({
       districtName: "Inlet Beach",
       displayName: "Avery Resident",

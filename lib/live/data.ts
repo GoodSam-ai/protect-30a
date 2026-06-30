@@ -204,7 +204,12 @@ export async function getLiveMetrics(
   if (!hasSupabaseEnv()) return commentMetrics;
 
   const supabase = await createSupabaseServerClient();
-  const [topCommentsResult, eventLeadersResult, weeklyLeadersResult] =
+  const [
+    topCommentsResult,
+    eventLeadersResult,
+    weeklyLeadersResult,
+    allCommentersResult
+  ] =
     await Promise.all([
       supabase
         .from("top_comments_for_event")
@@ -232,12 +237,17 @@ export async function getLiveMetrics(
         .eq("week_start", getCurrentWeekStartDate())
         .order("week_start", { ascending: false })
         .order("rank", { ascending: true })
-        .limit(8)
+        .limit(8),
+      supabase
+        .from("top_commenters_for_event")
+        .select("event_id, shares_count")
+        .eq("event_id", eventId)
     ]);
 
   if (topCommentsResult.error) throw topCommentsResult.error;
   if (eventLeadersResult.error) throw eventLeadersResult.error;
   if (weeklyLeadersResult.error) throw weeklyLeadersResult.error;
+  if (allCommentersResult.error) throw allCommentersResult.error;
 
   const topComments = ((topCommentsResult.data ?? []) as TopCommentRow[]).map(
     mapTopCommentRow
@@ -245,8 +255,8 @@ export async function getLiveMetrics(
   const eventLeaders = ((eventLeadersResult.data ?? []) as TopCommenterRow[]).map(
     (leader, index) => mapTopCommenterRow(leader, index, topComments)
   );
-  const totalShares = eventLeaders.reduce(
-    (sum, leader) => sum + leader.sharesCount,
+  const totalShares = ((allCommentersResult.data ?? []) as TopCommenterRow[]).reduce(
+    (sum, leader) => sum + (leader.shares_count ?? 0),
     0
   );
   const weeklyDistrictLeaders = (
