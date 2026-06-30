@@ -41,6 +41,8 @@ Use the same names in the Vercel project **protect-30a**:
   builds, fork PR previews, logs, client bundles, or browser-executed code.
 - `NEXT_PUBLIC_SITE_URL`: keep `https://protect30a.org` for production.
 - `NEXT_PUBLIC_CANONICAL_DOMAIN`: keep `protect30a.org` for production.
+- `NEXT_PUBLIC_POLLING_INTERVAL_MS`: optional client-side live polling
+  interval. Keep `5000` unless a launch test needs a slower cadence.
 - `BOOTSTRAP_ADMIN_EMAIL`: keep `doug@goodsam.ai`.
 
 `https://protect30a.org` is the canonical production URL until Protect38

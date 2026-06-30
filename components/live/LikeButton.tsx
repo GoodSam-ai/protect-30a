@@ -3,6 +3,32 @@
 import { Heart } from "lucide-react";
 import { useState } from "react";
 
+type LikeState = {
+  commentId: string;
+  initialLiked: boolean;
+  initialCount: number;
+  liked: boolean;
+  count: number;
+};
+
+function createLikeState({
+  commentId,
+  initialLiked,
+  initialCount
+}: {
+  commentId: string;
+  initialLiked: boolean;
+  initialCount: number;
+}): LikeState {
+  return {
+    commentId,
+    initialLiked,
+    initialCount,
+    liked: initialLiked,
+    count: initialCount
+  };
+}
+
 export function LikeButton({
   commentId,
   initialLiked,
@@ -16,9 +42,22 @@ export function LikeButton({
   disabled: boolean;
   commentAuthor?: string;
 }) {
-  const [liked, setLiked] = useState(initialLiked);
-  const [count, setCount] = useState(initialCount);
+  const [likeState, setLikeState] = useState(() =>
+    createLikeState({ commentId, initialLiked, initialCount })
+  );
   const [pending, setPending] = useState(false);
+
+  const propsChanged =
+    likeState.commentId !== commentId ||
+    likeState.initialLiked !== initialLiked ||
+    likeState.initialCount !== initialCount;
+
+  if (propsChanged && !pending) {
+    setLikeState(createLikeState({ commentId, initialLiked, initialCount }));
+  }
+
+  const liked = propsChanged && !pending ? initialLiked : likeState.liked;
+  const count = propsChanged && !pending ? initialCount : likeState.count;
 
   async function toggleLike() {
     if (disabled || pending) return;
@@ -26,8 +65,13 @@ export function LikeButton({
     const previousCount = count;
     const nextLiked = !liked;
     setPending(true);
-    setLiked(nextLiked);
-    setCount(previousCount + (nextLiked ? 1 : -1));
+    setLikeState({
+      commentId,
+      initialLiked,
+      initialCount,
+      liked: nextLiked,
+      count: previousCount + (nextLiked ? 1 : -1)
+    });
 
     try {
       const response = await fetch(`/api/comments/${commentId}/like`, {
@@ -35,12 +79,22 @@ export function LikeButton({
       });
 
       if (!response.ok) {
-        setLiked(previousLiked);
-        setCount(previousCount);
+        setLikeState({
+          commentId,
+          initialLiked,
+          initialCount,
+          liked: previousLiked,
+          count: previousCount
+        });
       }
     } catch {
-      setLiked(previousLiked);
-      setCount(previousCount);
+      setLikeState({
+        commentId,
+        initialLiked,
+        initialCount,
+        liked: previousLiked,
+        count: previousCount
+      });
     } finally {
       setPending(false);
     }

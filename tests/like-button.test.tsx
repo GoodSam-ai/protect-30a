@@ -87,4 +87,38 @@ describe("LikeButton", () => {
     expect(button).toHaveTextContent("8");
     expect(button).toHaveAttribute("aria-pressed", "false");
   });
+
+  it("syncs refreshed like state from parent live data", () => {
+    const { rerender } = render(
+      <LikeButton
+        commentId="comment-1"
+        initialLiked={false}
+        initialCount={8}
+        disabled={false}
+        commentAuthor="Community member"
+      />
+    );
+
+    expect(
+      screen.getByRole("button", {
+        name: /like comment from community member\. 8 likes/i
+      })
+    ).toHaveAttribute("aria-pressed", "false");
+
+    rerender(
+      <LikeButton
+        commentId="comment-1"
+        initialLiked
+        initialCount={9}
+        disabled={false}
+        commentAuthor="Community member"
+      />
+    );
+
+    expect(
+      screen.getByRole("button", {
+        name: /unlike comment from community member\. 9 likes/i
+      })
+    ).toHaveAttribute("aria-pressed", "true");
+  });
 });
