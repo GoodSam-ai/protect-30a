@@ -130,6 +130,14 @@ create table public.audit_log (
   created_at timestamptz not null default now()
 );
 
+create table public.admin_settings (
+  key text primary key,
+  value jsonb not null default '{}'::jsonb,
+  updated_by uuid references public.profiles(id),
+  updated_at timestamptz not null default now(),
+  constraint admin_settings_key_check check (key in ('engagement_scoring', 'engagement_badges'))
+);
+
 insert into public.districts (name, slug, description, sort_order) values
   ('Inlet Beach', 'inlet-beach', 'Inlet Beach district placeholder.', 1),
   ('Rosemary Beach', 'rosemary-beach', 'Rosemary Beach district placeholder.', 2),
@@ -173,6 +181,16 @@ select
   true
 from public.districts
 where slug = 'inlet-beach';
+
+insert into public.admin_settings (key, value) values
+  (
+    'engagement_scoring',
+    '{"comment_weight": 1, "like_weight": 3, "share_weight": 2, "featured_weight": 10, "podcast_invite_threshold": 30}'::jsonb
+  ),
+  (
+    'engagement_badges',
+    '{"first_voice_comments": 1, "conversation_starter_comments": 5, "community_signal_score": 25, "podcast_invite_score": 30}'::jsonb
+  );
 
 create index comments_event_created_idx on public.comments (event_id, created_at desc);
 create index comments_event_featured_idx on public.comments (event_id, is_featured, created_at desc);
@@ -427,6 +445,7 @@ alter table public.comment_reports enable row level security;
 alter table public.event_shares enable row level security;
 alter table public.district_influencer_scores enable row level security;
 alter table public.audit_log enable row level security;
+alter table public.admin_settings enable row level security;
 
 create policy "public read districts" on public.districts for select using (true);
 create policy "admins manage districts" on public.districts for all using (public.is_admin()) with check (public.is_admin());
@@ -495,6 +514,12 @@ create policy "admins manage influencer scores" on public.district_influencer_sc
 
 create policy "admins read audit log" on public.audit_log for select using (public.is_admin());
 create policy "moderators insert audit log" on public.audit_log for insert with check (public.is_admin_or_moderator());
+
+revoke all on table public.admin_settings from anon, authenticated;
+grant select on table public.admin_settings to anon, authenticated;
+
+create policy "public read admin settings" on public.admin_settings for select using (true);
+create policy "admins manage admin settings" on public.admin_settings for all using (public.is_admin_or_moderator()) with check (public.is_admin_or_moderator());
 
 create or replace view public.public_profiles as
 select
@@ -626,6 +651,18 @@ active_users as (
   select event_id, user_id from like_stats
   union
   select event_id, user_id from share_stats
+),
+scoring_settings as (
+  select
+    coalesce((value->>'comment_weight')::numeric, 1) as comment_weight,
+    coalesce((value->>'like_weight')::numeric, 3) as like_weight,
+    coalesce((value->>'share_weight')::numeric, 2) as share_weight,
+    coalesce((value->>'featured_weight')::numeric, 10) as featured_weight
+  from public.admin_settings
+  where key = 'engagement_scoring'
+  union all
+  select 1::numeric, 3::numeric, 2::numeric, 10::numeric
+  limit 1
 )
 select
   active_users.event_id,
@@ -636,13 +673,14 @@ select
   coalesce(ss.shares_count, 0)::int as shares_count,
   coalesce(cs.featured_comments_count, 0)::int as featured_comments_count,
   (
-    coalesce(ls.likes_received_count, 0) * 3 +
-    coalesce(cs.comments_count, 0) * 1 +
-    coalesce(ss.shares_count, 0) * 2 +
-    coalesce(cs.featured_comments_count, 0) * 10
+    coalesce(ls.likes_received_count, 0) * weights.like_weight +
+    coalesce(cs.comments_count, 0) * weights.comment_weight +
+    coalesce(ss.shares_count, 0) * weights.share_weight +
+    coalesce(cs.featured_comments_count, 0) * weights.featured_weight
   )::numeric as engagement_score,
   tcs.top_comment_text
 from active_users
+cross join scoring_settings weights
 join public.public_profiles p on p.id = active_users.user_id
 left join comment_stats cs on cs.event_id = active_users.event_id and cs.user_id = active_users.user_id
 left join like_stats ls on ls.event_id = active_users.event_id and ls.user_id = active_users.user_id
@@ -767,6 +805,18 @@ active_districts as (
   union
   select event_id, district_id from share_stats
 ),
+scoring_settings as (
+  select
+    coalesce((value->>'comment_weight')::numeric, 1) as comment_weight,
+    coalesce((value->>'like_weight')::numeric, 3) as like_weight,
+    coalesce((value->>'share_weight')::numeric, 2) as share_weight,
+    coalesce((value->>'featured_weight')::numeric, 10) as featured_weight
+  from public.admin_settings
+  where key = 'engagement_scoring'
+  union all
+  select 1::numeric, 3::numeric, 2::numeric, 10::numeric
+  limit 1
+),
 district_base as (
   select
     active_districts.event_id,
@@ -778,12 +828,13 @@ district_base as (
     coalesce(share_stats.shares_count, 0)::int as shares_count,
     coalesce(comment_stats.featured_comments_count, 0)::int as featured_comments_count,
     (
-      coalesce(like_stats.likes_received_count, 0) * 3 +
-      coalesce(comment_stats.comments_count, 0) * 1 +
-      coalesce(share_stats.shares_count, 0) * 2 +
-      coalesce(comment_stats.featured_comments_count, 0) * 10
+      coalesce(like_stats.likes_received_count, 0) * weights.like_weight +
+      coalesce(comment_stats.comments_count, 0) * weights.comment_weight +
+      coalesce(share_stats.shares_count, 0) * weights.share_weight +
+      coalesce(comment_stats.featured_comments_count, 0) * weights.featured_weight
     )::numeric as engagement_score
   from active_districts
+  cross join scoring_settings weights
   join public.districts districts on districts.id = active_districts.district_id
   left join comment_stats on comment_stats.event_id = active_districts.event_id
     and comment_stats.district_id = active_districts.district_id
@@ -894,6 +945,18 @@ begin
     union
     select district_id, user_id from share_stats
   ),
+  scoring_settings as (
+    select
+      coalesce((value->>'comment_weight')::numeric, 1) as comment_weight,
+      coalesce((value->>'like_weight')::numeric, 3) as like_weight,
+      coalesce((value->>'share_weight')::numeric, 2) as share_weight,
+      coalesce((value->>'featured_weight')::numeric, 10) as featured_weight
+    from public.admin_settings
+    where key = 'engagement_scoring'
+    union all
+    select 1::numeric, 3::numeric, 2::numeric, 10::numeric
+    limit 1
+  ),
   score_base as (
     select
       au.district_id,
@@ -904,12 +967,13 @@ begin
       coalesce(ss.shares_count, 0)::int as shares_count,
       coalesce(cs.featured_comments_count, 0)::int as featured_comments_count,
       (
-        coalesce(ls.likes_received_count, 0) * 3 +
-        coalesce(cs.comments_count, 0) * 1 +
-        coalesce(ss.shares_count, 0) * 2 +
-        coalesce(cs.featured_comments_count, 0) * 10
+        coalesce(ls.likes_received_count, 0) * weights.like_weight +
+        coalesce(cs.comments_count, 0) * weights.comment_weight +
+        coalesce(ss.shares_count, 0) * weights.share_weight +
+        coalesce(cs.featured_comments_count, 0) * weights.featured_weight
       )::numeric as engagement_score
     from active_users au
+    cross join scoring_settings weights
     join public.profiles p on p.id = au.user_id
     left join comment_stats cs on cs.district_id = au.district_id and cs.user_id = au.user_id
     left join like_stats ls on ls.district_id = au.district_id and ls.user_id = au.user_id

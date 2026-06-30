@@ -192,6 +192,25 @@ describe("leaderboard scoring", () => {
     ).toBe(44);
   });
 
+  it("accepts configurable weights while preserving default behavior", () => {
+    const input = {
+      likesReceivedCount: 10,
+      commentsCount: 2,
+      sharesCount: 1,
+      featuredCommentsCount: 1
+    };
+
+    expect(calculateEngagementScore(input)).toBe(44);
+    expect(
+      calculateEngagementScore(input, {
+        likeWeight: 4,
+        commentWeight: 2,
+        shareWeight: 1,
+        featuredWeight: 12
+      })
+    ).toBe(57);
+  });
+
   it("ranks highest score first with deterministic ties", () => {
     const ranked = rankScores([
       { userId: "b", displayName: "Beta", score: 10 },
@@ -369,6 +388,14 @@ describe("live dashboard data", () => {
           engagement_score: 25,
           rank: 2
         }
+      ],
+      admin_settings: [
+        {
+          key: "engagement_badges",
+          value: {
+            podcast_invite_score: 70
+          }
+        }
       ]
     });
     const comments = [
@@ -392,7 +419,8 @@ describe("live dashboard data", () => {
       "top_commenters_for_event",
       "weekly_district_influencers",
       "live_event_metrics",
-      "event_district_engagement_scores"
+      "event_district_engagement_scores",
+      "admin_settings"
     ]);
     expect(query.calls.eq).toEqual([
       {
@@ -419,6 +447,11 @@ describe("live dashboard data", () => {
         table: "event_district_engagement_scores",
         column: "event_id",
         value: fixtureEvent.id
+      },
+      {
+        table: "admin_settings",
+        column: "key",
+        value: "engagement_badges"
       }
     ]);
     expect(query.calls.order).toEqual([
@@ -483,7 +516,8 @@ describe("live dashboard data", () => {
       commentsCount: 0,
       sharesCount: 30,
       engagementScore: 60,
-      topCommentText: null
+      topCommentText: null,
+      podcastInvitationEligible: false
     });
     expect(metrics.eventLeaders).toHaveLength(5);
     expect(metrics.eventLeaders.map((leader) => leader.displayName)).not.toContain(
@@ -493,7 +527,8 @@ describe("live dashboard data", () => {
       districtName: "Inlet Beach",
       displayName: "Avery Resident",
       engagementScore: 53,
-      topCommentText: "Weekly influencer text from the view."
+      topCommentText: "Weekly influencer text from the view.",
+      podcastInvitationEligible: false
     });
     expect(metrics.districtEngagementScores).toEqual([
       {

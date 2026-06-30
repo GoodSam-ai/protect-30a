@@ -35,6 +35,22 @@ export async function POST(request: NextRequest) {
       podcast_invite_threshold: parsed.podcastInviteThreshold
     };
     const admin = createSupabaseAdminClient();
+    const { error: settingsError } = await admin.from("admin_settings").upsert(
+      {
+        key: "engagement_scoring",
+        value: metadata,
+        updated_by: user.id,
+        updated_at: new Date().toISOString()
+      },
+      { onConflict: "key" }
+    );
+
+    if (settingsError) {
+      throw new Error(
+        errorMessage(settingsError, "Unable to save scoring settings.")
+      );
+    }
+
     const { error } = await admin.from("audit_log").insert({
       actor_user_id: user.id,
       action: "admin_scoring_settings_update",

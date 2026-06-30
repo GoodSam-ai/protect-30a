@@ -5,18 +5,35 @@ export type ScoreInput = {
   featuredCommentsCount: number;
 };
 
+export type EngagementScoreWeights = {
+  likeWeight: number;
+  commentWeight: number;
+  shareWeight: number;
+  featuredWeight: number;
+};
+
 export type RankableScore = {
   userId: string;
   displayName: string;
   score: number;
 };
 
-export function calculateEngagementScore(input: ScoreInput): number {
+export const DEFAULT_ENGAGEMENT_SCORE_WEIGHTS: EngagementScoreWeights = {
+  likeWeight: 3,
+  commentWeight: 1,
+  shareWeight: 2,
+  featuredWeight: 10
+};
+
+export function calculateEngagementScore(
+  input: ScoreInput,
+  weights: EngagementScoreWeights = DEFAULT_ENGAGEMENT_SCORE_WEIGHTS
+): number {
   return (
-    input.likesReceivedCount * 3 +
-    input.commentsCount * 1 +
-    input.sharesCount * 2 +
-    input.featuredCommentsCount * 10
+    input.likesReceivedCount * weights.likeWeight +
+    input.commentsCount * weights.commentWeight +
+    input.sharesCount * weights.shareWeight +
+    input.featuredCommentsCount * weights.featuredWeight
   );
 }
 

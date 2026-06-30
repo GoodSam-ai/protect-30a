@@ -7,6 +7,7 @@ import { FeaturedCommentsPanel } from "@/components/admin/FeaturedCommentsPanel"
 import { ManualFacebookImport } from "@/components/admin/ManualFacebookImport";
 import { ReportedCommentsQueue } from "@/components/admin/ReportedCommentsQueue";
 import { ScoringSettings } from "@/components/admin/ScoringSettings";
+import type { ReportedCommentQueueItem } from "@/lib/admin/types";
 import type { PublicProfile } from "@/lib/auth/session";
 import {
   BadgeCheck,
@@ -31,7 +32,13 @@ const tabs = [
 
 type TabId = (typeof tabs)[number]["id"];
 
-export function AdminModerationPanel({ profile }: { profile: PublicProfile }) {
+export function AdminModerationPanel({
+  profile,
+  reportedComments
+}: {
+  profile: PublicProfile;
+  reportedComments: ReportedCommentQueueItem[];
+}) {
   const [activeTab, setActiveTab] = useState<TabId>("events");
   const active = tabs.find((tab) => tab.id === activeTab) ?? tabs[0];
 
@@ -95,7 +102,9 @@ export function AdminModerationPanel({ profile }: { profile: PublicProfile }) {
           className="rounded border border-protect-sand bg-white p-4 shadow-sm sm:p-5"
         >
           {activeTab === "events" ? <EventEditor /> : null}
-          {activeTab === "reported" ? <ReportedCommentsQueue /> : null}
+          {activeTab === "reported" ? (
+            <ReportedCommentsQueue reportedComments={reportedComments} />
+          ) : null}
           {activeTab === "featured" ? <FeaturedCommentsPanel /> : null}
           {activeTab === "facebook" ? <ManualFacebookImport /> : null}
           {activeTab === "exports" ? <EngagementExport /> : null}

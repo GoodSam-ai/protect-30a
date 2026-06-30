@@ -4,6 +4,8 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi, beforeEach } from "vitest";
 
 const dashboardMocks = vi.hoisted(() => ({
+  createSupabaseAdminClient: vi.fn(),
+  getReportedCommentsQueue: vi.fn(),
   getCurrentUserAndProfile: vi.fn(),
   redirect: vi.fn((path: string) => {
     throw new Error(`redirect:${path}`);
@@ -25,6 +27,14 @@ vi.mock("@/lib/auth/session", async () => {
   };
 });
 
+vi.mock("@/lib/supabase/admin", () => ({
+  createSupabaseAdminClient: dashboardMocks.createSupabaseAdminClient
+}));
+
+vi.mock("@/lib/admin/data", () => ({
+  getReportedCommentsQueue: dashboardMocks.getReportedCommentsQueue
+}));
+
 const moderatorProfile = {
   id: "33333333-3333-4333-8333-333333333333",
   display_name: "Moderator",
@@ -34,9 +44,48 @@ const moderatorProfile = {
   is_restricted: false
 };
 
+function reportedCommentsTable() {
+  return {
+    select: vi.fn(() => ({
+      eq: vi.fn(() => ({
+        order: vi.fn(() => ({
+          limit: vi.fn().mockResolvedValue({
+            data: [
+              {
+                id: "44444444-4444-4444-8444-444444444444",
+                created_at: "2026-06-30T12:00:00Z",
+                body: "Reported queue comment body.",
+                topic: "Traffic",
+                moderation_status: "pending",
+                is_hidden: false,
+                is_featured: false,
+                is_reported: true,
+                external_source_author: null,
+                profiles: { display_name: "Careful Resident" },
+                comment_reports: [
+                  {
+                    reason: "spam",
+                    details: "Repeated link",
+                    reporter_user_id: "do-not-render"
+                  }
+                ]
+              }
+            ],
+            error: null
+          })
+        }))
+      }))
+    }))
+  };
+}
+
 describe("admin dashboard route guard", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    dashboardMocks.getReportedCommentsQueue.mockResolvedValue([]);
+    dashboardMocks.createSupabaseAdminClient.mockReturnValue({
+      from: vi.fn(() => reportedCommentsTable())
+    });
   });
 
   it("redirects non-moderators to the live room", async () => {
@@ -75,6 +124,37 @@ describe("admin dashboard route guard", () => {
       expect(screen.getByRole("tab", { name: tab })).toBeInTheDocument();
     }
   });
+
+  it("loads reported comments for the queue after the admin guard", async () => {
+    dashboardMocks.getCurrentUserAndProfile.mockResolvedValue({
+      user: { id: moderatorProfile.id },
+      profile: moderatorProfile
+    });
+    dashboardMocks.getReportedCommentsQueue.mockResolvedValue([
+      {
+        id: "44444444-4444-4444-8444-444444444444",
+        createdAt: "2026-06-30T12:00:00Z",
+        body: "Reported queue comment body.",
+        topic: "Traffic",
+        moderationStatus: "pending",
+        isHidden: false,
+        isFeatured: false,
+        isReported: true,
+        authorDisplayName: "Careful Resident",
+        reportCount: 1,
+        reportReasons: ["spam"],
+        reportDetails: ["Repeated link"]
+      }
+    ]);
+
+    render(await AdminPage());
+    fireEvent.click(screen.getByRole("tab", { name: "Reported comments" }));
+
+    expect(screen.getByText("Reported queue comment body.")).toBeInTheDocument();
+    expect(screen.getByText("Careful Resident")).toBeInTheDocument();
+    expect(screen.getByText("spam")).toBeInTheDocument();
+    expect(screen.queryByText("do-not-render")).not.toBeInTheDocument();
+  });
 });
 
 describe("AdminModerationPanel", () => {
@@ -89,7 +169,7 @@ describe("AdminModerationPanel", () => {
   ])(
     "renders a route-backed form and polite status region for %s",
     (tabName, formName, action) => {
-    render(<AdminModerationPanel profile={moderatorProfile} />);
+    render(<AdminModerationPanel profile={moderatorProfile} reportedComments={[]} />);
 
     fireEvent.click(screen.getByRole("tab", { name: tabName }));
 

@@ -6,7 +6,12 @@ import {
   fixtureDistricts,
   fixtureEvent
 } from "./fixtures";
-import { calculateEngagementScore, rankScores } from "./scoring";
+import {
+  DEFAULT_ENGAGEMENT_SCORE_WEIGHTS,
+  calculateEngagementScore,
+  rankScores,
+  type EngagementScoreWeights
+} from "./scoring";
 import type {
   LiveComment,
   LiveDistrictEngagementScore,
@@ -16,7 +21,7 @@ import type {
   LiveTopComment
 } from "./types";
 
-const PODCAST_INVITATION_SCORE_THRESHOLD = 30;
+const DEFAULT_PODCAST_INVITATION_SCORE_THRESHOLD = 30;
 
 type VisibleCommentRow = {
   id: string;
@@ -93,6 +98,16 @@ type EventDistrictEngagementScoreRow = {
   featured_comments_count: number | null;
   engagement_score: number | string | null;
   rank: number | null;
+};
+
+type AdminSettingsRow = {
+  key: string;
+  value: Record<string, unknown> | null;
+};
+
+type EngagementSettings = {
+  scoringWeights: EngagementScoreWeights;
+  podcastInviteScore: number;
 };
 
 function hasSupabaseEnv() {
@@ -190,13 +205,17 @@ export async function getVisibleComments(
 
 export function buildLiveMetricsFromComments(
   comments: LiveComment[],
-  totalShares = 0
+  totalShares = 0,
+  settings = defaultEngagementSettings()
 ): LiveMetrics {
   const topTopics = buildTopicLeaderboard(comments);
   const topComments = buildTopCommentsFromComments(comments);
-  const eventLeaders = buildEventLeadersFromComments(comments);
-  const districtEngagementScores = buildDistrictScoresFromComments(comments);
-  const districtLeaders = buildDistrictLeadersFromComments(comments);
+  const eventLeaders = buildEventLeadersFromComments(comments, settings);
+  const districtEngagementScores = buildDistrictScoresFromComments(
+    comments,
+    settings
+  );
+  const districtLeaders = buildDistrictLeadersFromComments(comments, settings);
 
   return {
     totalComments: comments.length,
@@ -228,7 +247,8 @@ export async function getLiveMetrics(
     eventLeadersResult,
     weeklyLeadersResult,
     eventMetricsResult,
-    districtScoresResult
+    districtScoresResult,
+    settingsResult
   ] =
     await Promise.all([
       supabase
@@ -270,7 +290,11 @@ export async function getLiveMetrics(
         )
         .eq("event_id", eventId)
         .order("rank", { ascending: true })
-        .limit(8)
+        .limit(8),
+      supabase
+        .from("admin_settings")
+        .select("key, value")
+        .eq("key", "engagement_badges")
     ]);
 
   if (topCommentsResult.error) throw topCommentsResult.error;
@@ -278,12 +302,17 @@ export async function getLiveMetrics(
   if (weeklyLeadersResult.error) throw weeklyLeadersResult.error;
   if (eventMetricsResult.error) throw eventMetricsResult.error;
   if (districtScoresResult.error) throw districtScoresResult.error;
+  if (settingsResult.error) throw settingsResult.error;
+
+  const engagementSettings = parseEngagementSettings(
+    ((settingsResult.data ?? []) as AdminSettingsRow[])[0]
+  );
 
   const topComments = ((topCommentsResult.data ?? []) as TopCommentRow[]).map(
     mapTopCommentRow
   );
   const eventLeaders = ((eventLeadersResult.data ?? []) as TopCommenterRow[]).map(
-    (leader, index) => mapTopCommenterRow(leader, index)
+    (leader, index) => mapTopCommenterRow(leader, index, engagementSettings)
   );
   const eventMetrics = (
     (eventMetricsResult.data ?? []) as LiveEventMetricsRow[]
@@ -293,7 +322,7 @@ export async function getLiveMetrics(
   ).map(mapEventDistrictEngagementScoreRow);
   const weeklyDistrictLeaders = (
     (weeklyLeadersResult.data ?? []) as WeeklyDistrictInfluencerRow[]
-  ).map(mapWeeklyDistrictInfluencerRow);
+  ).map((leader) => mapWeeklyDistrictInfluencerRow(leader, engagementSettings));
 
   return {
     ...commentMetrics,
@@ -389,7 +418,8 @@ function buildTopCommentsFromComments(comments: LiveComment[]): LiveTopComment[]
 }
 
 function buildEventLeadersFromComments(
-  comments: LiveComment[]
+  comments: LiveComment[],
+  settings = defaultEngagementSettings()
 ): LiveInfluencerScore[] {
   const authors = new Map<
     string,
@@ -437,7 +467,7 @@ function buildEventLeadersFromComments(
   return rankScores(
     Array.from(authors.values()).map((author) => ({
       ...author,
-      score: calculateEngagementScore(author)
+      score: calculateEngagementScore(author, settings.scoringWeights)
     }))
   )
     .slice(0, 5)
@@ -451,12 +481,13 @@ function buildEventLeadersFromComments(
       engagementScore: score,
       rank,
       topCommentText: author.topCommentText,
-      podcastInvitationEligible: isPodcastInvitationEligible(score)
+      podcastInvitationEligible: isPodcastInvitationEligible(score, settings)
     }));
 }
 
 function buildDistrictScoresFromComments(
-  comments: LiveComment[]
+  comments: LiveComment[],
+  settings = defaultEngagementSettings()
 ): LiveDistrictEngagementScore[] {
   const districts = new Map<
     string,
@@ -490,7 +521,7 @@ function buildDistrictScoresFromComments(
   return Array.from(districts.values())
     .map((district) => ({
       ...district,
-      engagementScore: calculateEngagementScore(district)
+      engagementScore: calculateEngagementScore(district, settings.scoringWeights)
     }))
     .sort((left, right) => {
       if (right.engagementScore !== left.engagementScore) {
@@ -502,9 +533,10 @@ function buildDistrictScoresFromComments(
 }
 
 function buildDistrictLeadersFromComments(
-  comments: LiveComment[]
+  comments: LiveComment[],
+  settings = defaultEngagementSettings()
 ): LiveDistrictInfluencerScore[] {
-  const eventLeaders = buildEventLeadersFromComments(comments);
+  const eventLeaders = buildEventLeadersFromComments(comments, settings);
 
   return eventLeaders.map((leader) => {
     const comment = comments.find(
@@ -542,7 +574,8 @@ function mapTopCommentRow(row: TopCommentRow): LiveTopComment {
 
 function mapTopCommenterRow(
   row: TopCommenterRow,
-  index: number
+  index: number,
+  settings = defaultEngagementSettings()
 ): LiveInfluencerScore {
   const engagementScore = Number(row.engagement_score ?? 0);
   const displayName = row.display_name || "Community member";
@@ -557,12 +590,16 @@ function mapTopCommenterRow(
     engagementScore,
     rank: index + 1,
     topCommentText: row.top_comment_text,
-    podcastInvitationEligible: isPodcastInvitationEligible(engagementScore)
+    podcastInvitationEligible: isPodcastInvitationEligible(
+      engagementScore,
+      settings
+    )
   };
 }
 
 function mapWeeklyDistrictInfluencerRow(
-  row: WeeklyDistrictInfluencerRow
+  row: WeeklyDistrictInfluencerRow,
+  settings = defaultEngagementSettings()
 ): LiveDistrictInfluencerScore {
   const engagementScore = Number(row.engagement_score ?? 0);
   const displayName = row.display_name || "Community member";
@@ -582,12 +619,42 @@ function mapWeeklyDistrictInfluencerRow(
     rank: row.rank ?? 0,
     updatedAt: row.updated_at ?? undefined,
     topCommentText: row.top_comment_text,
-    podcastInvitationEligible: isPodcastInvitationEligible(engagementScore)
+    podcastInvitationEligible: isPodcastInvitationEligible(
+      engagementScore,
+      settings
+    )
   };
 }
 
-function isPodcastInvitationEligible(score: number) {
-  return score >= PODCAST_INVITATION_SCORE_THRESHOLD;
+function isPodcastInvitationEligible(
+  score: number,
+  settings = defaultEngagementSettings()
+) {
+  return score >= settings.podcastInviteScore;
+}
+
+function defaultEngagementSettings(): EngagementSettings {
+  return {
+    scoringWeights: DEFAULT_ENGAGEMENT_SCORE_WEIGHTS,
+    podcastInviteScore: DEFAULT_PODCAST_INVITATION_SCORE_THRESHOLD
+  };
+}
+
+function numericSetting(value: unknown, fallback: number) {
+  return typeof value === "number" && Number.isFinite(value) ? value : fallback;
+}
+
+function parseEngagementSettings(row?: AdminSettingsRow): EngagementSettings {
+  const defaults = defaultEngagementSettings();
+  const value = row?.value ?? {};
+
+  return {
+    scoringWeights: defaults.scoringWeights,
+    podcastInviteScore: numericSetting(
+      value.podcast_invite_score,
+      defaults.podcastInviteScore
+    )
+  };
 }
 
 function getCurrentWeekStartDate(now = new Date()) {

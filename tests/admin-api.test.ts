@@ -276,27 +276,44 @@ describe("scoring settings endpoint", () => {
     signInAsModerator();
   });
 
-  it("writes scoring settings to the audit log", async () => {
+  it("upserts scoring settings and writes audit metadata", async () => {
+    const upsert = vi.fn().mockResolvedValue({ error: null });
     const auditInsert = vi.fn().mockResolvedValue({ error: null });
     adminMocks.createSupabaseAdminClient.mockReturnValue({
       from: vi.fn((table: string) => {
-        expect(table).toBe("audit_log");
-        return { insert: auditInsert };
+        if (table === "admin_settings") return { upsert };
+        if (table === "audit_log") return { insert: auditInsert };
+        throw new Error(`Unexpected table ${table}`);
       })
     });
 
     const response = await updateScoring(
       requestJsonTo("https://protect30a.test/api/admin/scoring", {
         commentWeight: 1,
-        likeWeight: 3,
+        likeWeight: 4,
         shareWeight: 2,
-        featuredWeight: 10,
-        podcastInviteThreshold: 25
+        featuredWeight: 12,
+        podcastInviteThreshold: 35
       })
     );
 
     await expect(response.json()).resolves.toEqual({ ok: true });
     expect(response.status).toBe(200);
+    expect(upsert).toHaveBeenCalledWith(
+      {
+        key: "engagement_scoring",
+        value: {
+          comment_weight: 1,
+          like_weight: 4,
+          share_weight: 2,
+          featured_weight: 12,
+          podcast_invite_threshold: 35
+        },
+        updated_by: user.id,
+        updated_at: expect.any(String)
+      },
+      { onConflict: "key" }
+    );
     expect(auditInsert).toHaveBeenCalledWith({
       actor_user_id: user.id,
       action: "admin_scoring_settings_update",
@@ -304,12 +321,38 @@ describe("scoring settings endpoint", () => {
       entity_id: null,
       metadata: {
         comment_weight: 1,
-        like_weight: 3,
+        like_weight: 4,
         share_weight: 2,
-        featured_weight: 10,
-        podcast_invite_threshold: 25
+        featured_weight: 12,
+        podcast_invite_threshold: 35
       }
     });
+  });
+
+  it("rejects invalid scoring settings before writes", async () => {
+    const upsert = vi.fn().mockResolvedValue({ error: null });
+    const auditInsert = vi.fn().mockResolvedValue({ error: null });
+    adminMocks.createSupabaseAdminClient.mockReturnValue({
+      from: vi.fn((table: string) => {
+        if (table === "admin_settings") return { upsert };
+        if (table === "audit_log") return { insert: auditInsert };
+        throw new Error(`Unexpected table ${table}`);
+      })
+    });
+
+    const response = await updateScoring(
+      requestJsonTo("https://protect30a.test/api/admin/scoring", {
+        commentWeight: -1,
+        likeWeight: 3,
+        shareWeight: 2,
+        featuredWeight: 10,
+        podcastInviteThreshold: 25
+      })
+    );
+
+    expect(response.status).toBe(400);
+    expect(upsert).not.toHaveBeenCalled();
+    expect(auditInsert).not.toHaveBeenCalled();
   });
 });
 
@@ -319,12 +362,14 @@ describe("badge settings endpoint", () => {
     signInAsModerator();
   });
 
-  it("writes badge settings to the audit log", async () => {
+  it("upserts badge settings and writes audit metadata", async () => {
+    const upsert = vi.fn().mockResolvedValue({ error: null });
     const auditInsert = vi.fn().mockResolvedValue({ error: null });
     adminMocks.createSupabaseAdminClient.mockReturnValue({
       from: vi.fn((table: string) => {
-        expect(table).toBe("audit_log");
-        return { insert: auditInsert };
+        if (table === "admin_settings") return { upsert };
+        if (table === "audit_log") return { insert: auditInsert };
+        throw new Error(`Unexpected table ${table}`);
       })
     });
 
@@ -333,12 +378,26 @@ describe("badge settings endpoint", () => {
         firstVoiceComments: 1,
         conversationStarterComments: 5,
         communitySignalScore: 25,
-        podcastInviteScore: 25
+        podcastInviteScore: 35
       })
     );
 
     await expect(response.json()).resolves.toEqual({ ok: true });
     expect(response.status).toBe(200);
+    expect(upsert).toHaveBeenCalledWith(
+      {
+        key: "engagement_badges",
+        value: {
+          first_voice_comments: 1,
+          conversation_starter_comments: 5,
+          community_signal_score: 25,
+          podcast_invite_score: 35
+        },
+        updated_by: user.id,
+        updated_at: expect.any(String)
+      },
+      { onConflict: "key" }
+    );
     expect(auditInsert).toHaveBeenCalledWith({
       actor_user_id: user.id,
       action: "admin_badge_settings_update",
@@ -348,9 +407,34 @@ describe("badge settings endpoint", () => {
         first_voice_comments: 1,
         conversation_starter_comments: 5,
         community_signal_score: 25,
-        podcast_invite_score: 25
+        podcast_invite_score: 35
       }
     });
+  });
+
+  it("rejects invalid badge settings before writes", async () => {
+    const upsert = vi.fn().mockResolvedValue({ error: null });
+    const auditInsert = vi.fn().mockResolvedValue({ error: null });
+    adminMocks.createSupabaseAdminClient.mockReturnValue({
+      from: vi.fn((table: string) => {
+        if (table === "admin_settings") return { upsert };
+        if (table === "audit_log") return { insert: auditInsert };
+        throw new Error(`Unexpected table ${table}`);
+      })
+    });
+
+    const response = await updateBadges(
+      requestJsonTo("https://protect30a.test/api/admin/badges", {
+        firstVoiceComments: 1,
+        conversationStarterComments: 5,
+        communitySignalScore: 25,
+        podcastInviteScore: -1
+      })
+    );
+
+    expect(response.status).toBe(400);
+    expect(upsert).not.toHaveBeenCalled();
+    expect(auditInsert).not.toHaveBeenCalled();
   });
 });
 

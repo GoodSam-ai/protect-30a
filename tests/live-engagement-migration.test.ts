@@ -113,6 +113,45 @@ describe("live engagement migration contracts", () => {
     ).toContain("top_comment_text");
   });
 
+  it("defines persisted admin engagement settings with scoring and badge defaults", () => {
+    expect(migration).toContain("create table public.admin_settings");
+    expect(migration).toContain("key text primary key");
+    expect(migration).toContain("value jsonb not null");
+    expect(migration).toContain("'engagement_scoring'");
+    expect(migration).toContain("'engagement_badges'");
+    expect(migration).toContain('"comment_weight": 1');
+    expect(migration).toContain('"like_weight": 3');
+    expect(migration).toContain('"share_weight": 2');
+    expect(migration).toContain('"featured_weight": 10');
+    expect(migration).toContain('"podcast_invite_score": 30');
+    expect(migration).toContain("alter table public.admin_settings enable row level security");
+    expect(migration).toContain(
+      'create policy "public read admin settings" on public.admin_settings'
+    );
+  });
+
+  it("uses persisted scoring settings in SQL leaderboard scoring", () => {
+    const topCommentersStart = migration.indexOf(
+      "create or replace view public.top_commenters_for_event as"
+    );
+    const weeklyRefreshStart = migration.indexOf(
+      "create or replace function public.refresh_weekly_district_influencer_scores",
+      topCommentersStart
+    );
+    const scoringSql = migration.slice(topCommentersStart, weeklyRefreshStart);
+    const refreshSql = migration.slice(weeklyRefreshStart);
+
+    expect(scoringSql).toContain("from public.admin_settings");
+    expect(scoringSql).toContain("weights.like_weight");
+    expect(scoringSql).toContain("weights.comment_weight");
+    expect(scoringSql).toContain("weights.share_weight");
+    expect(scoringSql).toContain("weights.featured_weight");
+    expect(scoringSql).not.toContain("likes_received_count, 0) * 3 +");
+    expect(scoringSql).not.toContain("comments_count, 0) * 1 +");
+    expect(refreshSql).toContain("from public.admin_settings");
+    expect(refreshSql).toContain("weights.like_weight");
+  });
+
   it("includes share-only users in public event leaders without exposing ids", () => {
     const viewStart = migration.indexOf(
       "create or replace view public.top_commenters_for_event as"

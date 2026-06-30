@@ -1,4 +1,5 @@
 import { AdminModerationPanel } from "@/components/admin/AdminModerationPanel";
+import { getReportedCommentsQueue } from "@/lib/admin/data";
 import { canModerate, getCurrentUserAndProfile } from "@/lib/auth/session";
 import { redirect } from "next/navigation";
 
@@ -11,5 +12,12 @@ export default async function AdminPage() {
     redirect("/live");
   }
 
-  return <AdminModerationPanel profile={profile} />;
+  const reportedComments = await getReportedCommentsQueue();
+
+  return (
+    <AdminModerationPanel
+      profile={profile}
+      reportedComments={reportedComments}
+    />
+  );
 }

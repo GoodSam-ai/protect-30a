@@ -1,9 +1,14 @@
 "use client";
 
+import type { ReportedCommentQueueItem } from "@/lib/admin/types";
 import { Flag, ShieldCheck } from "lucide-react";
 import { useId, useState } from "react";
 
-export function ReportedCommentsQueue() {
+export function ReportedCommentsQueue({
+  reportedComments
+}: {
+  reportedComments: ReportedCommentQueueItem[];
+}) {
   const commentIdId = useId();
   const statusId = useId();
   const [status, setStatus] = useState("Ready to moderate a reported comment.");
@@ -103,6 +108,75 @@ export function ReportedCommentsQueue() {
           Apply moderation
         </button>
       </form>
+
+      <section className="mt-4" aria-label="Reported comments queue">
+        {reportedComments.length > 0 ? (
+          <div className="overflow-x-auto rounded border border-protect-sand">
+            <table className="w-full min-w-[48rem] border-collapse text-left text-sm">
+              <thead className="bg-protect-cream text-protect-teal">
+                <tr>
+                  <th className="border-b border-protect-sand px-3 py-2 font-semibold">
+                    Comment
+                  </th>
+                  <th className="border-b border-protect-sand px-3 py-2 font-semibold">
+                    Reports
+                  </th>
+                  <th className="border-b border-protect-sand px-3 py-2 font-semibold">
+                    Status
+                  </th>
+                  <th className="border-b border-protect-sand px-3 py-2 font-semibold">
+                    ID
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {reportedComments.map((comment) => (
+                  <tr key={comment.id} className="align-top">
+                    <td className="border-b border-protect-sand px-3 py-2">
+                      <p className="font-semibold text-protect-teal">
+                        {comment.authorDisplayName}
+                      </p>
+                      <p className="mt-1 whitespace-pre-wrap break-words text-protect-ink">
+                        {comment.body}
+                      </p>
+                      <p className="mt-1 text-xs text-protect-ink/60">
+                        {comment.topic ?? "No topic"} ·{" "}
+                        {new Date(comment.createdAt).toLocaleString()}
+                      </p>
+                    </td>
+                    <td className="border-b border-protect-sand px-3 py-2">
+                      <p className="font-semibold text-protect-teal">
+                        {comment.reportCount} report
+                        {comment.reportCount === 1 ? "" : "s"}
+                      </p>
+                      <p className="mt-1 text-xs font-semibold text-protect-ink/70">
+                        {comment.reportReasons.join(", ") || "No reason"}
+                      </p>
+                      {comment.reportDetails.length > 0 ? (
+                        <p className="mt-1 line-clamp-2 text-xs text-protect-ink/70">
+                          {comment.reportDetails.join(" | ")}
+                        </p>
+                      ) : null}
+                    </td>
+                    <td className="border-b border-protect-sand px-3 py-2">
+                      <span className="rounded border border-protect-sand bg-white px-2 py-1 text-xs font-semibold text-protect-teal">
+                        {comment.moderationStatus}
+                      </span>
+                    </td>
+                    <td className="border-b border-protect-sand px-3 py-2 font-mono text-xs text-protect-ink/70">
+                      {comment.id}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <p className="rounded border border-dashed border-protect-sand bg-white p-4 text-sm text-protect-ink/70">
+            No reported comments are waiting in the queue.
+          </p>
+        )}
+      </section>
 
       <div className="mt-4 flex gap-2 rounded border border-protect-sand bg-white p-3 text-sm text-protect-ink/75">
         <ShieldCheck size={18} className="mt-0.5 shrink-0 text-protect-terra" aria-hidden="true" />
