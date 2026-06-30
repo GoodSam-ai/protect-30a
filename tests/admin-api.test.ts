@@ -1,0 +1,250 @@
+import { GET as exportComments } from "@/app/api/admin/export/comments/route";
+import { POST as importFacebookComment } from "@/app/api/admin/facebook-import/route";
+import type { NextRequest } from "next/server";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
+const adminMocks = vi.hoisted(() => ({
+  createSupabaseAdminClient: vi.fn(),
+  getCurrentUserAndProfile: vi.fn()
+}));
+
+vi.mock("server-only", () => ({}));
+
+vi.mock("@/lib/auth/session", async () => {
+  const actual = await vi.importActual<typeof import("@/lib/auth/session")>(
+    "@/lib/auth/session"
+  );
+
+  return {
+    ...actual,
+    getCurrentUserAndProfile: adminMocks.getCurrentUserAndProfile
+  };
+});
+
+vi.mock("@/lib/supabase/admin", () => ({
+  createSupabaseAdminClient: adminMocks.createSupabaseAdminClient
+}));
+
+const user = { id: "33333333-3333-4333-8333-333333333333" };
+const eventId = "11111111-1111-4111-8111-111111111111";
+const districtId = "22222222-2222-4222-8222-222222222222";
+const commentId = "44444444-4444-4444-8444-444444444444";
+
+function moderatorProfile(overrides: Record<string, unknown> = {}) {
+  return {
+    id: user.id,
+    display_name: "Moderator",
+    avatar_url: null,
+    role: "moderator",
+    primary_district_id: null,
+    is_restricted: false,
+    ...overrides
+  };
+}
+
+function signInAsModerator() {
+  adminMocks.getCurrentUserAndProfile.mockResolvedValue({
+    user,
+    profile: moderatorProfile()
+  });
+}
+
+function requestJson(body: unknown) {
+  return new Request("https://protect30a.test/api/admin/facebook-import", {
+    method: "POST",
+    body: JSON.stringify(body)
+  }) as unknown as NextRequest;
+}
+
+function nextRequest(url: string) {
+  return new Request(url) as unknown as NextRequest;
+}
+
+describe("admin API authorization", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it.each([
+    ["anonymous", { user: null, profile: null }],
+    ["missing profile", { user, profile: null }],
+    ["restricted moderator", { user, profile: moderatorProfile({ is_restricted: true }) }],
+    ["ordinary user", { user, profile: moderatorProfile({ role: "user" }) }]
+  ])("blocks %s from manual imports and exports", async (_label, session) => {
+    adminMocks.getCurrentUserAndProfile.mockResolvedValue(session);
+
+    const importResponse = await importFacebookComment(
+      requestJson({
+        eventId,
+        body: "Imported community comment."
+      })
+    );
+    const exportResponse = await exportComments(
+      nextRequest(
+        `https://protect30a.test/api/admin/export/comments?eventId=${eventId}`
+      )
+    );
+
+    expect(importResponse.status).toBe(403);
+    expect(exportResponse.status).toBe(403);
+    expect(adminMocks.createSupabaseAdminClient).not.toHaveBeenCalled();
+  });
+});
+
+describe("manual Facebook import endpoint", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    signInAsModerator();
+  });
+
+  it("validates required fields before writing", async () => {
+    const response = await importFacebookComment(
+      requestJson({ eventId: "not-a-uuid", body: "bad" })
+    );
+
+    await expect(response.json()).resolves.toEqual({
+      error: expect.any(String)
+    });
+    expect(response.status).toBe(400);
+    expect(adminMocks.createSupabaseAdminClient).not.toHaveBeenCalled();
+  });
+
+  it("inserts a visible facebook_manual comment and writes audit metadata", async () => {
+    const commentInsert = vi.fn(() => ({
+      select: vi.fn(() => ({
+        single: vi.fn().mockResolvedValue({
+          data: { id: commentId, event_id: eventId },
+          error: null
+        })
+      }))
+    }));
+    const auditInsert = vi.fn().mockResolvedValue({ error: null });
+    adminMocks.createSupabaseAdminClient.mockReturnValue({
+      from: vi.fn((table: string) => {
+        if (table === "comments") return { insert: commentInsert };
+        if (table === "audit_log") return { insert: auditInsert };
+        throw new Error(`Unexpected table ${table}`);
+      })
+    });
+
+    const response = await importFacebookComment(
+      requestJson({
+        eventId,
+        districtId,
+        body: "A quoted Facebook concern about parking near the beach.",
+        externalSourceAuthor: "Facebook Neighbor",
+        externalSourceUrl: "https://facebook.com/groups/example/posts/1"
+      })
+    );
+
+    await expect(response.json()).resolves.toEqual({
+      comment: { id: commentId, event_id: eventId }
+    });
+    expect(response.status).toBe(200);
+    expect(commentInsert).toHaveBeenCalledWith({
+      event_id: eventId,
+      district_id: districtId,
+      user_id: null,
+      parent_comment_id: null,
+      body: "A quoted Facebook concern about parking near the beach.",
+      topic: null,
+      source: "facebook_manual",
+      external_source_author: "Facebook Neighbor",
+      external_source_url: "https://facebook.com/groups/example/posts/1",
+      moderation_status: "visible",
+      is_hidden: false,
+      is_reported: false
+    });
+    expect(auditInsert).toHaveBeenCalledWith({
+      actor_user_id: user.id,
+      action: "facebook_manual_import",
+      entity_type: "comment",
+      entity_id: commentId,
+      metadata: {
+        event_id: eventId,
+        district_id: districtId,
+        external_source_author: "Facebook Neighbor",
+        external_source_url: "https://facebook.com/groups/example/posts/1"
+      }
+    });
+  });
+});
+
+describe("comment export endpoint", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    signInAsModerator();
+  });
+
+  it("returns escaped CSV with exact headers and public-safe authors", async () => {
+    const commentsQuery = {
+      select: vi.fn(() => ({
+        eq: vi.fn(() => ({
+          order: vi.fn().mockResolvedValue({
+            data: [
+              {
+                id: "comment-1",
+                created_at: "2026-06-30T12:00:00Z",
+                body: "Line one,\n\"quoted\" line",
+                topic: "Parking",
+                source: "site",
+                moderation_status: "visible",
+                external_source_author: null,
+                profiles: { display_name: "Resident, One" }
+              },
+              {
+                id: "comment-2",
+                created_at: "2026-06-30T12:05:00Z",
+                body: "Facebook body",
+                topic: null,
+                source: "facebook_manual",
+                moderation_status: "visible",
+                external_source_author: "FB Neighbor",
+                profiles: null
+              }
+            ],
+            error: null
+          })
+        }))
+      }))
+    };
+    const likesQuery = {
+      select: vi.fn(() => ({
+        in: vi.fn().mockResolvedValue({
+          data: [
+            { comment_id: "comment-1" },
+            { comment_id: "comment-1" },
+            { comment_id: "comment-2" }
+          ],
+          error: null
+        })
+      }))
+    };
+    adminMocks.createSupabaseAdminClient.mockReturnValue({
+      from: vi.fn((table: string) => {
+        if (table === "comments") return commentsQuery;
+        if (table === "comment_likes") return likesQuery;
+        throw new Error(`Unexpected table ${table}`);
+      })
+    });
+
+    const response = await exportComments(
+      nextRequest(
+        `https://protect30a.test/api/admin/export/comments?eventId=${eventId}`
+      )
+    );
+    const csv = await response.text();
+
+    expect(response.status).toBe(200);
+    expect(response.headers.get("content-type")).toContain("text/csv");
+    expect(csv.split("\n")[0]).toBe(
+      "created_at,author,topic,body,like_count,source,moderation_status"
+    );
+    expect(csv).toContain(
+      '2026-06-30T12:00:00Z,"Resident, One",Parking,"Line one,\n""quoted"" line",2,site,visible'
+    );
+    expect(csv).toContain(
+      "2026-06-30T12:05:00Z,FB Neighbor,,Facebook body,1,facebook_manual,visible"
+    );
+  });
+});
