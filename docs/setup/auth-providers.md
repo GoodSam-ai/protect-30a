@@ -49,8 +49,10 @@ Configure these as Supabase built-in social providers:
 - LinkedIn
 
 Each provider needs its client ID and client secret in Supabase. Mirror the
-corresponding local and Vercel environment variables from `.env.example` so the
-app can render and flag the expected sign-in options.
+corresponding local and Vercel environment variables from `.env.example` only
+when application code needs them outside Supabase. OAuth client secrets should
+live in Supabase provider configuration unless a future server-only integration
+explicitly consumes them.
 
 ## Email Magic Links
 

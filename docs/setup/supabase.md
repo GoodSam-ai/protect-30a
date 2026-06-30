@@ -35,8 +35,10 @@ Use the same names in the Vercel project **protect-30a**:
 
 - `NEXT_PUBLIC_SUPABASE_URL`: Production, Preview, and Development.
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY`: Production, Preview, and Development.
-- `SUPABASE_SERVICE_ROLE_KEY`: server environments only. It is safe to set in
-  Vercel Production and Preview because it is not prefixed with `NEXT_PUBLIC_`.
+- `SUPABASE_SERVICE_ROLE_KEY`: server environments only. Set it in Production
+  and only trusted Preview environments where admin/server APIs require it.
+  The service role key bypasses RLS, so never expose it to untrusted preview
+  builds, fork PR previews, logs, client bundles, or browser-executed code.
 - `NEXT_PUBLIC_SITE_URL`: keep `https://protect30a.org` for production.
 - `NEXT_PUBLIC_CANONICAL_DOMAIN`: keep `protect30a.org` for production.
 - `BOOTSTRAP_ADMIN_EMAIL`: keep `doug@goodsam.ai`.
@@ -75,15 +77,18 @@ needed by `/live`, `/live/[slug]`, and `/admin`.
 ## 5. Bootstrap the First Admin
 
 After deployment, sign in once as `doug@goodsam.ai` so Supabase creates the auth
-user and application profile. Then bootstrap that profile as admin:
+user. Then bootstrap or update the application profile as admin:
 
 ```sql
-update public.profiles as profile
-set role = 'admin'
-from auth.users as auth_user
-where profile.id = auth_user.id
-  and lower(auth_user.email) = lower('doug@goodsam.ai');
+insert into public.profiles (id, role)
+select id, 'admin'::public.profile_role
+from auth.users
+where lower(email) = lower('doug@goodsam.ai')
+on conflict (id) do update
+set role = 'admin'::public.profile_role,
+    updated_at = now();
 ```
 
 Run this from the Supabase SQL editor or another trusted server-side database
-connection. After the role update, `doug@goodsam.ai` can access `/admin`.
+connection. Confirm that the statement changed one row. After the role update,
+`doug@goodsam.ai` can access `/admin`.
