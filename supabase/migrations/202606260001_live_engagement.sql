@@ -619,27 +619,35 @@ top_comment_stats as (
     and c.user_id is not null
     and pe.status in ('upcoming', 'live', 'replay')
   order by c.event_id, c.user_id, coalesce(likes.like_count, 0) desc, c.created_at desc
+),
+active_users as (
+  select event_id, user_id from comment_stats
+  union
+  select event_id, user_id from like_stats
+  union
+  select event_id, user_id from share_stats
 )
 select
-  cs.event_id,
+  active_users.event_id,
   p.display_name,
   p.avatar_url,
-  cs.comments_count,
+  coalesce(cs.comments_count, 0)::int as comments_count,
   coalesce(ls.likes_received_count, 0)::int as likes_received_count,
   coalesce(ss.shares_count, 0)::int as shares_count,
-  cs.featured_comments_count,
+  coalesce(cs.featured_comments_count, 0)::int as featured_comments_count,
   (
     coalesce(ls.likes_received_count, 0) * 3 +
-    cs.comments_count * 1 +
+    coalesce(cs.comments_count, 0) * 1 +
     coalesce(ss.shares_count, 0) * 2 +
-    cs.featured_comments_count * 10
+    coalesce(cs.featured_comments_count, 0) * 10
   )::numeric as engagement_score,
   tcs.top_comment_text
-from comment_stats cs
-join public.public_profiles p on p.id = cs.user_id
-left join like_stats ls on ls.event_id = cs.event_id and ls.user_id = cs.user_id
-left join share_stats ss on ss.event_id = cs.event_id and ss.user_id = cs.user_id
-left join top_comment_stats tcs on tcs.event_id = cs.event_id and tcs.user_id = cs.user_id;
+from active_users
+join public.public_profiles p on p.id = active_users.user_id
+left join comment_stats cs on cs.event_id = active_users.event_id and cs.user_id = active_users.user_id
+left join like_stats ls on ls.event_id = active_users.event_id and ls.user_id = active_users.user_id
+left join share_stats ss on ss.event_id = active_users.event_id and ss.user_id = active_users.user_id
+left join top_comment_stats tcs on tcs.event_id = active_users.event_id and tcs.user_id = active_users.user_id;
 
 create or replace view public.weekly_district_influencers as
 with top_weekly_comments as (

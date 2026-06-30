@@ -50,8 +50,8 @@ describe("live engagement migration contracts", () => {
     expect(
       extractViewSelectList(
         "top_commenters_for_event",
-        "select\n  cs.event_id",
-        "from comment_stats cs"
+        "select\n  active_users.event_id",
+        "from active_users"
       )
     ).not.toMatch(/\buser_id\b/);
 
@@ -100,8 +100,8 @@ describe("live engagement migration contracts", () => {
     expect(
       extractViewSelectList(
         "top_commenters_for_event",
-        "select\n  cs.event_id",
-        "from comment_stats cs"
+        "select\n  active_users.event_id",
+        "from active_users"
       )
     ).toContain("top_comment_text");
     expect(
@@ -111,6 +111,29 @@ describe("live engagement migration contracts", () => {
         "from public.district_influencer_scores scores"
       )
     ).toContain("top_comment_text");
+  });
+
+  it("includes share-only users in public event leaders without exposing ids", () => {
+    const viewStart = migration.indexOf(
+      "create or replace view public.top_commenters_for_event as"
+    );
+    const viewEnd = migration.indexOf(
+      "create or replace view public.weekly_district_influencers as",
+      viewStart
+    );
+    const viewSql = migration.slice(viewStart, viewEnd);
+    const finalSelect = extractViewSelectList(
+      "top_commenters_for_event",
+      "select\n  active_users.event_id",
+      "from active_users"
+    );
+
+    expect(viewSql).toContain("active_users as (");
+    expect(viewSql).toContain("select event_id, user_id from comment_stats");
+    expect(viewSql).toContain("select event_id, user_id from like_stats");
+    expect(viewSql).toContain("select event_id, user_id from share_stats");
+    expect(finalSelect).toContain("active_users.event_id");
+    expect(finalSelect).not.toMatch(/\b(user_id|profile_id)\b/);
   });
 
   it("does not grant direct public access to raw profile or influencer score rows", () => {

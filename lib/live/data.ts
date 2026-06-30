@@ -248,6 +248,7 @@ export async function getLiveMetrics(
         )
         .eq("event_id", eventId)
         .order("engagement_score", { ascending: false })
+        .order("display_name", { ascending: true })
         .limit(5),
       supabase
         .from("weekly_district_influencers")

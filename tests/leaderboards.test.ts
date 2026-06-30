@@ -253,6 +253,17 @@ describe("live dashboard data", () => {
       top_commenters_for_event: [
         {
           event_id: fixtureEvent.id,
+          display_name: "Share Captain",
+          avatar_url: null,
+          comments_count: 0,
+          likes_received_count: 0,
+          shares_count: 30,
+          featured_comments_count: 0,
+          engagement_score: 60,
+          top_comment_text: null
+        },
+        {
+          event_id: fixtureEvent.id,
           display_name: "Avery Resident",
           avatar_url: null,
           comments_count: 3,
@@ -305,17 +316,6 @@ describe("live dashboard data", () => {
           featured_comments_count: 0,
           engagement_score: 3,
           top_comment_text: "Emery view-backed comment."
-        },
-        {
-          event_id: fixtureEvent.id,
-          display_name: "Finley Resident",
-          avatar_url: null,
-          comments_count: 1,
-          likes_received_count: 0,
-          shares_count: 7,
-          featured_comments_count: 0,
-          engagement_score: 2,
-          top_comment_text: "Hidden display leader share-heavy comment."
         }
       ],
       weekly_district_influencers: [
@@ -443,6 +443,11 @@ describe("live dashboard data", () => {
         options: { ascending: false }
       },
       {
+        table: "top_commenters_for_event",
+        column: "display_name",
+        options: { ascending: true }
+      },
+      {
         table: "weekly_district_influencers",
         column: "week_start",
         options: { ascending: false }
@@ -474,13 +479,15 @@ describe("live dashboard data", () => {
       likeCount: 12
     });
     expect(metrics.eventLeaders[0]).toMatchObject({
-      displayName: "Avery Resident",
-      engagementScore: 53,
-      topCommentText: "Direct event leader comment from the view."
+      displayName: "Share Captain",
+      commentsCount: 0,
+      sharesCount: 30,
+      engagementScore: 60,
+      topCommentText: null
     });
     expect(metrics.eventLeaders).toHaveLength(5);
     expect(metrics.eventLeaders.map((leader) => leader.displayName)).not.toContain(
-      "Finley Resident"
+      "Emery Resident"
     );
     expect(metrics.weeklyDistrictLeaders[0]).toMatchObject({
       districtName: "Inlet Beach",
