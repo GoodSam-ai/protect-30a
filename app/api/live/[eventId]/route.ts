@@ -1,5 +1,5 @@
 import {
-  buildLiveMetricsFromComments,
+  getLiveMetrics,
   getVisibleComments
 } from "@/lib/live/data";
 import { NextResponse } from "next/server";
@@ -19,10 +19,11 @@ export async function GET(
 
   try {
     const comments = await getVisibleComments(eventId);
+    const metrics = await getLiveMetrics(eventId, comments);
 
     return NextResponse.json({
       comments,
-      metrics: buildLiveMetricsFromComments(comments)
+      metrics
     });
   } catch {
     return NextResponse.json(

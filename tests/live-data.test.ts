@@ -162,7 +162,7 @@ describe("live data access", () => {
       totalComments: 1,
       totalLikes: 8,
       totalShares: 3,
-      commentsPerMinute: 0,
+      commentsPerMinute: 1,
       topTopics: [{ topic: "Stormwater", count: 1 }],
       topicLeaderboard: [{ topic: "Stormwater", count: 1 }]
     });

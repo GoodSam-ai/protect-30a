@@ -8,11 +8,13 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const liveDataMocks = vi.hoisted(() => ({
   buildLiveMetricsFromComments: vi.fn(),
+  getLiveMetrics: vi.fn(),
   getVisibleComments: vi.fn()
 }));
 
 vi.mock("@/lib/live/data", () => ({
   buildLiveMetricsFromComments: liveDataMocks.buildLiveMetricsFromComments,
+  getLiveMetrics: liveDataMocks.getLiveMetrics,
   getVisibleComments: liveDataMocks.getVisibleComments
 }));
 
@@ -87,12 +89,18 @@ describe("dedupeCommentsById", () => {
 describe("GET /api/live/[eventId]", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    liveDataMocks.buildLiveMetricsFromComments.mockReturnValue({
+    liveDataMocks.getLiveMetrics.mockResolvedValue({
       totalComments: 0,
       totalLikes: 0,
       totalShares: 0,
       commentsPerMinute: 0,
-      topTopics: []
+      topTopics: [],
+      topicLeaderboard: [],
+      topComments: [],
+      eventLeaders: [],
+      weeklyDistrictLeaders: [],
+      allTimeDistrictLeaders: [],
+      districtEngagementScores: []
     });
   });
 
@@ -106,6 +114,48 @@ describe("GET /api/live/[eventId]", () => {
     });
     expect(response.status).toBe(400);
     expect(liveDataMocks.getVisibleComments).not.toHaveBeenCalled();
+  });
+
+  it("returns refreshed dashboard metrics from the view-backed live metrics loader", async () => {
+    const eventId = "10000000-0000-4000-8000-000000000001";
+    const comments = [{ ...baseComment, event_id: eventId }];
+    const metrics = {
+      totalComments: 1,
+      totalLikes: 1,
+      totalShares: 4,
+      commentsPerMinute: 1,
+      topTopics: [{ topic: "access", count: 1 }],
+      topicLeaderboard: [{ topic: "access", count: 1 }],
+      topComments: [
+        {
+          id: "comment-1",
+          eventId,
+          body: "Protect public access.",
+          topic: "access",
+          createdAt: "2026-06-26T12:00:00.000Z",
+          isFeatured: false,
+          displayName: "Community member",
+          avatarUrl: null,
+          districtName: null,
+          likeCount: 1,
+          replyCount: 0
+        }
+      ],
+      eventLeaders: [],
+      weeklyDistrictLeaders: [],
+      allTimeDistrictLeaders: [],
+      districtEngagementScores: []
+    };
+    liveDataMocks.getVisibleComments.mockResolvedValue(comments);
+    liveDataMocks.getLiveMetrics.mockResolvedValue(metrics);
+
+    const response = await GET(new Request(`http://localhost/api/live/${eventId}`), {
+      params: Promise.resolve({ eventId })
+    });
+
+    await expect(response.json()).resolves.toEqual({ comments, metrics });
+    expect(liveDataMocks.getLiveMetrics).toHaveBeenCalledWith(eventId, comments);
+    expect(liveDataMocks.buildLiveMetricsFromComments).not.toHaveBeenCalled();
   });
 
   it("returns a controlled 500 JSON error when live data loading fails", async () => {

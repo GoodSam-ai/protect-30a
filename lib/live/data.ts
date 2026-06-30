@@ -183,7 +183,7 @@ export function buildLiveMetricsFromComments(
     totalComments: comments.length,
     totalLikes: comments.reduce((sum, comment) => sum + comment.like_count, 0),
     totalShares,
-    commentsPerMinute: 0,
+    commentsPerMinute: calculateCommentsPerMinute(comments),
     topTopics,
     topicLeaderboard: topTopics,
     topComments,
@@ -245,12 +245,17 @@ export async function getLiveMetrics(
   const eventLeaders = ((eventLeadersResult.data ?? []) as TopCommenterRow[]).map(
     (leader, index) => mapTopCommenterRow(leader, index, topComments)
   );
+  const totalShares = eventLeaders.reduce(
+    (sum, leader) => sum + leader.sharesCount,
+    0
+  );
   const weeklyDistrictLeaders = (
     (weeklyLeadersResult.data ?? []) as WeeklyDistrictInfluencerRow[]
   ).map((leader) => mapWeeklyDistrictInfluencerRow(leader, topComments));
 
   return {
     ...commentMetrics,
+    totalShares,
     topComments,
     eventLeaders,
     weeklyDistrictLeaders,
@@ -274,6 +279,20 @@ function buildTopicLeaderboard(comments: LiveComment[]) {
       if (right.count !== left.count) return right.count - left.count;
       return left.topic.localeCompare(right.topic);
     });
+}
+
+function calculateCommentsPerMinute(comments: LiveComment[]) {
+  const timestamps = comments
+    .map((comment) => new Date(comment.created_at).getTime())
+    .filter(Number.isFinite);
+
+  if (timestamps.length === 0) return 0;
+
+  const oldest = Math.min(...timestamps);
+  const newest = Math.max(...timestamps);
+  const minutes = Math.max(1, (newest - oldest) / 60000);
+
+  return Number((timestamps.length / minutes).toFixed(1));
 }
 
 function buildTopCommentsFromComments(comments: LiveComment[]): LiveTopComment[] {

@@ -249,6 +249,16 @@ describe("live dashboard data", () => {
           shares_count: 2,
           featured_comments_count: 1,
           engagement_score: 53
+        },
+        {
+          event_id: fixtureEvent.id,
+          display_name: "Blake Resident",
+          avatar_url: null,
+          comments_count: 1,
+          likes_received_count: 3,
+          shares_count: 1,
+          featured_comments_count: 0,
+          engagement_score: 14
         }
       ],
       weekly_district_influencers: [
@@ -269,9 +279,21 @@ describe("live dashboard data", () => {
         }
       ]
     });
+    const comments = [
+      {
+        ...fixtureComments[0],
+        id: "comment-older",
+        created_at: "2026-06-26T12:00:00.000Z"
+      },
+      {
+        ...fixtureComments[0],
+        id: "comment-newer",
+        created_at: "2026-06-26T12:10:00.000Z"
+      }
+    ];
     supabaseMocks.createSupabaseServerClient.mockResolvedValue(query.client);
 
-    const metrics = await getLiveMetrics(fixtureEvent.id, fixtureComments);
+    const metrics = await getLiveMetrics(fixtureEvent.id, comments);
 
     expect(query.calls.from).toEqual([
       "top_comments_for_event",
@@ -332,6 +354,8 @@ describe("live dashboard data", () => {
       { table: "top_commenters_for_event", count: 5 },
       { table: "weekly_district_influencers", count: 8 }
     ]);
+    expect(metrics.totalShares).toBe(3);
+    expect(metrics.commentsPerMinute).toBe(0.2);
     expect(metrics.topComments[0]).toMatchObject({
       body: "Stormwater maps should stay visible.",
       displayName: "Avery Resident",
@@ -368,6 +392,7 @@ describe("live dashboard data", () => {
       topCommentText: fixtureComments[0].body,
       podcastInvitationEligible: true
     });
+    expect(metrics.commentsPerMinute).toBe(1);
     expect(metrics.districtEngagementScores[0]).toMatchObject({
       districtName: "Inlet Beach",
       engagementScore: 35
@@ -384,7 +409,7 @@ describe("live dashboard data", () => {
       totalComments: 1,
       totalLikes: 8,
       totalShares: 3,
-      commentsPerMinute: 0,
+      commentsPerMinute: 1,
       topTopics: [{ topic: "Stormwater", count: 1 }],
       topicLeaderboard: [{ topic: "Stormwater", count: 1 }]
     });
