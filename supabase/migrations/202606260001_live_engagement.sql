@@ -152,6 +152,7 @@ create table public.event_shares (
   user_id uuid references public.profiles(id) on delete set null,
   platform text not null,
   created_at timestamptz not null default now(),
+  unique (event_id, user_id, platform),
   constraint event_shares_platform_check check (platform in ('facebook', 'instagram', 'tiktok', 'x', 'email', 'copy_link', 'other'))
 );
 
@@ -416,6 +417,7 @@ as $$
     where c.id = target_comment_id
       and c.moderation_status = 'visible'
       and c.is_hidden = false
+      and c.user_id is distinct from auth.uid()
       and pe.status in ('upcoming', 'live', 'replay')
   );
 $$;
@@ -591,7 +593,7 @@ select
   c.topic,
   c.is_featured,
   c.created_at,
-  p.display_name,
+  coalesce(p.display_name, c.external_source_author) as display_name,
   p.avatar_url,
   d.name as district_name,
   coalesce(likes.like_count, 0)::int as like_count,
@@ -661,6 +663,7 @@ like_stats as (
   from public.comments c
   join public.podcast_events pe on pe.id = c.event_id
   left join public.comment_likes cl on cl.comment_id = c.id
+    and cl.user_id is distinct from c.user_id
   where c.moderation_status = 'visible'
     and c.is_hidden = false
     and c.user_id is not null
@@ -686,9 +689,13 @@ top_comment_stats as (
   from public.comments c
   join public.podcast_events pe on pe.id = c.event_id
   left join (
-    select comment_id, count(*)::int as like_count
-    from public.comment_likes
-    group by comment_id
+    select
+      cl.comment_id,
+      count(*)::int as like_count
+    from public.comment_likes cl
+    join public.comments liked_comment on liked_comment.id = cl.comment_id
+    where cl.user_id is distinct from liked_comment.user_id
+    group by cl.comment_id
   ) likes on likes.comment_id = c.id
   where c.moderation_status = 'visible'
     and c.is_hidden = false
@@ -757,9 +764,13 @@ with top_weekly_comments as (
   from public.comments c
   join public.podcast_events pe on pe.id = c.event_id
   left join (
-    select comment_id, count(*)::int as like_count
-    from public.comment_likes
-    group by comment_id
+    select
+      cl.comment_id,
+      count(*)::int as like_count
+    from public.comment_likes cl
+    join public.comments liked_comment on liked_comment.id = cl.comment_id
+    where cl.user_id is distinct from liked_comment.user_id
+    group by cl.comment_id
   ) likes on likes.comment_id = c.id
   where c.moderation_status = 'visible'
     and c.is_hidden = false
@@ -841,6 +852,7 @@ like_stats as (
   from public.comments c
   join public.podcast_events pe on pe.id = c.event_id
   left join public.comment_likes cl on cl.comment_id = c.id
+    and cl.user_id is distinct from c.user_id
   where c.moderation_status = 'visible'
     and c.is_hidden = false
     and c.district_id is not null
@@ -984,6 +996,7 @@ begin
     from public.comments c
     join public.podcast_events pe on pe.id = c.event_id
     join public.comment_likes cl on cl.comment_id = c.id
+      and cl.user_id is distinct from c.user_id
     where c.moderation_status = 'visible'
       and c.is_hidden = false
       and c.district_id is not null

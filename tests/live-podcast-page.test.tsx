@@ -107,6 +107,23 @@ describe("LivePodcastPage", () => {
     ).toBeEnabled();
   });
 
+  it("keeps the composer closed for replay events even when comments are enabled", () => {
+    render(
+      <LivePodcastPage
+        event={{ ...fixtureEvent, status: "replay", comments_enabled: true }}
+        districts={fixtureDistricts}
+        comments={fixtureComments}
+        metrics={fixtureMetrics}
+        profile={unrestrictedProfile}
+      />
+    );
+
+    expect(screen.getByLabelText("Comment")).toBeDisabled();
+    expect(screen.getByRole("status")).toHaveTextContent(
+      "Comments are closed for replay events."
+    );
+  });
+
   it("renders accessible live engagement mode controls", () => {
     render(
       <LivePodcastPage

@@ -194,10 +194,7 @@ export function useLiveEngagement({
   }, [eventId, modeState.activeMode, modeState.failures, refreshLiveData]);
 
   useEffect(() => {
-    if (
-      modeState.requestedMode !== "auto" ||
-      modeState.activeMode !== "realtime"
-    ) {
+    if (modeState.activeMode !== "realtime") {
       return;
     }
 

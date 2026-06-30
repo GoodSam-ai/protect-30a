@@ -1,4 +1,4 @@
-import { canModerate, getCurrentUserAndProfile } from "@/lib/auth/session";
+import { canAdmin, getCurrentUserAndProfile } from "@/lib/auth/session";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 import { NextResponse, type NextRequest } from "next/server";
 import { z } from "zod";
@@ -27,10 +27,10 @@ function errorMessage(error: unknown, fallback: string) {
   return error instanceof Error ? error.message : fallback;
 }
 
-async function requireModerator() {
+async function requireAdmin() {
   const { user, profile } = await getCurrentUserAndProfile();
 
-  if (!user || !canModerate(profile)) {
+  if (!user || !canAdmin(profile)) {
     return null;
   }
 
@@ -39,11 +39,11 @@ async function requireModerator() {
 
 export async function PATCH(request: NextRequest) {
   try {
-    const user = await requireModerator();
+    const user = await requireAdmin();
 
     if (!user) {
       return NextResponse.json(
-        { error: "Moderator access required." },
+        { error: "Admin access required." },
         { status: 403 }
       );
     }

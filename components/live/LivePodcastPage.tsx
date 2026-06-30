@@ -24,11 +24,20 @@ function playerLabel(event: PodcastEvent) {
   return "Player pending";
 }
 
+function commentsAcceptingStatus(event: PodcastEvent) {
+  return event.status === "upcoming" || event.status === "live";
+}
+
 function buildCommentComposerProps(event: PodcastEvent, profile: PublicProfile) {
   const displayName = profile.display_name?.trim() || "Community member";
-  const canDraft = event.comments_enabled && !profile.is_restricted;
+  const canDraft =
+    event.comments_enabled &&
+    commentsAcceptingStatus(event) &&
+    !profile.is_restricted;
   const status = !event.comments_enabled
     ? "Comments are closed for this event."
+    : !commentsAcceptingStatus(event)
+      ? `Comments are closed for ${event.status} events.`
     : profile.is_restricted
       ? "Your profile cannot post comments right now."
       : "Ready to post.";
@@ -191,7 +200,9 @@ export function LivePodcastPage({
                 </p>
                 <p className="mt-1 font-semibold text-protect-teal">
                   {event.comments_enabled
-                    ? "Comments open for signed-in residents"
+                    ? commentsAcceptingStatus(event)
+                      ? "Comments open for signed-in residents"
+                      : "Comments closed"
                     : "Comments closed"}
                 </p>
               </div>

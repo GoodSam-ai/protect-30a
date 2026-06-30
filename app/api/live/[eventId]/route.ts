@@ -2,6 +2,7 @@ import {
   getLiveMetrics,
   getVisibleComments
 } from "@/lib/live/data";
+import { getCurrentUserAndProfile } from "@/lib/auth/session";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
@@ -18,7 +19,8 @@ export async function GET(
   }
 
   try {
-    const comments = await getVisibleComments(eventId);
+    const { user } = await getCurrentUserAndProfile();
+    const comments = await getVisibleComments(eventId, user?.id ?? null);
     const metrics = await getLiveMetrics(eventId, comments);
 
     return NextResponse.json({

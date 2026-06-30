@@ -39,8 +39,15 @@ export function AdminModerationPanel({
   profile: PublicProfile;
   dashboardData: AdminDashboardData;
 }) {
-  const [activeTab, setActiveTab] = useState<TabId>("events");
-  const active = tabs.find((tab) => tab.id === activeTab) ?? tabs[0];
+  const isAdmin = profile.role === "admin" && !profile.is_restricted;
+  const availableTabs = isAdmin
+    ? tabs
+    : tabs.filter((tab) => tab.id !== "events");
+  const [activeTab, setActiveTab] = useState<TabId>(
+    isAdmin ? "events" : "reported"
+  );
+  const active =
+    availableTabs.find((tab) => tab.id === activeTab) ?? availableTabs[0];
 
   return (
     <main className="min-h-screen bg-protect-cream text-protect-ink">
@@ -68,7 +75,7 @@ export function AdminModerationPanel({
           className="rounded border border-protect-sand bg-white p-2 shadow-sm"
         >
           <div className="grid gap-1" role="tablist" aria-orientation="vertical">
-            {tabs.map((tab) => {
+            {availableTabs.map((tab) => {
               const Icon = tab.icon;
               const isActive = tab.id === activeTab;
 
@@ -101,7 +108,7 @@ export function AdminModerationPanel({
           aria-labelledby={`admin-tab-${active.id}`}
           className="rounded border border-protect-sand bg-white p-4 shadow-sm sm:p-5"
         >
-          {activeTab === "events" ? (
+          {isAdmin && activeTab === "events" ? (
             <EventEditor
               events={dashboardData.events}
               activeEvent={dashboardData.activeEvent}

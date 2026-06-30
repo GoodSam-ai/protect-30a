@@ -13,7 +13,7 @@ export default async function LivePage() {
     getDistricts(),
     getCurrentUserAndProfile()
   ]);
-  const comments = await getVisibleComments(event.id);
+  const comments = await getVisibleComments(event.id, session.user?.id ?? null);
   const metrics = await getLiveMetrics(event.id, comments);
 
   return (

@@ -25,7 +25,7 @@ function extractViewSelectList(
 
 function extractFunctionBody(functionName: string): string {
   const functionStart = migration.indexOf(
-    `create or replace function public.${functionName}()`
+    `create or replace function public.${functionName}`
   );
   expect(functionStart).toBeGreaterThanOrEqual(0);
 
@@ -232,8 +232,36 @@ describe("live engagement migration contracts", () => {
     expect(migration).toContain("constraint comment_reports_reason_check");
     expect(migration).toContain("constraint comment_reports_details_length_check");
     expect(migration).toContain("constraint event_shares_platform_check");
+    expect(migration).toContain("unique (event_id, user_id, platform)");
     expect(migration).toContain("'spam', 'harassment', 'misinformation', 'off_topic', 'other'");
     expect(migration).toContain("'facebook', 'instagram', 'tiktok', 'x', 'email', 'copy_link', 'other'");
+  });
+
+  it("prevents self-likes from engagement and scoring", () => {
+    const engageBody = extractFunctionBody("can_engage_with_comment");
+
+    expect(engageBody).toContain("c.user_id is distinct from auth.uid()");
+    expect(migration).toContain(
+      "left join public.comment_likes cl on cl.comment_id = c.id\n    and cl.user_id is distinct from c.user_id"
+    );
+    expect(migration).toContain(
+      "join public.comment_likes cl on cl.comment_id = c.id\n      and cl.user_id is distinct from c.user_id"
+    );
+  });
+
+  it("preserves external-source author names in public visible comments", () => {
+    const viewStart = migration.indexOf(
+      "create or replace view public.visible_comments as"
+    );
+    const viewEnd = migration.indexOf(
+      "create or replace view public.top_comments_for_event as",
+      viewStart
+    );
+    const viewSql = migration.slice(viewStart, viewEnd);
+
+    expect(viewSql).toContain(
+      "coalesce(p.display_name, c.external_source_author) as display_name"
+    );
   });
 
   it("attaches engagement insert triggers to the matching field normalization bodies", () => {

@@ -46,10 +46,21 @@ function moderatorProfile(overrides: Record<string, unknown> = {}) {
   };
 }
 
+function adminProfile(overrides: Record<string, unknown> = {}) {
+  return moderatorProfile({ role: "admin", ...overrides });
+}
+
 function signInAsModerator() {
   adminMocks.getCurrentUserAndProfile.mockResolvedValue({
     user,
     profile: moderatorProfile()
+  });
+}
+
+function signInAsAdmin() {
+  adminMocks.getCurrentUserAndProfile.mockResolvedValue({
+    user,
+    profile: adminProfile()
   });
 }
 
@@ -138,7 +149,35 @@ describe("admin API authorization", () => {
 describe("event setup endpoint", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    signInAsAdmin();
+  });
+
+  it("blocks moderators from changing event setup with the service role", async () => {
     signInAsModerator();
+
+    const response = await updateEvent(
+      requestJsonTo(
+        "https://protect30a.test/api/admin/events",
+        {
+          eventId,
+          title: "Updated live event",
+          status: "live",
+          startsAt: "2026-07-03T18:00:00-05:00",
+          livestreamUrl: "https://example.com/live",
+          replayUrl: "",
+          commentsEnabled: true,
+          leaderboardEnabled: false,
+          forcedEngagementMode: "realtime"
+        },
+        "PATCH"
+      )
+    );
+
+    await expect(response.json()).resolves.toEqual({
+      error: "Admin access required."
+    });
+    expect(response.status).toBe(403);
+    expect(adminMocks.createSupabaseAdminClient).not.toHaveBeenCalled();
   });
 
   it("updates podcast_events and writes audit metadata", async () => {

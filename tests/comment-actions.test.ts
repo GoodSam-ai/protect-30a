@@ -106,6 +106,25 @@ function insertReturningSingle(data: unknown) {
   };
 }
 
+function noRecentDuplicateCommentTable() {
+  return {
+    select: vi.fn(() => ({
+      eq: vi.fn(() => ({
+        eq: vi.fn(() => ({
+          order: vi.fn(() => ({
+            limit: vi.fn(() => ({
+              maybeSingle: vi.fn().mockResolvedValue({
+                data: null,
+                error: { code: "PGRST116" }
+              })
+            }))
+          }))
+        }))
+      }))
+    }))
+  };
+}
+
 describe("comment validation", () => {
   it("accepts valid comments with supported topics", () => {
     expect(
@@ -230,6 +249,7 @@ describe("comment validation", () => {
 describe("live engagement mutation actions", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.useRealTimers();
     signIn();
   });
 
@@ -303,10 +323,10 @@ describe("live engagement mutation actions", () => {
     };
     const commentsTable = insertReturningSingle(insertedComment);
     actionMocks.createSupabaseServerClient.mockResolvedValue({
-      from: vi.fn((table: string) => {
-        expect(table).toBe("comments");
-        return commentsTable;
-      })
+      from: vi
+        .fn()
+        .mockReturnValueOnce(noRecentDuplicateCommentTable())
+        .mockReturnValueOnce(commentsTable)
     });
 
     await expect(
@@ -341,6 +361,40 @@ describe("live engagement mutation actions", () => {
       source: "site",
       user_id: user.id
     });
+  });
+
+  it("rejects rapid duplicate comments before inserting", async () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date("2026-06-26T12:00:20Z"));
+    const maybeSingle = vi.fn().mockResolvedValue({
+      data: {
+        body: "Please discuss stormwater planning.",
+        created_at: "2026-06-26T12:00:00Z"
+      },
+      error: null
+    });
+    const duplicateLimit = vi.fn(() => ({ maybeSingle }));
+    const duplicateOrder = vi.fn(() => ({ limit: duplicateLimit }));
+    const duplicateEqEvent = vi.fn(() => ({ order: duplicateOrder }));
+    const duplicateEqUser = vi.fn(() => ({ eq: duplicateEqEvent }));
+    const duplicateSelect = vi.fn(() => ({ eq: duplicateEqUser }));
+    const insert = vi.fn();
+    actionMocks.createSupabaseServerClient.mockResolvedValue({
+      from: vi.fn((table: string) => {
+        expect(table).toBe("comments");
+        return { select: duplicateSelect, insert };
+      })
+    });
+
+    await expect(
+      createComment({
+        eventId,
+        districtId,
+        body: "  Please discuss stormwater planning.  ",
+        topic: "Stormwater"
+      })
+    ).rejects.toThrow("Please wait before posting the same comment again.");
+    expect(insert).not.toHaveBeenCalled();
   });
 
   it("upserts and deletes comment likes for the current user", async () => {
@@ -457,11 +511,11 @@ describe("live engagement mutation actions", () => {
   });
 
   it("tracks supported share platforms for the current user", async () => {
-    const insert = vi.fn().mockResolvedValue({ error: null });
+    const upsert = vi.fn().mockResolvedValue({ error: null });
     actionMocks.createSupabaseServerClient.mockResolvedValue({
       from: vi.fn((table: string) => {
         expect(table).toBe("event_shares");
-        return { insert };
+        return { upsert };
       })
     });
 
@@ -472,16 +526,30 @@ describe("live engagement mutation actions", () => {
       ok: true
     });
 
-    expect(insert).toHaveBeenNthCalledWith(1, {
-      event_id: eventId,
-      user_id: user.id,
-      platform: "instagram"
-    });
-    expect(insert).toHaveBeenNthCalledWith(2, {
-      event_id: eventId,
-      user_id: user.id,
-      platform: "tiktok"
-    });
+    expect(upsert).toHaveBeenNthCalledWith(
+      1,
+      {
+        event_id: eventId,
+        user_id: user.id,
+        platform: "instagram"
+      },
+      {
+        onConflict: "event_id,user_id,platform",
+        ignoreDuplicates: true
+      }
+    );
+    expect(upsert).toHaveBeenNthCalledWith(
+      2,
+      {
+        event_id: eventId,
+        user_id: user.id,
+        platform: "tiktok"
+      },
+      {
+        onConflict: "event_id,user_id,platform",
+        ignoreDuplicates: true
+      }
+    );
   });
 });
 
@@ -508,9 +576,15 @@ describe("live engagement route handlers", () => {
     const secondEq = vi.fn().mockResolvedValue({ error: null });
     const firstEq = vi.fn(() => ({ eq: secondEq }));
     const deleteLike = vi.fn(() => ({ eq: firstEq }));
+    let commentsCalls = 0;
     actionMocks.createSupabaseServerClient.mockResolvedValue({
       from: vi.fn((table: string) => {
-        if (table === "comments") return commentsTable;
+        if (table === "comments") {
+          commentsCalls += 1;
+          return commentsCalls === 1
+            ? noRecentDuplicateCommentTable()
+            : commentsTable;
+        }
         return {
           insert,
           upsert,

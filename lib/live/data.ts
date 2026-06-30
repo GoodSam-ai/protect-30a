@@ -18,6 +18,7 @@ import type {
   LiveDistrictInfluencerScore,
   LiveInfluencerScore,
   LiveMetrics,
+  PodcastEvent,
   LiveTopComment
 } from "./types";
 
@@ -123,6 +124,18 @@ function hasSupabaseEnv() {
   return hasUrl && hasAnonKey;
 }
 
+async function getFirstEvent(query: {
+  limit: (count: number) => {
+    maybeSingle: () => PromiseLike<{ data: unknown; error: unknown }>;
+  };
+}): Promise<PodcastEvent | null> {
+  const { data, error } = await query.limit(1).maybeSingle();
+
+  if (error) throw error;
+
+  return data as PodcastEvent | null;
+}
+
 export async function getDistricts() {
   if (!hasSupabaseEnv()) return fixtureDistricts;
 
@@ -140,16 +153,37 @@ export async function getActiveEvent() {
   if (!hasSupabaseEnv()) return fixtureEvent;
 
   const supabase = await createSupabaseServerClient();
-  const { data, error } = await supabase
-    .from("podcast_events")
-    .select("*")
-    .eq("is_active", true)
-    .order("starts_at", { ascending: true })
-    .limit(1)
-    .single();
+  const activeEvent = await getFirstEvent(
+    supabase
+      .from("podcast_events")
+      .select("*")
+      .eq("is_active", true)
+      .order("starts_at", { ascending: true, nullsFirst: false })
+  );
 
-  if (error) throw error;
-  return data;
+  if (activeEvent) return activeEvent;
+
+  const upcomingEvent = await getFirstEvent(
+    supabase
+      .from("podcast_events")
+      .select("*")
+      .eq("status", "upcoming")
+      .order("starts_at", { ascending: true, nullsFirst: false })
+  );
+
+  if (upcomingEvent) return upcomingEvent;
+
+  const replayEvent = await getFirstEvent(
+    supabase
+      .from("podcast_events")
+      .select("*")
+      .eq("status", "replay")
+      .order("starts_at", { ascending: false, nullsFirst: false })
+  );
+
+  if (replayEvent) return replayEvent;
+
+  throw new Error("No current podcast event is available.");
 }
 
 export async function getEventBySlug(slug: string) {
@@ -169,10 +203,13 @@ export async function getEventBySlug(slug: string) {
 }
 
 export async function getVisibleComments(
-  eventId: string
+  eventId: string,
+  viewerUserId: string | null = null
 ): Promise<LiveComment[]> {
   if (!hasSupabaseEnv()) {
-    return fixtureComments.filter((comment) => comment.event_id === eventId);
+    return fixtureComments
+      .filter((comment) => comment.event_id === eventId)
+      .map((comment) => ({ ...comment }));
   }
 
   const supabase = await createSupabaseServerClient();
@@ -186,7 +223,7 @@ export async function getVisibleComments(
 
   if (error) throw error;
 
-  return ((data ?? []) as VisibleCommentRow[]).map((comment) => ({
+  const comments = ((data ?? []) as VisibleCommentRow[]).map((comment) => ({
     id: comment.id,
     event_id: comment.event_id,
     district_id: comment.district_id,
@@ -200,6 +237,28 @@ export async function getVisibleComments(
     liked_by_me: false,
     author_display_name: comment.display_name || "Community member",
     author_avatar_url: comment.avatar_url
+  }));
+
+  if (!viewerUserId || comments.length === 0) {
+    return comments;
+  }
+
+  const commentIds = comments.map((comment) => comment.id);
+  const { data: likes, error: likesError } = await supabase
+    .from("comment_likes")
+    .select("comment_id")
+    .eq("user_id", viewerUserId)
+    .in("comment_id", commentIds);
+
+  if (likesError) throw likesError;
+
+  const likedCommentIds = new Set(
+    ((likes ?? []) as Array<{ comment_id: string }>).map((like) => like.comment_id)
+  );
+
+  return comments.map((comment) => ({
+    ...comment,
+    liked_by_me: likedCommentIds.has(comment.id)
   }));
 }
 

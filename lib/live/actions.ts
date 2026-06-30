@@ -6,6 +6,7 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 import type { LiveComment } from "@/lib/live/types";
 import {
   commentInputSchema,
+  isRapidDuplicateComment,
   reportInputSchema,
   shareInputSchema
 } from "./validation";
@@ -26,6 +27,11 @@ type CreatedCommentRow = {
   body: string;
   topic: string | null;
   is_featured: boolean | null;
+  created_at: string;
+};
+
+type PreviousCommentRow = {
+  body: string;
   created_at: string;
 };
 
@@ -71,6 +77,52 @@ async function requireEngagementUser(
   return { user, profile };
 }
 
+function isMissingRowError(error: unknown) {
+  return (
+    typeof error === "object" &&
+    error !== null &&
+    "code" in error &&
+    error.code === "PGRST116"
+  );
+}
+
+async function assertNotRapidDuplicateComment({
+  supabase,
+  userId,
+  eventId,
+  body
+}: {
+  supabase: Awaited<ReturnType<typeof createSupabaseServerClient>>;
+  userId: string;
+  eventId: string;
+  body: string;
+}) {
+  const { data, error } = await supabase
+    .from("comments")
+    .select("body, created_at")
+    .eq("user_id", userId)
+    .eq("event_id", eventId)
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .maybeSingle<PreviousCommentRow>();
+
+  if (error && !isMissingRowError(error)) {
+    throw new Error(errorMessage(error, "Unable to check recent comments."));
+  }
+
+  if (
+    data &&
+    isRapidDuplicateComment({
+      previousBody: data.body,
+      nextBody: body,
+      previousCreatedAt: new Date(data.created_at),
+      now: new Date()
+    })
+  ) {
+    throw new Error("Please wait before posting the same comment again.");
+  }
+}
+
 export async function createComment(input: unknown) {
   const { user, profile } = await requireEngagementUser(
     "Sign in required to comment.",
@@ -78,6 +130,12 @@ export async function createComment(input: unknown) {
   );
   const parsed = commentInputSchema.parse(input);
   const supabase = await createSupabaseServerClient();
+  await assertNotRapidDuplicateComment({
+    supabase,
+    userId: user.id,
+    eventId: parsed.eventId,
+    body: parsed.body
+  });
   const { data, error } = await supabase
     .from("comments")
     .insert({
@@ -188,11 +246,17 @@ export async function trackShare(input: unknown) {
   );
   const parsed = shareInputSchema.parse(input);
   const supabase = await createSupabaseServerClient();
-  const { error } = await supabase.from("event_shares").insert({
-    event_id: parsed.eventId,
-    user_id: user.id,
-    platform: parsed.platform
-  });
+  const { error } = await supabase.from("event_shares").upsert(
+    {
+      event_id: parsed.eventId,
+      user_id: user.id,
+      platform: parsed.platform
+    },
+    {
+      onConflict: "event_id,user_id,platform",
+      ignoreDuplicates: true
+    }
+  );
 
   if (error) {
     throw new Error(errorMessage(error, "Unable to track share."));

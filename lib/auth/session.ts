@@ -132,3 +132,7 @@ export function canModerate(profile: PublicProfile | null) {
     (profile.role === "admin" || profile.role === "moderator")
   );
 }
+
+export function canAdmin(profile: PublicProfile | null) {
+  return profile !== null && !profile.is_restricted && profile.role === "admin";
+}

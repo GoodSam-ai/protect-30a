@@ -17,11 +17,11 @@ export default async function EventPage({
   const event = await getEventBySlug(slug);
   if (!event) notFound();
 
-  const [districts, session, comments] = await Promise.all([
+  const [districts, session] = await Promise.all([
     getDistricts(),
-    getCurrentUserAndProfile(),
-    getVisibleComments(event.id)
+    getCurrentUserAndProfile()
   ]);
+  const comments = await getVisibleComments(event.id, session.user?.id ?? null);
   const metrics = await getLiveMetrics(event.id, comments);
 
   return (

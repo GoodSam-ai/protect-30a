@@ -34,6 +34,11 @@ supports additional redirect URLs or wildcard redirect URLs:
 https://<preview-host>/auth/callback
 ```
 
+Use the unique, non-redirecting preview deployment host for callback tests.
+Do not use canonicalized Vercel aliases such as `protect-30a.vercel.app` or
+`protect-30a-git-main-team-good-sam.vercel.app` for preview callbacks, because
+`vercel.json` redirects those hosts to `https://protect30a.org`.
+
 Keep Supabase Auth redirect allow-list entries aligned with production and
 preview hosts. Use exact preview hosts when a provider does not support
 wildcards; use wildcard/additional redirect URL support only where both Supabase

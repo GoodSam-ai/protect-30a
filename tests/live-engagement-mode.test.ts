@@ -11,11 +11,17 @@ const liveDataMocks = vi.hoisted(() => ({
   getLiveMetrics: vi.fn(),
   getVisibleComments: vi.fn()
 }));
+const authMocks = vi.hoisted(() => ({
+  getCurrentUserAndProfile: vi.fn()
+}));
 
 vi.mock("@/lib/live/data", () => ({
   buildLiveMetricsFromComments: liveDataMocks.buildLiveMetricsFromComments,
   getLiveMetrics: liveDataMocks.getLiveMetrics,
   getVisibleComments: liveDataMocks.getVisibleComments
+}));
+vi.mock("@/lib/auth/session", () => ({
+  getCurrentUserAndProfile: authMocks.getCurrentUserAndProfile
 }));
 
 const baseComment: LiveComment = {
@@ -89,6 +95,10 @@ describe("dedupeCommentsById", () => {
 describe("GET /api/live/[eventId]", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    authMocks.getCurrentUserAndProfile.mockResolvedValue({
+      user: null,
+      profile: null
+    });
     liveDataMocks.getLiveMetrics.mockResolvedValue({
       totalComments: 0,
       totalLikes: 0,
@@ -154,8 +164,27 @@ describe("GET /api/live/[eventId]", () => {
     });
 
     await expect(response.json()).resolves.toEqual({ comments, metrics });
+    expect(liveDataMocks.getVisibleComments).toHaveBeenCalledWith(eventId, null);
     expect(liveDataMocks.getLiveMetrics).toHaveBeenCalledWith(eventId, comments);
     expect(liveDataMocks.buildLiveMetricsFromComments).not.toHaveBeenCalled();
+  });
+
+  it("hydrates refreshed comments with the signed-in viewer id", async () => {
+    const eventId = "10000000-0000-4000-8000-000000000001";
+    const viewerId = "40000000-0000-4000-8000-000000000001";
+    const comments = [{ ...baseComment, event_id: eventId, liked_by_me: true }];
+    authMocks.getCurrentUserAndProfile.mockResolvedValue({
+      user: { id: viewerId },
+      profile: null
+    });
+    liveDataMocks.getVisibleComments.mockResolvedValue(comments);
+
+    const response = await GET(new Request(`http://localhost/api/live/${eventId}`), {
+      params: Promise.resolve({ eventId })
+    });
+
+    expect(response.status).toBe(200);
+    expect(liveDataMocks.getVisibleComments).toHaveBeenCalledWith(eventId, viewerId);
   });
 
   it("returns a controlled 500 JSON error when live data loading fails", async () => {

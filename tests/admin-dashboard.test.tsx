@@ -44,6 +44,12 @@ const moderatorProfile = {
   is_restricted: false
 };
 
+const adminProfile = {
+  ...moderatorProfile,
+  display_name: "Admin",
+  role: "admin" as const
+};
+
 const loadedEvent = {
   id: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
   title: "Loaded admin event",
@@ -128,7 +134,6 @@ describe("admin dashboard route guard", () => {
       screen.getByRole("heading", { name: "Live engagement admin" })
     ).toBeInTheDocument();
     for (const tab of [
-      "Events",
       "Reported comments",
       "Featured comments",
       "Manual Facebook import",
@@ -138,6 +143,22 @@ describe("admin dashboard route guard", () => {
     ]) {
       expect(screen.getByRole("tab", { name: tab })).toBeInTheDocument();
     }
+    expect(screen.queryByRole("tab", { name: "Events" })).not.toBeInTheDocument();
+  });
+
+  it("renders event setup for admins", async () => {
+    dashboardMocks.getCurrentUserAndProfile.mockResolvedValue({
+      user: { id: adminProfile.id },
+      profile: adminProfile
+    });
+
+    render(await AdminPage());
+
+    expect(screen.getByRole("tab", { name: "Events" })).toBeInTheDocument();
+    expect(screen.getByRole("form", { name: "Event setup" })).toHaveAttribute(
+      "action",
+      "/api/admin/events"
+    );
   });
 
   it("loads reported comments for the queue after the admin guard", async () => {
@@ -177,8 +198,8 @@ describe("admin dashboard route guard", () => {
 
   it("hydrates admin forms from loaded server data instead of fixture ids", async () => {
     dashboardMocks.getCurrentUserAndProfile.mockResolvedValue({
-      user: { id: moderatorProfile.id },
-      profile: moderatorProfile
+      user: { id: adminProfile.id },
+      profile: adminProfile
     });
 
     render(await AdminPage());
@@ -205,8 +226,8 @@ describe("admin dashboard route guard", () => {
 
   it("updates event setup fields when selecting a different event", async () => {
     dashboardMocks.getCurrentUserAndProfile.mockResolvedValue({
-      user: { id: moderatorProfile.id },
-      profile: moderatorProfile
+      user: { id: adminProfile.id },
+      profile: adminProfile
     });
     dashboardMocks.getAdminDashboardData.mockResolvedValue({
       ...loadedDashboardData,
@@ -243,19 +264,19 @@ describe("admin dashboard route guard", () => {
 
 describe("AdminModerationPanel", () => {
   it.each([
-    ["Events", "Event setup", "/api/admin/events"],
-    ["Reported comments", "Moderate comment", "/api/admin/comments/moderate"],
-    ["Featured comments", "Feature comment", "/api/admin/comments/moderate"],
-    ["Manual Facebook import", "Manual Facebook import", "/api/admin/facebook-import"],
-    ["Exports", "Export comments", "/api/admin/export/comments"],
-    ["Scoring", "Scoring settings", "/api/admin/scoring"],
-    ["Badges", "Badge settings", "/api/admin/badges"]
+    ["Events", "Event setup", "/api/admin/events", adminProfile],
+    ["Reported comments", "Moderate comment", "/api/admin/comments/moderate", moderatorProfile],
+    ["Featured comments", "Feature comment", "/api/admin/comments/moderate", moderatorProfile],
+    ["Manual Facebook import", "Manual Facebook import", "/api/admin/facebook-import", moderatorProfile],
+    ["Exports", "Export comments", "/api/admin/export/comments", moderatorProfile],
+    ["Scoring", "Scoring settings", "/api/admin/scoring", moderatorProfile],
+    ["Badges", "Badge settings", "/api/admin/badges", moderatorProfile]
   ])(
     "renders a route-backed form and polite status region for %s",
-    (tabName, formName, action) => {
+    (tabName, formName, action, profile) => {
       render(
         <AdminModerationPanel
-          profile={moderatorProfile}
+          profile={profile}
           dashboardData={loadedDashboardData}
         />
       );

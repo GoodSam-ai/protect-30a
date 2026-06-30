@@ -1,5 +1,6 @@
 import {
   buildLiveMetricsFromComments,
+  getActiveEvent,
   getEventBySlug,
   getVisibleComments
 } from "@/lib/live/data";
@@ -11,6 +12,8 @@ const supabaseMocks = vi.hoisted(() => ({
   from: vi.fn(),
   select: vi.fn(),
   eq: vi.fn(),
+  in: vi.fn(),
+  limit: vi.fn(),
   maybeSingle: vi.fn(),
   order: vi.fn()
 }));
@@ -44,6 +47,38 @@ function usePartialSupabaseEnv(
     "NEXT_PUBLIC_SUPABASE_ANON_KEY",
     presentKey === "NEXT_PUBLIC_SUPABASE_ANON_KEY" ? "anon-key" : ""
   );
+}
+
+function eventQuery(result: { data: unknown; error: unknown }) {
+  const query = {
+    select: vi.fn(() => query),
+    eq: vi.fn(() => query),
+    order: vi.fn(() => query),
+    limit: vi.fn(() => query),
+    maybeSingle: vi.fn().mockResolvedValue(result)
+  };
+
+  return query;
+}
+
+function commentListQuery(rows: unknown[]) {
+  const query = {
+    select: vi.fn(() => query),
+    eq: vi.fn(() => query),
+    order: vi.fn().mockResolvedValue({ data: rows, error: null })
+  };
+
+  return query;
+}
+
+function viewerLikesQuery(rows: Array<{ comment_id: string }>) {
+  const query = {
+    select: vi.fn(() => query),
+    eq: vi.fn(() => query),
+    in: vi.fn().mockResolvedValue({ data: rows, error: null })
+  };
+
+  return query;
 }
 
 describe("live data access", () => {
@@ -83,6 +118,29 @@ describe("live data access", () => {
     supabaseMocks.maybeSingle.mockResolvedValue({ data: null, error: dbError });
 
     await expect(getEventBySlug("live-event")).rejects.toThrow(dbError);
+  });
+
+  it("selects the active event, then next upcoming, then latest replay for /live", async () => {
+    useSupabaseEnv();
+    const upcomingEvent = {
+      ...fixtureEvent,
+      id: "10000000-0000-4000-8000-000000000123",
+      title: "Next upcoming forum",
+      status: "upcoming"
+    };
+    const activeQuery = eventQuery({ data: null, error: null });
+    const upcomingQuery = eventQuery({ data: upcomingEvent, error: null });
+    supabaseMocks.from
+      .mockReturnValueOnce(activeQuery)
+      .mockReturnValueOnce(upcomingQuery);
+
+    await expect(getActiveEvent()).resolves.toEqual(upcomingEvent);
+    expect(activeQuery.eq).toHaveBeenCalledWith("is_active", true);
+    expect(upcomingQuery.eq).toHaveBeenCalledWith("status", "upcoming");
+    expect(upcomingQuery.order).toHaveBeenCalledWith("starts_at", {
+      ascending: true,
+      nullsFirst: false
+    });
   });
 
   it("throws a configuration error when only the Supabase URL is configured", async () => {
@@ -144,6 +202,44 @@ describe("live data access", () => {
     expect(supabaseMocks.from).toHaveBeenCalledWith("visible_comments");
     expect(supabaseMocks.from).not.toHaveBeenCalledWith("comments");
     expect(supabaseMocks.eq).toHaveBeenCalledWith("event_id", fixtureEvent.id);
+  });
+
+  it("hydrates liked_by_me from the viewer's own like rows", async () => {
+    useSupabaseEnv();
+    const commentId = "30000000-0000-4000-8000-000000000099";
+    const viewerUserId = "40000000-0000-4000-8000-000000000001";
+    const visibleQuery = commentListQuery([
+      {
+        id: commentId,
+        event_id: fixtureEvent.id,
+        district_id: null,
+        parent_comment_id: null,
+        body: "Please keep this discussion public and useful.",
+        topic: "Other",
+        is_featured: false,
+        created_at: "2026-06-26T13:00:00.000Z",
+        display_name: "Resident Voice",
+        avatar_url: null,
+        like_count: 2
+      }
+    ]);
+    const likesQuery = viewerLikesQuery([{ comment_id: commentId }]);
+    supabaseMocks.from.mockImplementation((table: string) => {
+      if (table === "visible_comments") return visibleQuery;
+      if (table === "comment_likes") return likesQuery;
+      throw new Error(`Unexpected table ${table}`);
+    });
+
+    await expect(getVisibleComments(fixtureEvent.id, viewerUserId)).resolves.toEqual([
+      expect.objectContaining({
+        id: commentId,
+        liked_by_me: true,
+        like_count: 2,
+        user_id: null
+      })
+    ]);
+    expect(likesQuery.eq).toHaveBeenCalledWith("user_id", viewerUserId);
+    expect(likesQuery.in).toHaveBeenCalledWith("comment_id", [commentId]);
   });
 
   it("filters fixture comments by event id", async () => {
