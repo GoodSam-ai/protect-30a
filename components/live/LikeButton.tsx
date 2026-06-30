@@ -55,7 +55,7 @@ export function LikeButton({
   return (
     <button
       type="button"
-      className="inline-flex min-h-10 items-center justify-center gap-2 rounded border border-protect-sand px-3 text-sm font-semibold text-protect-teal transition hover:bg-protect-cream disabled:cursor-not-allowed disabled:opacity-55"
+      className="inline-flex min-h-11 items-center justify-center gap-2 rounded border border-protect-sand px-3 text-sm font-semibold text-protect-teal transition hover:bg-protect-cream disabled:cursor-not-allowed disabled:opacity-55"
       aria-label={accessibleLabel}
       aria-pressed={liked}
       aria-busy={pending}

@@ -71,7 +71,7 @@ export function SignInPanelClient({
           <button
             key={provider.id}
             type="button"
-            className="rounded border border-protect-sand px-3 py-2 text-left font-semibold hover:bg-protect-cream"
+            className="min-h-11 rounded border border-protect-sand px-3 py-2 text-left font-semibold hover:bg-protect-cream"
             onClick={() => signInWithProvider(provider.id)}
           >
             {provider.label}

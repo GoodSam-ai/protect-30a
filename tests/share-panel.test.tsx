@@ -105,8 +105,9 @@ describe("SharePanel", () => {
       screen.getByRole("button", { name: "Copy link for Instagram" })
     );
     await waitFor(() =>
-      expect(writeTextMock).toHaveBeenLastCalledWith(canonicalShareUrl)
+      expect(writeTextMock).toHaveBeenCalledTimes(2)
     );
+    expect(writeTextMock).toHaveBeenLastCalledWith(canonicalShareUrl);
     expect(screen.getByRole("status")).toHaveTextContent(
       "Copied canonical live room link for Instagram."
     );

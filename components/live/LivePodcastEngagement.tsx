@@ -16,7 +16,7 @@ import type {
   PodcastEvent
 } from "@/lib/live/types";
 import { RadioTower } from "lucide-react";
-import type { ReactNode } from "react";
+import { Fragment, type ReactNode } from "react";
 
 type CommentComposerProps = {
   eventId: string;
@@ -137,11 +137,11 @@ export function LivePodcastEngagement({
   return (
     <section className="mx-auto grid max-w-7xl gap-6 px-4 py-6 sm:px-6 lg:grid-cols-[minmax(0,1fr)_23rem] lg:px-8">
       <div className="grid min-w-0 gap-6">
-        {playerSlot}
+        <Fragment key="player-slot">{playerSlot}</Fragment>
         {composerProps ? (
-          <CommentComposer {...composerProps} />
+          <CommentComposer key="comment-composer" {...composerProps} />
         ) : (
-          signedOutSlot
+          <Fragment key="signed-out-slot">{signedOutSlot}</Fragment>
         )}
         <LiveCommentFeed comments={comments} viewerProfile={profile} />
       </div>
