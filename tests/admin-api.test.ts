@@ -254,7 +254,8 @@ describe("comment moderation endpoint", () => {
     expect(commentUpdate).toHaveBeenCalledWith({
       moderation_status: "hidden",
       is_hidden: true,
-      is_featured: true
+      is_featured: true,
+      is_reported: false
     });
     expect(auditInsert).toHaveBeenCalledWith({
       actor_user_id: user.id,
@@ -264,8 +265,43 @@ describe("comment moderation endpoint", () => {
       metadata: {
         moderation_status: "hidden",
         is_hidden: true,
-        is_featured: true
+        is_featured: true,
+        is_reported: false
       }
+    });
+  });
+
+  it("keeps reports open when moderation is non-terminal unless explicitly resolved", async () => {
+    const commentUpdate = vi.fn(() => ({
+      eq: vi.fn(() => ({
+        select: vi.fn(() => ({
+          single: vi.fn().mockResolvedValue({
+            data: { id: commentId },
+            error: null
+          })
+        }))
+      }))
+    }));
+    const auditInsert = vi.fn().mockResolvedValue({ error: null });
+    adminMocks.createSupabaseAdminClient.mockReturnValue({
+      from: vi.fn((table: string) => {
+        if (table === "comments") return { update: commentUpdate };
+        if (table === "audit_log") return { insert: auditInsert };
+        throw new Error(`Unexpected table ${table}`);
+      })
+    });
+
+    const response = await moderateComment(
+      requestJsonTo("https://protect30a.test/api/admin/comments/moderate", {
+        commentId,
+        moderationStatus: "pending"
+      })
+    );
+
+    expect(response.status).toBe(200);
+    expect(commentUpdate).toHaveBeenCalledWith({
+      moderation_status: "pending",
+      is_hidden: false
     });
   });
 });
@@ -292,8 +328,7 @@ describe("scoring settings endpoint", () => {
         commentWeight: 1,
         likeWeight: 4,
         shareWeight: 2,
-        featuredWeight: 12,
-        podcastInviteThreshold: 35
+        featuredWeight: 12
       })
     );
 
@@ -306,8 +341,7 @@ describe("scoring settings endpoint", () => {
           comment_weight: 1,
           like_weight: 4,
           share_weight: 2,
-          featured_weight: 12,
-          podcast_invite_threshold: 35
+          featured_weight: 12
         },
         updated_by: user.id,
         updated_at: expect.any(String)
@@ -323,8 +357,7 @@ describe("scoring settings endpoint", () => {
         comment_weight: 1,
         like_weight: 4,
         share_weight: 2,
-        featured_weight: 12,
-        podcast_invite_threshold: 35
+        featured_weight: 12
       }
     });
   });
@@ -345,8 +378,7 @@ describe("scoring settings endpoint", () => {
         commentWeight: -1,
         likeWeight: 3,
         shareWeight: 2,
-        featuredWeight: 10,
-        podcastInviteThreshold: 25
+        featuredWeight: 10
       })
     );
 
@@ -592,6 +624,53 @@ describe("comment export endpoint", () => {
     );
     expect(csv).toContain(
       "2026-06-30T12:05:00Z,FB Neighbor,,Facebook body,1,facebook_manual,visible"
+    );
+  });
+
+  it("neutralizes spreadsheet formula injection in exported text fields", async () => {
+    const commentsQuery = {
+      select: vi.fn(() => ({
+        eq: vi.fn(() => ({
+          order: vi.fn().mockResolvedValue({
+            data: [
+              {
+                id: "comment-1",
+                created_at: "2026-06-30T12:00:00Z",
+                body: "=IMPORTXML(\"https://example.com\")",
+                topic: "+Topic",
+                source: "site",
+                moderation_status: "visible",
+                external_source_author: "@Attacker",
+                profiles: null
+              }
+            ],
+            error: null
+          })
+        }))
+      }))
+    };
+    const likesQuery = {
+      select: vi.fn(() => ({
+        in: vi.fn().mockResolvedValue({ data: [], error: null })
+      }))
+    };
+    adminMocks.createSupabaseAdminClient.mockReturnValue({
+      from: vi.fn((table: string) => {
+        if (table === "comments") return commentsQuery;
+        if (table === "comment_likes") return likesQuery;
+        throw new Error(`Unexpected table ${table}`);
+      })
+    });
+
+    const response = await exportComments(
+      nextRequest(
+        `https://protect30a.test/api/admin/export/comments?eventId=${eventId}`
+      )
+    );
+    const csv = await response.text();
+
+    expect(csv).toContain(
+      '2026-06-30T12:00:00Z,\'@Attacker,\'+Topic,"\'=IMPORTXML(""https://example.com"")",0,site,visible'
     );
   });
 });

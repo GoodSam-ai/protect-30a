@@ -7,8 +7,7 @@ const scoringSchema = z.object({
   commentWeight: z.coerce.number().int().min(0).max(100),
   likeWeight: z.coerce.number().int().min(0).max(100),
   shareWeight: z.coerce.number().int().min(0).max(100),
-  featuredWeight: z.coerce.number().int().min(0).max(100),
-  podcastInviteThreshold: z.coerce.number().int().min(0).max(1000)
+  featuredWeight: z.coerce.number().int().min(0).max(100)
 });
 
 function errorMessage(error: unknown, fallback: string) {
@@ -31,8 +30,7 @@ export async function POST(request: NextRequest) {
       comment_weight: parsed.commentWeight,
       like_weight: parsed.likeWeight,
       share_weight: parsed.shareWeight,
-      featured_weight: parsed.featuredWeight,
-      podcast_invite_threshold: parsed.podcastInviteThreshold
+      featured_weight: parsed.featuredWeight
     };
     const admin = createSupabaseAdminClient();
     const { error: settingsError } = await admin.from("admin_settings").upsert(

@@ -9,12 +9,17 @@ const moderationSchema = z
     moderationStatus: z
       .enum(["visible", "pending", "hidden", "removed"])
       .optional(),
-    isFeatured: z.boolean().optional()
+    isFeatured: z.boolean().optional(),
+    isReported: z.boolean().optional(),
+    resolveReport: z.boolean().optional()
   })
   .refine(
     (value) =>
-      value.moderationStatus !== undefined || value.isFeatured !== undefined,
-    "Provide a moderation status or featured state."
+      value.moderationStatus !== undefined ||
+      value.isFeatured !== undefined ||
+      value.isReported !== undefined ||
+      value.resolveReport !== undefined,
+    "Provide a moderation status, featured state, or report resolution."
   );
 
 function errorMessage(error: unknown, fallback: string) {
@@ -47,6 +52,7 @@ export async function POST(request: NextRequest) {
       moderation_status?: "visible" | "pending" | "hidden" | "removed";
       is_hidden?: boolean;
       is_featured?: boolean;
+      is_reported?: boolean;
     } = {};
 
     if (parsed.moderationStatus) {
@@ -58,6 +64,17 @@ export async function POST(request: NextRequest) {
 
     if (parsed.isFeatured !== undefined) {
       update.is_featured = parsed.isFeatured;
+    }
+
+    if (parsed.isReported !== undefined) {
+      update.is_reported = parsed.isReported;
+    } else if (
+      parsed.resolveReport ||
+      parsed.moderationStatus === "visible" ||
+      parsed.moderationStatus === "hidden" ||
+      parsed.moderationStatus === "removed"
+    ) {
+      update.is_reported = false;
     }
 
     const admin = createSupabaseAdminClient();

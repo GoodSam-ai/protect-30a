@@ -123,6 +123,7 @@ describe("live engagement migration contracts", () => {
     expect(migration).toContain('"like_weight": 3');
     expect(migration).toContain('"share_weight": 2');
     expect(migration).toContain('"featured_weight": 10');
+    expect(migration).not.toContain('"podcast_invite_threshold"');
     expect(migration).toContain('"podcast_invite_score": 30');
     expect(migration).toContain("alter table public.admin_settings enable row level security");
     expect(migration).toContain(
@@ -150,6 +151,16 @@ describe("live engagement migration contracts", () => {
     expect(scoringSql).not.toContain("comments_count, 0) * 1 +");
     expect(refreshSql).toContain("from public.admin_settings");
     expect(refreshSql).toContain("weights.like_weight");
+  });
+
+  it("selects persisted scoring settings over defaults deterministically", () => {
+    expect(migration.match(/scoring_settings as \(/g)).toHaveLength(3);
+    expect(migration.match(/0 as priority/g)).toHaveLength(3);
+    expect(migration.match(/1 as priority/g)).toHaveLength(3);
+    expect(migration.match(/order by priority\s+limit 1/g)).toHaveLength(3);
+    expect(migration).not.toContain(
+      "union all\n  select 1::numeric, 3::numeric, 2::numeric, 10::numeric\n  limit 1"
+    );
   });
 
   it("includes share-only users in public event leaders without exposing ids", () => {

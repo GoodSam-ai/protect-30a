@@ -5,7 +5,7 @@ import { describe, expect, it, vi, beforeEach } from "vitest";
 
 const dashboardMocks = vi.hoisted(() => ({
   createSupabaseAdminClient: vi.fn(),
-  getReportedCommentsQueue: vi.fn(),
+  getAdminDashboardData: vi.fn(),
   getCurrentUserAndProfile: vi.fn(),
   redirect: vi.fn((path: string) => {
     throw new Error(`redirect:${path}`);
@@ -32,7 +32,7 @@ vi.mock("@/lib/supabase/admin", () => ({
 }));
 
 vi.mock("@/lib/admin/data", () => ({
-  getReportedCommentsQueue: dashboardMocks.getReportedCommentsQueue
+  getAdminDashboardData: dashboardMocks.getAdminDashboardData
 }));
 
 const moderatorProfile = {
@@ -44,48 +44,49 @@ const moderatorProfile = {
   is_restricted: false
 };
 
-function reportedCommentsTable() {
-  return {
-    select: vi.fn(() => ({
-      eq: vi.fn(() => ({
-        order: vi.fn(() => ({
-          limit: vi.fn().mockResolvedValue({
-            data: [
-              {
-                id: "44444444-4444-4444-8444-444444444444",
-                created_at: "2026-06-30T12:00:00Z",
-                body: "Reported queue comment body.",
-                topic: "Traffic",
-                moderation_status: "pending",
-                is_hidden: false,
-                is_featured: false,
-                is_reported: true,
-                external_source_author: null,
-                profiles: { display_name: "Careful Resident" },
-                comment_reports: [
-                  {
-                    reason: "spam",
-                    details: "Repeated link",
-                    reporter_user_id: "do-not-render"
-                  }
-                ]
-              }
-            ],
-            error: null
-          })
-        }))
-      }))
-    }))
-  };
-}
+const loadedEvent = {
+  id: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+  title: "Loaded admin event",
+  slug: "loaded-admin-event",
+  status: "live",
+  startsAt: "2026-07-03T18:00:00.000Z",
+  livestreamUrl: "https://example.com/live",
+  replayUrl: null,
+  commentsEnabled: true,
+  leaderboardEnabled: false,
+  forcedEngagementMode: "realtime",
+  districtId: "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb"
+};
+
+const loadedDashboardData = {
+  events: [loadedEvent],
+  activeEvent: loadedEvent,
+  districts: [
+    {
+      id: "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
+      name: "Loaded District",
+      slug: "loaded-district"
+    }
+  ],
+  reportedComments: [],
+  scoringSettings: {
+    commentWeight: 2,
+    likeWeight: 4,
+    shareWeight: 3,
+    featuredWeight: 12
+  },
+  badgeSettings: {
+    firstVoiceComments: 2,
+    conversationStarterComments: 6,
+    communitySignalScore: 30,
+    podcastInviteScore: 40
+  }
+};
 
 describe("admin dashboard route guard", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    dashboardMocks.getReportedCommentsQueue.mockResolvedValue([]);
-    dashboardMocks.createSupabaseAdminClient.mockReturnValue({
-      from: vi.fn(() => reportedCommentsTable())
-    });
+    dashboardMocks.getAdminDashboardData.mockResolvedValue(loadedDashboardData);
   });
 
   it("redirects non-moderators to the live room", async () => {
@@ -130,30 +131,62 @@ describe("admin dashboard route guard", () => {
       user: { id: moderatorProfile.id },
       profile: moderatorProfile
     });
-    dashboardMocks.getReportedCommentsQueue.mockResolvedValue([
-      {
-        id: "44444444-4444-4444-8444-444444444444",
-        createdAt: "2026-06-30T12:00:00Z",
-        body: "Reported queue comment body.",
-        topic: "Traffic",
-        moderationStatus: "pending",
-        isHidden: false,
-        isFeatured: false,
-        isReported: true,
-        authorDisplayName: "Careful Resident",
-        reportCount: 1,
-        reportReasons: ["spam"],
-        reportDetails: ["Repeated link"]
-      }
-    ]);
+    dashboardMocks.getAdminDashboardData.mockResolvedValue({
+      ...loadedDashboardData,
+      reportedComments: [
+        {
+          id: "44444444-4444-4444-8444-444444444444",
+          createdAt: "2026-06-30T12:00:00Z",
+          body: "Reported queue comment body.",
+          topic: "Traffic",
+          moderationStatus: "pending",
+          isHidden: false,
+          isFeatured: false,
+          isReported: true,
+          authorDisplayName: "Careful Resident",
+          reportCount: 1,
+          reportReasons: ["spam"],
+          reportDetails: ["Repeated link"]
+        }
+      ]
+    });
 
     render(await AdminPage());
     fireEvent.click(screen.getByRole("tab", { name: "Reported comments" }));
 
+    expect(dashboardMocks.getAdminDashboardData).toHaveBeenCalled();
     expect(screen.getByText("Reported queue comment body.")).toBeInTheDocument();
     expect(screen.getByText("Careful Resident")).toBeInTheDocument();
     expect(screen.getByText("spam")).toBeInTheDocument();
     expect(screen.queryByText("do-not-render")).not.toBeInTheDocument();
+  });
+
+  it("hydrates admin forms from loaded server data instead of fixture ids", async () => {
+    dashboardMocks.getCurrentUserAndProfile.mockResolvedValue({
+      user: { id: moderatorProfile.id },
+      profile: moderatorProfile
+    });
+
+    render(await AdminPage());
+
+    expect(screen.getByLabelText("Event ID")).toHaveValue(loadedEvent.id);
+    expect(screen.getByLabelText("Title")).toHaveValue(loadedEvent.title);
+
+    fireEvent.click(screen.getByRole("tab", { name: "Manual Facebook import" }));
+    expect(screen.getByLabelText("Event ID")).toHaveValue(loadedEvent.id);
+    expect(screen.getByRole("option", { name: "Loaded District" })).toHaveValue(
+      loadedDashboardData.districts[0].id
+    );
+
+    fireEvent.click(screen.getByRole("tab", { name: "Exports" }));
+    expect(screen.getByLabelText("Event ID")).toHaveValue(loadedEvent.id);
+
+    fireEvent.click(screen.getByRole("tab", { name: "Scoring" }));
+    expect(screen.getByLabelText("Like")).toHaveValue(4);
+    expect(screen.queryByLabelText("Invite threshold")).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("tab", { name: "Badges" }));
+    expect(screen.getByLabelText("Podcast invite score")).toHaveValue(40);
   });
 });
 
@@ -169,13 +202,18 @@ describe("AdminModerationPanel", () => {
   ])(
     "renders a route-backed form and polite status region for %s",
     (tabName, formName, action) => {
-    render(<AdminModerationPanel profile={moderatorProfile} reportedComments={[]} />);
+      render(
+        <AdminModerationPanel
+          profile={moderatorProfile}
+          dashboardData={loadedDashboardData}
+        />
+      );
 
-    fireEvent.click(screen.getByRole("tab", { name: tabName }));
+      fireEvent.click(screen.getByRole("tab", { name: tabName }));
 
-    const form = screen.getByRole("form", { name: formName });
-    expect(form).toHaveAttribute("action", action);
-    expect(screen.getByRole("status")).toHaveAttribute("aria-live", "polite");
+      const form = screen.getByRole("form", { name: formName });
+      expect(form).toHaveAttribute("action", action);
+      expect(screen.getByRole("status")).toHaveAttribute("aria-live", "polite");
     }
   );
 });

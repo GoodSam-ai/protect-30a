@@ -1,5 +1,5 @@
 import { AdminModerationPanel } from "@/components/admin/AdminModerationPanel";
-import { getReportedCommentsQueue } from "@/lib/admin/data";
+import { getAdminDashboardData } from "@/lib/admin/data";
 import { canModerate, getCurrentUserAndProfile } from "@/lib/auth/session";
 import { redirect } from "next/navigation";
 
@@ -12,12 +12,12 @@ export default async function AdminPage() {
     redirect("/live");
   }
 
-  const reportedComments = await getReportedCommentsQueue();
+  const dashboardData = await getAdminDashboardData();
 
   return (
     <AdminModerationPanel
       profile={profile}
-      reportedComments={reportedComments}
+      dashboardData={dashboardData}
     />
   );
 }

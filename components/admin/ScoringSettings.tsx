@@ -1,14 +1,18 @@
 "use client";
 
+import type { AdminScoringSettings } from "@/lib/admin/types";
 import { BarChart3, Save } from "lucide-react";
 import { useId, useState } from "react";
 
-export function ScoringSettings() {
+export function ScoringSettings({
+  settings
+}: {
+  settings: AdminScoringSettings;
+}) {
   const commentId = useId();
   const likeId = useId();
   const shareId = useId();
   const featuredId = useId();
-  const thresholdId = useId();
   const [status, setStatus] = useState("Ready to save scoring settings.");
   const [pending, setPending] = useState(false);
 
@@ -28,8 +32,7 @@ export function ScoringSettings() {
           commentWeight: form.get("commentWeight"),
           likeWeight: form.get("likeWeight"),
           shareWeight: form.get("shareWeight"),
-          featuredWeight: form.get("featuredWeight"),
-          podcastInviteThreshold: form.get("podcastInviteThreshold")
+          featuredWeight: form.get("featuredWeight")
         })
       });
       const result = (await response.json().catch(() => null)) as {
@@ -65,13 +68,12 @@ export function ScoringSettings() {
         className="mt-4 grid gap-4 rounded border border-protect-sand bg-protect-cream p-4"
         onSubmit={handleSubmit}
       >
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {[
-            ["Comment", "commentWeight", commentId, 1],
-            ["Like", "likeWeight", likeId, 3],
-            ["Share", "shareWeight", shareId, 2],
-            ["Featured", "featuredWeight", featuredId, 10],
-            ["Invite threshold", "podcastInviteThreshold", thresholdId, 25]
+            ["Comment", "commentWeight", commentId, settings.commentWeight],
+            ["Like", "likeWeight", likeId, settings.likeWeight],
+            ["Share", "shareWeight", shareId, settings.shareWeight],
+            ["Featured", "featuredWeight", featuredId, settings.featuredWeight]
           ].map(([label, name, id, value]) => (
             <div className="grid gap-2" key={String(name)}>
               <label className="text-sm font-semibold text-protect-teal" htmlFor={String(id)}>

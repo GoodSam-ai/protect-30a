@@ -185,7 +185,7 @@ where slug = 'inlet-beach';
 insert into public.admin_settings (key, value) values
   (
     'engagement_scoring',
-    '{"comment_weight": 1, "like_weight": 3, "share_weight": 2, "featured_weight": 10, "podcast_invite_threshold": 30}'::jsonb
+    '{"comment_weight": 1, "like_weight": 3, "share_weight": 2, "featured_weight": 10}'::jsonb
   ),
   (
     'engagement_badges',
@@ -654,14 +654,23 @@ active_users as (
 ),
 scoring_settings as (
   select
-    coalesce((value->>'comment_weight')::numeric, 1) as comment_weight,
-    coalesce((value->>'like_weight')::numeric, 3) as like_weight,
-    coalesce((value->>'share_weight')::numeric, 2) as share_weight,
-    coalesce((value->>'featured_weight')::numeric, 10) as featured_weight
-  from public.admin_settings
-  where key = 'engagement_scoring'
-  union all
-  select 1::numeric, 3::numeric, 2::numeric, 10::numeric
+    comment_weight,
+    like_weight,
+    share_weight,
+    featured_weight
+  from (
+    select
+      0 as priority,
+      coalesce((value->>'comment_weight')::numeric, 1) as comment_weight,
+      coalesce((value->>'like_weight')::numeric, 3) as like_weight,
+      coalesce((value->>'share_weight')::numeric, 2) as share_weight,
+      coalesce((value->>'featured_weight')::numeric, 10) as featured_weight
+    from public.admin_settings
+    where key = 'engagement_scoring'
+    union all
+    select 1 as priority, 1::numeric, 3::numeric, 2::numeric, 10::numeric
+  ) configured_scoring_settings
+  order by priority
   limit 1
 )
 select
@@ -807,14 +816,23 @@ active_districts as (
 ),
 scoring_settings as (
   select
-    coalesce((value->>'comment_weight')::numeric, 1) as comment_weight,
-    coalesce((value->>'like_weight')::numeric, 3) as like_weight,
-    coalesce((value->>'share_weight')::numeric, 2) as share_weight,
-    coalesce((value->>'featured_weight')::numeric, 10) as featured_weight
-  from public.admin_settings
-  where key = 'engagement_scoring'
-  union all
-  select 1::numeric, 3::numeric, 2::numeric, 10::numeric
+    comment_weight,
+    like_weight,
+    share_weight,
+    featured_weight
+  from (
+    select
+      0 as priority,
+      coalesce((value->>'comment_weight')::numeric, 1) as comment_weight,
+      coalesce((value->>'like_weight')::numeric, 3) as like_weight,
+      coalesce((value->>'share_weight')::numeric, 2) as share_weight,
+      coalesce((value->>'featured_weight')::numeric, 10) as featured_weight
+    from public.admin_settings
+    where key = 'engagement_scoring'
+    union all
+    select 1 as priority, 1::numeric, 3::numeric, 2::numeric, 10::numeric
+  ) configured_scoring_settings
+  order by priority
   limit 1
 ),
 district_base as (
@@ -947,14 +965,23 @@ begin
   ),
   scoring_settings as (
     select
-      coalesce((value->>'comment_weight')::numeric, 1) as comment_weight,
-      coalesce((value->>'like_weight')::numeric, 3) as like_weight,
-      coalesce((value->>'share_weight')::numeric, 2) as share_weight,
-      coalesce((value->>'featured_weight')::numeric, 10) as featured_weight
-    from public.admin_settings
-    where key = 'engagement_scoring'
-    union all
-    select 1::numeric, 3::numeric, 2::numeric, 10::numeric
+      comment_weight,
+      like_weight,
+      share_weight,
+      featured_weight
+    from (
+      select
+        0 as priority,
+        coalesce((value->>'comment_weight')::numeric, 1) as comment_weight,
+        coalesce((value->>'like_weight')::numeric, 3) as like_weight,
+        coalesce((value->>'share_weight')::numeric, 2) as share_weight,
+        coalesce((value->>'featured_weight')::numeric, 10) as featured_weight
+      from public.admin_settings
+      where key = 'engagement_scoring'
+      union all
+      select 1 as priority, 1::numeric, 3::numeric, 2::numeric, 10::numeric
+    ) configured_scoring_settings
+    order by priority
     limit 1
   ),
   score_base as (

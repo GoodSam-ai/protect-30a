@@ -11,6 +11,7 @@ export function ReportedCommentsQueue({
 }) {
   const commentIdId = useId();
   const statusId = useId();
+  const resolveId = useId();
   const [status, setStatus] = useState("Ready to moderate a reported comment.");
   const [pending, setPending] = useState(false);
 
@@ -28,7 +29,8 @@ export function ReportedCommentsQueue({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           commentId: form.get("commentId"),
-          moderationStatus: form.get("moderationStatus")
+          moderationStatus: form.get("moderationStatus"),
+          resolveReport: form.get("resolveReport") === "on"
         })
       });
       const result = (await response.json().catch(() => null)) as {
@@ -94,6 +96,19 @@ export function ReportedCommentsQueue({
             </select>
           </div>
         </div>
+
+        <label
+          className="flex items-center gap-2 text-sm font-semibold text-protect-teal"
+          htmlFor={resolveId}
+        >
+          <input
+            id={resolveId}
+            name="resolveReport"
+            type="checkbox"
+            defaultChecked
+          />
+          Resolve report after moderation
+        </label>
 
         <p className="text-sm text-protect-ink/70" role="status" aria-live="polite">
           {status}

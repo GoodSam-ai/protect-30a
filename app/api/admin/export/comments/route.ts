@@ -22,14 +22,20 @@ function errorMessage(error: unknown, fallback: string) {
   return error instanceof Error ? error.message : fallback;
 }
 
+function neutralizeSpreadsheetFormula(text: string) {
+  return /^[=+\-@\t]/.test(text) ? `'${text}` : text;
+}
+
 function csvField(value: string | number | null | undefined) {
   const text = value === null || value === undefined ? "" : String(value);
+  const safeText =
+    typeof value === "number" ? text : neutralizeSpreadsheetFormula(text);
 
-  if (/[",\n\r]/.test(text)) {
-    return `"${text.replaceAll('"', '""')}"`;
+  if (/[",\n\r]/.test(safeText)) {
+    return `"${safeText.replaceAll('"', '""')}"`;
   }
 
-  return text;
+  return safeText;
 }
 
 function authorName(row: CommentExportRow) {

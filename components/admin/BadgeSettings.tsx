@@ -1,9 +1,10 @@
 "use client";
 
+import type { AdminBadgeSettings } from "@/lib/admin/types";
 import { BadgeCheck, Save } from "lucide-react";
 import { useId, useState } from "react";
 
-export function BadgeSettings() {
+export function BadgeSettings({ settings }: { settings: AdminBadgeSettings }) {
   const firstVoiceId = useId();
   const conversationId = useId();
   const signalId = useId();
@@ -65,15 +66,30 @@ export function BadgeSettings() {
       >
         <div className="grid gap-3 sm:grid-cols-2">
           {[
-            ["First voice comments", "firstVoiceComments", firstVoiceId, 1],
+            [
+              "First voice comments",
+              "firstVoiceComments",
+              firstVoiceId,
+              settings.firstVoiceComments
+            ],
             [
               "Conversation starter comments",
               "conversationStarterComments",
               conversationId,
-              5
+              settings.conversationStarterComments
             ],
-            ["Community signal score", "communitySignalScore", signalId, 25],
-            ["Podcast invite score", "podcastInviteScore", inviteId, 25]
+            [
+              "Community signal score",
+              "communitySignalScore",
+              signalId,
+              settings.communitySignalScore
+            ],
+            [
+              "Podcast invite score",
+              "podcastInviteScore",
+              inviteId,
+              settings.podcastInviteScore
+            ]
           ].map(([label, name, id, value]) => (
             <div className="grid gap-2" key={String(name)}>
               <label className="text-sm font-semibold text-protect-teal" htmlFor={String(id)}>

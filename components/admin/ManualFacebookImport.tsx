@@ -1,6 +1,6 @@
 "use client";
 
-import { fixtureDistricts, fixtureEvent } from "@/lib/live/fixtures";
+import type { AdminDistrictOption, AdminEventOption } from "@/lib/admin/types";
 import { MessageSquarePlus } from "lucide-react";
 import { useId, useState } from "react";
 
@@ -9,7 +9,17 @@ type ImportResult = {
   error?: string;
 };
 
-export function ManualFacebookImport() {
+export function ManualFacebookImport({
+  events,
+  districts,
+  activeEventId,
+  activeDistrictId
+}: {
+  events: AdminEventOption[];
+  districts: AdminDistrictOption[];
+  activeEventId: string;
+  activeDistrictId: string | null;
+}) {
   const eventIdId = useId();
   const districtIdId = useId();
   const authorId = useId();
@@ -76,13 +86,19 @@ export function ManualFacebookImport() {
             <label className="text-sm font-semibold text-protect-teal" htmlFor={eventIdId}>
               Event ID
             </label>
-            <input
+            <select
               id={eventIdId}
               name="eventId"
-              className="min-h-11 rounded border border-protect-sand px-3 text-protect-ink"
-              defaultValue={fixtureEvent.id}
+              className="min-h-11 rounded border border-protect-sand bg-white px-3 text-protect-ink"
+              defaultValue={activeEventId}
               required
-            />
+            >
+              {events.map((event) => (
+                <option key={event.id} value={event.id}>
+                  {event.title}
+                </option>
+              ))}
+            </select>
           </div>
           <div className="grid gap-2">
             <label className="text-sm font-semibold text-protect-teal" htmlFor={districtIdId}>
@@ -92,10 +108,10 @@ export function ManualFacebookImport() {
               id={districtIdId}
               name="districtId"
               className="min-h-11 rounded border border-protect-sand bg-white px-3 text-protect-ink"
-              defaultValue={fixtureEvent.district_id ?? ""}
+              defaultValue={activeDistrictId ?? ""}
             >
               <option value="">No district</option>
-              {fixtureDistricts.map((district) => (
+              {districts.map((district) => (
                 <option key={district.id} value={district.id}>
                   {district.name}
                 </option>

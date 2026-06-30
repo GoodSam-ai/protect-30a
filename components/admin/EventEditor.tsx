@@ -1,10 +1,16 @@
 "use client";
 
-import { fixtureEvent } from "@/lib/live/fixtures";
+import type { AdminEventOption } from "@/lib/admin/types";
 import { CalendarDays, Save } from "lucide-react";
 import { useId, useState } from "react";
 
-export function EventEditor() {
+export function EventEditor({
+  events,
+  activeEvent
+}: {
+  events: AdminEventOption[];
+  activeEvent: AdminEventOption | null;
+}) {
   const eventIdId = useId();
   const titleId = useId();
   const statusId = useId();
@@ -14,6 +20,7 @@ export function EventEditor() {
   const modeId = useId();
   const [status, setStatus] = useState("Ready to update event setup.");
   const [pending, setPending] = useState(false);
+  const selectedEvent = activeEvent ?? events[0] ?? null;
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -77,13 +84,19 @@ export function EventEditor() {
             <label className="text-sm font-semibold text-protect-teal" htmlFor={eventIdId}>
               Event ID
             </label>
-            <input
+            <select
               id={eventIdId}
               name="eventId"
               className="min-h-11 rounded border border-protect-sand bg-white px-3 text-protect-ink"
-              defaultValue={fixtureEvent.id}
+              defaultValue={selectedEvent?.id ?? ""}
               required
-            />
+            >
+              {events.map((event) => (
+                <option key={event.id} value={event.id}>
+                  {event.title}
+                </option>
+              ))}
+            </select>
           </div>
           <div className="grid gap-2">
             <label className="text-sm font-semibold text-protect-teal" htmlFor={statusId}>
@@ -93,7 +106,7 @@ export function EventEditor() {
               id={statusId}
               name="status"
               className="min-h-11 rounded border border-protect-sand bg-white px-3 text-protect-ink"
-              defaultValue={fixtureEvent.status}
+              defaultValue={selectedEvent?.status ?? "upcoming"}
             >
               <option value="upcoming">Upcoming</option>
               <option value="live">Live</option>
@@ -109,7 +122,7 @@ export function EventEditor() {
               id={modeId}
               name="forcedEngagementMode"
               className="min-h-11 rounded border border-protect-sand bg-white px-3 text-protect-ink"
-              defaultValue={fixtureEvent.forced_engagement_mode}
+              defaultValue={selectedEvent?.forcedEngagementMode ?? "auto"}
             >
               <option value="auto">Auto</option>
               <option value="realtime">Realtime</option>
@@ -128,7 +141,7 @@ export function EventEditor() {
               id={titleId}
               name="title"
               className="min-h-11 rounded border border-protect-sand bg-white px-3 text-protect-ink"
-              defaultValue={fixtureEvent.title}
+              defaultValue={selectedEvent?.title ?? ""}
               required
             />
           </div>
@@ -140,7 +153,7 @@ export function EventEditor() {
               id={startsAtId}
               name="startsAt"
               className="min-h-11 rounded border border-protect-sand bg-white px-3 text-protect-ink"
-              defaultValue={fixtureEvent.starts_at ?? ""}
+              defaultValue={selectedEvent?.startsAt ?? ""}
             />
           </div>
         </div>
@@ -154,7 +167,7 @@ export function EventEditor() {
               id={livestreamId}
               name="livestreamUrl"
               className="min-h-11 rounded border border-protect-sand bg-white px-3 text-protect-ink"
-              defaultValue={fixtureEvent.livestream_url ?? ""}
+              defaultValue={selectedEvent?.livestreamUrl ?? ""}
               type="url"
             />
           </div>
@@ -166,7 +179,7 @@ export function EventEditor() {
               id={replayId}
               name="replayUrl"
               className="min-h-11 rounded border border-protect-sand bg-white px-3 text-protect-ink"
-              defaultValue={fixtureEvent.replay_url ?? ""}
+              defaultValue={selectedEvent?.replayUrl ?? ""}
               type="url"
             />
           </div>
@@ -177,7 +190,7 @@ export function EventEditor() {
             <input
               name="commentsEnabled"
               type="checkbox"
-              defaultChecked={fixtureEvent.comments_enabled}
+              defaultChecked={selectedEvent?.commentsEnabled ?? true}
             />
             Comments enabled
           </label>
@@ -185,7 +198,7 @@ export function EventEditor() {
             <input
               name="leaderboardEnabled"
               type="checkbox"
-              defaultChecked={fixtureEvent.leaderboard_enabled}
+              defaultChecked={selectedEvent?.leaderboardEnabled ?? true}
             />
             Leaderboard enabled
           </label>

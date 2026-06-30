@@ -1,10 +1,16 @@
 "use client";
 
-import { fixtureEvent } from "@/lib/live/fixtures";
+import type { AdminEventOption } from "@/lib/admin/types";
 import { Download } from "lucide-react";
 import { useId, useState } from "react";
 
-export function EngagementExport() {
+export function EngagementExport({
+  events,
+  activeEventId
+}: {
+  events: AdminEventOption[];
+  activeEventId: string;
+}) {
   const eventIdId = useId();
   const [status, setStatus] = useState("Ready to export comments.");
   const [pending, setPending] = useState(false);
@@ -65,13 +71,19 @@ export function EngagementExport() {
           <label className="text-sm font-semibold text-protect-teal" htmlFor={eventIdId}>
             Event ID
           </label>
-          <input
+          <select
             id={eventIdId}
             name="eventId"
             className="min-h-11 rounded border border-protect-sand bg-white px-3 text-protect-ink"
-            defaultValue={fixtureEvent.id}
+            defaultValue={activeEventId}
             required
-          />
+          >
+            {events.map((event) => (
+              <option key={event.id} value={event.id}>
+                {event.title}
+              </option>
+            ))}
+          </select>
         </div>
 
         <p className="text-sm text-protect-ink/70" role="status" aria-live="polite">
