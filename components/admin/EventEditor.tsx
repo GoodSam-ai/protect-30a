@@ -4,6 +4,30 @@ import type { AdminEventOption } from "@/lib/admin/types";
 import { CalendarDays, Save } from "lucide-react";
 import { useId, useState } from "react";
 
+type EventFormState = {
+  title: string;
+  status: string;
+  startsAt: string;
+  livestreamUrl: string;
+  replayUrl: string;
+  commentsEnabled: boolean;
+  leaderboardEnabled: boolean;
+  forcedEngagementMode: string;
+};
+
+function eventFormState(event: AdminEventOption | null): EventFormState {
+  return {
+    title: event?.title ?? "",
+    status: event?.status ?? "upcoming",
+    startsAt: event?.startsAt ?? "",
+    livestreamUrl: event?.livestreamUrl ?? "",
+    replayUrl: event?.replayUrl ?? "",
+    commentsEnabled: event?.commentsEnabled ?? true,
+    leaderboardEnabled: event?.leaderboardEnabled ?? true,
+    forcedEngagementMode: event?.forcedEngagementMode ?? "auto"
+  };
+}
+
 export function EventEditor({
   events,
   activeEvent
@@ -20,7 +44,18 @@ export function EventEditor({
   const modeId = useId();
   const [status, setStatus] = useState("Ready to update event setup.");
   const [pending, setPending] = useState(false);
-  const selectedEvent = activeEvent ?? events[0] ?? null;
+  const initialEvent = activeEvent ?? events[0] ?? null;
+  const [selectedEventId, setSelectedEventId] = useState(initialEvent?.id ?? "");
+  const [fields, setFields] = useState(() => eventFormState(initialEvent));
+
+  function handleEventSelection(event: React.ChangeEvent<HTMLSelectElement>) {
+    const nextEventId = event.target.value;
+    const nextEvent =
+      events.find((item) => item.id === nextEventId) ?? activeEvent ?? null;
+
+    setSelectedEventId(nextEventId);
+    setFields(eventFormState(nextEvent));
+  }
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -88,7 +123,8 @@ export function EventEditor({
               id={eventIdId}
               name="eventId"
               className="min-h-11 rounded border border-protect-sand bg-white px-3 text-protect-ink"
-              defaultValue={selectedEvent?.id ?? ""}
+              value={selectedEventId}
+              onChange={handleEventSelection}
               required
             >
               {events.map((event) => (
@@ -106,7 +142,13 @@ export function EventEditor({
               id={statusId}
               name="status"
               className="min-h-11 rounded border border-protect-sand bg-white px-3 text-protect-ink"
-              defaultValue={selectedEvent?.status ?? "upcoming"}
+              value={fields.status}
+              onChange={(event) =>
+                setFields((current) => ({
+                  ...current,
+                  status: event.target.value
+                }))
+              }
             >
               <option value="upcoming">Upcoming</option>
               <option value="live">Live</option>
@@ -122,7 +164,13 @@ export function EventEditor({
               id={modeId}
               name="forcedEngagementMode"
               className="min-h-11 rounded border border-protect-sand bg-white px-3 text-protect-ink"
-              defaultValue={selectedEvent?.forcedEngagementMode ?? "auto"}
+              value={fields.forcedEngagementMode}
+              onChange={(event) =>
+                setFields((current) => ({
+                  ...current,
+                  forcedEngagementMode: event.target.value
+                }))
+              }
             >
               <option value="auto">Auto</option>
               <option value="realtime">Realtime</option>
@@ -141,7 +189,13 @@ export function EventEditor({
               id={titleId}
               name="title"
               className="min-h-11 rounded border border-protect-sand bg-white px-3 text-protect-ink"
-              defaultValue={selectedEvent?.title ?? ""}
+              value={fields.title}
+              onChange={(event) =>
+                setFields((current) => ({
+                  ...current,
+                  title: event.target.value
+                }))
+              }
               required
             />
           </div>
@@ -153,7 +207,13 @@ export function EventEditor({
               id={startsAtId}
               name="startsAt"
               className="min-h-11 rounded border border-protect-sand bg-white px-3 text-protect-ink"
-              defaultValue={selectedEvent?.startsAt ?? ""}
+              value={fields.startsAt}
+              onChange={(event) =>
+                setFields((current) => ({
+                  ...current,
+                  startsAt: event.target.value
+                }))
+              }
             />
           </div>
         </div>
@@ -167,7 +227,13 @@ export function EventEditor({
               id={livestreamId}
               name="livestreamUrl"
               className="min-h-11 rounded border border-protect-sand bg-white px-3 text-protect-ink"
-              defaultValue={selectedEvent?.livestreamUrl ?? ""}
+              value={fields.livestreamUrl}
+              onChange={(event) =>
+                setFields((current) => ({
+                  ...current,
+                  livestreamUrl: event.target.value
+                }))
+              }
               type="url"
             />
           </div>
@@ -179,7 +245,13 @@ export function EventEditor({
               id={replayId}
               name="replayUrl"
               className="min-h-11 rounded border border-protect-sand bg-white px-3 text-protect-ink"
-              defaultValue={selectedEvent?.replayUrl ?? ""}
+              value={fields.replayUrl}
+              onChange={(event) =>
+                setFields((current) => ({
+                  ...current,
+                  replayUrl: event.target.value
+                }))
+              }
               type="url"
             />
           </div>
@@ -190,7 +262,13 @@ export function EventEditor({
             <input
               name="commentsEnabled"
               type="checkbox"
-              defaultChecked={selectedEvent?.commentsEnabled ?? true}
+              checked={fields.commentsEnabled}
+              onChange={(event) =>
+                setFields((current) => ({
+                  ...current,
+                  commentsEnabled: event.target.checked
+                }))
+              }
             />
             Comments enabled
           </label>
@@ -198,7 +276,13 @@ export function EventEditor({
             <input
               name="leaderboardEnabled"
               type="checkbox"
-              defaultChecked={selectedEvent?.leaderboardEnabled ?? true}
+              checked={fields.leaderboardEnabled}
+              onChange={(event) =>
+                setFields((current) => ({
+                  ...current,
+                  leaderboardEnabled: event.target.checked
+                }))
+              }
             />
             Leaderboard enabled
           </label>

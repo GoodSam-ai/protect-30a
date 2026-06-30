@@ -58,6 +58,20 @@ const loadedEvent = {
   districtId: "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb"
 };
 
+const secondLoadedEvent = {
+  id: "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+  title: "Second loaded event",
+  slug: "second-loaded-event",
+  status: "replay",
+  startsAt: "2026-07-10T20:30:00.000Z",
+  livestreamUrl: "https://example.com/second-live",
+  replayUrl: "https://example.com/second-replay",
+  commentsEnabled: false,
+  leaderboardEnabled: true,
+  forcedEngagementMode: "polling",
+  districtId: "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb"
+};
+
 const loadedDashboardData = {
   events: [loadedEvent],
   activeEvent: loadedEvent,
@@ -187,6 +201,43 @@ describe("admin dashboard route guard", () => {
 
     fireEvent.click(screen.getByRole("tab", { name: "Badges" }));
     expect(screen.getByLabelText("Podcast invite score")).toHaveValue(40);
+  });
+
+  it("updates event setup fields when selecting a different event", async () => {
+    dashboardMocks.getCurrentUserAndProfile.mockResolvedValue({
+      user: { id: moderatorProfile.id },
+      profile: moderatorProfile
+    });
+    dashboardMocks.getAdminDashboardData.mockResolvedValue({
+      ...loadedDashboardData,
+      events: [loadedEvent, secondLoadedEvent]
+    });
+
+    render(await AdminPage());
+
+    expect(screen.getByLabelText("Title")).toHaveValue(loadedEvent.title);
+
+    fireEvent.change(screen.getByLabelText("Event ID"), {
+      target: { value: secondLoadedEvent.id }
+    });
+
+    expect(screen.getByLabelText("Event ID")).toHaveValue(secondLoadedEvent.id);
+    expect(screen.getByLabelText("Title")).toHaveValue(secondLoadedEvent.title);
+    expect(screen.getByLabelText("Status")).toHaveValue(secondLoadedEvent.status);
+    expect(screen.getByLabelText("Starts at")).toHaveValue(
+      secondLoadedEvent.startsAt
+    );
+    expect(screen.getByLabelText("Livestream URL")).toHaveValue(
+      secondLoadedEvent.livestreamUrl
+    );
+    expect(screen.getByLabelText("Replay URL")).toHaveValue(
+      secondLoadedEvent.replayUrl
+    );
+    expect(screen.getByLabelText("Engagement mode")).toHaveValue(
+      secondLoadedEvent.forcedEngagementMode
+    );
+    expect(screen.getByLabelText("Comments enabled")).not.toBeChecked();
+    expect(screen.getByLabelText("Leaderboard enabled")).toBeChecked();
   });
 });
 

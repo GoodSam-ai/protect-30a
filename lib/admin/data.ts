@@ -164,7 +164,7 @@ async function getReportedCommentsQueueFromClient(
   const { data, error } = await admin
     .from("comments")
     .select(
-      "id, created_at, body, topic, moderation_status, is_hidden, is_featured, is_reported, external_source_author, profiles(display_name), comment_reports(reason, details, created_at)"
+      "id, created_at, body, topic, moderation_status, is_hidden, is_featured, is_reported, external_source_author, profiles(display_name), comment_reports(reason, details)"
     )
     .eq("is_reported", true)
     .order("created_at", { ascending: false })

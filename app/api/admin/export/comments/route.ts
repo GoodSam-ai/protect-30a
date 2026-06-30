@@ -23,7 +23,17 @@ function errorMessage(error: unknown, fallback: string) {
 }
 
 function neutralizeSpreadsheetFormula(text: string) {
-  return /^[=+\-@\t]/.test(text) ? `'${text}` : text;
+  const startsWithFormulaToken = /^[=+\-@\t\r\n]/.test(text);
+  const startsWithPaddedFormulaToken =
+    /^[ \f\v\u00a0]+[=+\-@\t\r\n]/.test(text);
+  const firstNonControl = text.replace(/^[\s\u0000-\u001f\u007f]+/, "");
+  const hasFormulaAfterLeadingControl = /^[=+\-@]/.test(firstNonControl);
+
+  return startsWithFormulaToken ||
+    startsWithPaddedFormulaToken ||
+    hasFormulaAfterLeadingControl
+    ? `'${text}`
+    : text;
 }
 
 function csvField(value: string | number | null | undefined) {

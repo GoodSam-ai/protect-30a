@@ -113,8 +113,7 @@ describe("admin API authorization", () => {
         commentWeight: 1,
         likeWeight: 3,
         shareWeight: 2,
-        featuredWeight: 10,
-        podcastInviteThreshold: 25
+        featuredWeight: 10
       })
     );
     const badgesResponse = await updateBadges(
@@ -671,6 +670,69 @@ describe("comment export endpoint", () => {
 
     expect(csv).toContain(
       '2026-06-30T12:00:00Z,\'@Attacker,\'+Topic,"\'=IMPORTXML(""https://example.com"")",0,site,visible'
+    );
+  });
+
+  it("neutralizes control and whitespace-prefixed spreadsheet formulas", async () => {
+    const commentsQuery = {
+      select: vi.fn(() => ({
+        eq: vi.fn(() => ({
+          order: vi.fn().mockResolvedValue({
+            data: [
+              {
+                id: "comment-1",
+                created_at: "2026-06-30T12:00:00Z",
+                body: "\r=WEBSERVICE(\"https://example.com\")",
+                topic: "  +Topic",
+                source: "site",
+                moderation_status: "visible",
+                external_source_author: "\n=Author",
+                profiles: null
+              },
+              {
+                id: "comment-2",
+                created_at: "2026-06-30T12:05:00Z",
+                body: "\n=HYPERLINK(\"https://example.com\")",
+                topic: " \t@Injected",
+                source: "site",
+                moderation_status: "visible",
+                external_source_author: " Safe Author",
+                profiles: null
+              }
+            ],
+            error: null
+          })
+        }))
+      }))
+    };
+    const likesQuery = {
+      select: vi.fn(() => ({
+        in: vi.fn().mockResolvedValue({
+          data: [{ comment_id: "comment-1" }],
+          error: null
+        })
+      }))
+    };
+    adminMocks.createSupabaseAdminClient.mockReturnValue({
+      from: vi.fn((table: string) => {
+        if (table === "comments") return commentsQuery;
+        if (table === "comment_likes") return likesQuery;
+        throw new Error(`Unexpected table ${table}`);
+      })
+    });
+
+    const response = await exportComments(
+      nextRequest(
+        `https://protect30a.test/api/admin/export/comments?eventId=${eventId}`
+      )
+    );
+    const csv = await response.text();
+
+    expect(csv).toContain(
+      '2026-06-30T12:00:00Z,\'=Author,\'  +Topic,"\'\r=WEBSERVICE(""https://example.com"")",1,site,visible'
+    );
+    expect(csv).toContain(
+      '2026-06-30T12:05:00Z,Safe Author,\' \t@Injected,"\'\n=HYPERLINK(""https://example.com"")",0,site,visible'
     );
   });
 });
