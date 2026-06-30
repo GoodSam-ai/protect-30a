@@ -162,4 +162,41 @@ describe("useLiveEngagement", () => {
     );
     expect(screen.getByTestId("comment-count")).toHaveTextContent("2");
   });
+
+  it("handles failed realtime change refreshes without crashing", async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(makeResponse(fixtureComments, fixtureMetrics))
+      .mockResolvedValueOnce(
+        new Response(JSON.stringify({ error: "refresh failed" }), {
+          headers: { "Content-Type": "application/json" },
+          status: 500
+        })
+      );
+    vi.stubGlobal("fetch", fetchMock);
+
+    render(<Harness />);
+
+    await act(async () => {
+      await Promise.resolve();
+    });
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+
+    act(() => {
+      changeHandlers[0]();
+    });
+
+    await act(async () => {
+      await Promise.resolve();
+      await Promise.resolve();
+    });
+
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+    expect(screen.getByTestId("comments")).toHaveTextContent(
+      fixtureComments.map((comment) => comment.body).join("|")
+    );
+    expect(screen.getByTestId("comment-count")).toHaveTextContent(
+      String(fixtureMetrics.totalComments)
+    );
+  });
 });

@@ -115,7 +115,7 @@ export function useLiveEngagement({
             filter: `event_id=eq.${eventId}`
           },
           () => {
-            void refreshLiveData();
+            void refreshLiveData().catch(() => undefined);
           }
         )
         .on(
@@ -126,7 +126,7 @@ export function useLiveEngagement({
             table: "comment_likes"
           },
           () => {
-            void refreshLiveData();
+            void refreshLiveData().catch(() => undefined);
           }
         )
         .subscribe((status) => {
@@ -134,7 +134,7 @@ export function useLiveEngagement({
 
           if (status === "SUBSCRIBED") {
             dispatchMode({ type: "realtime_connected" });
-            void refreshLiveData();
+            void refreshLiveData().catch(() => undefined);
           }
 
           if (
