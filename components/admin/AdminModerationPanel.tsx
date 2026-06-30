@@ -3,6 +3,7 @@
 import { BadgeSettings } from "@/components/admin/BadgeSettings";
 import { EngagementExport } from "@/components/admin/EngagementExport";
 import { EventEditor } from "@/components/admin/EventEditor";
+import { FeaturedCommentsPanel } from "@/components/admin/FeaturedCommentsPanel";
 import { ManualFacebookImport } from "@/components/admin/ManualFacebookImport";
 import { ReportedCommentsQueue } from "@/components/admin/ReportedCommentsQueue";
 import { ScoringSettings } from "@/components/admin/ScoringSettings";
@@ -103,37 +104,5 @@ export function AdminModerationPanel({ profile }: { profile: PublicProfile }) {
         </section>
       </div>
     </main>
-  );
-}
-
-function FeaturedCommentsPanel() {
-  return (
-    <div>
-      <div className="flex items-center gap-2">
-        <Star size={19} className="text-protect-terra" aria-hidden="true" />
-        <h2 className="font-serif text-xl font-semibold text-protect-teal">
-          Featured comments
-        </h2>
-      </div>
-      <div className="mt-4 grid gap-3 sm:grid-cols-3">
-        {[
-          ["Featured status", "Visible comments can be highlighted for leaderboards."],
-          ["Score impact", "+10 points per featured comment."],
-          ["Export field", "CSV exports include moderation status and source."]
-        ].map(([label, value]) => (
-          <div
-            key={label}
-            className="rounded border border-protect-sand bg-protect-cream p-3"
-          >
-            <p className="text-xs font-semibold uppercase tracking-wide text-protect-ink/60">
-              {label}
-            </p>
-            <p className="mt-1 text-sm font-semibold text-protect-teal">
-              {value}
-            </p>
-          </div>
-        ))}
-      </div>
-    </div>
   );
 }

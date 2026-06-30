@@ -78,21 +78,24 @@ describe("admin dashboard route guard", () => {
 });
 
 describe("AdminModerationPanel", () => {
-  it("includes live status regions for route-backed admin forms", () => {
+  it.each([
+    ["Events", "Event setup", "/api/admin/events"],
+    ["Reported comments", "Moderate comment", "/api/admin/comments/moderate"],
+    ["Featured comments", "Feature comment", "/api/admin/comments/moderate"],
+    ["Manual Facebook import", "Manual Facebook import", "/api/admin/facebook-import"],
+    ["Exports", "Export comments", "/api/admin/export/comments"],
+    ["Scoring", "Scoring settings", "/api/admin/scoring"],
+    ["Badges", "Badge settings", "/api/admin/badges"]
+  ])(
+    "renders a route-backed form and polite status region for %s",
+    (tabName, formName, action) => {
     render(<AdminModerationPanel profile={moderatorProfile} />);
 
-    fireEvent.click(
-      screen.getByRole("tab", { name: "Manual Facebook import" })
-    );
-    expect(
-      screen.getByRole("form", { name: "Manual Facebook import" })
-    ).toBeInTheDocument();
-    expect(screen.getByRole("status")).toHaveAttribute("aria-live", "polite");
+    fireEvent.click(screen.getByRole("tab", { name: tabName }));
 
-    fireEvent.click(screen.getByRole("tab", { name: "Exports" }));
-    expect(
-      screen.getByRole("form", { name: "Export comments" })
-    ).toBeInTheDocument();
+    const form = screen.getByRole("form", { name: formName });
+    expect(form).toHaveAttribute("action", action);
     expect(screen.getByRole("status")).toHaveAttribute("aria-live", "polite");
-  });
+    }
+  );
 });

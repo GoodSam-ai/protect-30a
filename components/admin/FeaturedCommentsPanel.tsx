@@ -1,12 +1,12 @@
 "use client";
 
-import { Flag, ShieldCheck } from "lucide-react";
+import { Star } from "lucide-react";
 import { useId, useState } from "react";
 
-export function ReportedCommentsQueue() {
+export function FeaturedCommentsPanel() {
   const commentIdId = useId();
-  const statusId = useId();
-  const [status, setStatus] = useState("Ready to moderate a reported comment.");
+  const featuredId = useId();
+  const [status, setStatus] = useState("Ready to update featured status.");
   const [pending, setPending] = useState(false);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -15,7 +15,7 @@ export function ReportedCommentsQueue() {
 
     const form = new FormData(event.currentTarget);
     setPending(true);
-    setStatus("Updating comment moderation...");
+    setStatus("Updating featured comment...");
 
     try {
       const response = await fetch("/api/admin/comments/moderate", {
@@ -23,7 +23,7 @@ export function ReportedCommentsQueue() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           commentId: form.get("commentId"),
-          moderationStatus: form.get("moderationStatus")
+          isFeatured: form.get("isFeatured") === "true"
         })
       });
       const result = (await response.json().catch(() => null)) as {
@@ -31,13 +31,13 @@ export function ReportedCommentsQueue() {
       } | null;
 
       if (!response.ok) {
-        setStatus(result?.error || "Unable to update comment moderation.");
+        setStatus(result?.error || "Unable to update featured comment.");
         return;
       }
 
-      setStatus("Comment moderation updated.");
+      setStatus("Featured comment updated.");
     } catch {
-      setStatus("Unable to update comment moderation.");
+      setStatus("Unable to update featured comment.");
     } finally {
       setPending(false);
     }
@@ -46,14 +46,14 @@ export function ReportedCommentsQueue() {
   return (
     <div>
       <div className="flex items-center gap-2">
-        <Flag size={19} className="text-protect-terra" aria-hidden="true" />
+        <Star size={19} className="text-protect-terra" aria-hidden="true" />
         <h2 className="font-serif text-xl font-semibold text-protect-teal">
-          Reported comments
+          Featured comments
         </h2>
       </div>
 
       <form
-        aria-label="Moderate comment"
+        aria-label="Feature comment"
         action="/api/admin/comments/moderate"
         method="post"
         className="mt-4 grid gap-3 rounded border border-protect-sand bg-protect-cream p-4"
@@ -73,19 +73,17 @@ export function ReportedCommentsQueue() {
             />
           </div>
           <div className="grid gap-2">
-            <label className="text-sm font-semibold text-protect-teal" htmlFor={statusId}>
-              Status
+            <label className="text-sm font-semibold text-protect-teal" htmlFor={featuredId}>
+              Featured
             </label>
             <select
-              id={statusId}
-              name="moderationStatus"
+              id={featuredId}
+              name="isFeatured"
               className="min-h-11 rounded border border-protect-sand bg-white px-3 text-protect-ink"
-              defaultValue="hidden"
+              defaultValue="true"
             >
-              <option value="visible">Visible</option>
-              <option value="pending">Pending</option>
-              <option value="hidden">Hidden</option>
-              <option value="removed">Removed</option>
+              <option value="true">Feature</option>
+              <option value="false">Unfeature</option>
             </select>
           </div>
         </div>
@@ -99,18 +97,10 @@ export function ReportedCommentsQueue() {
           className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded bg-protect-teal px-4 font-semibold text-white disabled:cursor-not-allowed disabled:bg-protect-teal/45 sm:w-fit"
           disabled={pending}
         >
-          <ShieldCheck size={18} aria-hidden="true" />
-          Apply moderation
+          <Star size={18} aria-hidden="true" />
+          Apply featured state
         </button>
       </form>
-
-      <div className="mt-4 flex gap-2 rounded border border-protect-sand bg-white p-3 text-sm text-protect-ink/75">
-        <ShieldCheck size={18} className="mt-0.5 shrink-0 text-protect-terra" aria-hidden="true" />
-        <p>
-          Report handling is tracked through comment reports, moderation status,
-          and the audit log.
-        </p>
-      </div>
     </div>
   );
 }

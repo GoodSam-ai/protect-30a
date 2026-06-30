@@ -1,5 +1,9 @@
+import { POST as updateBadges } from "@/app/api/admin/badges/route";
+import { POST as moderateComment } from "@/app/api/admin/comments/moderate/route";
+import { PATCH as updateEvent } from "@/app/api/admin/events/route";
 import { GET as exportComments } from "@/app/api/admin/export/comments/route";
 import { POST as importFacebookComment } from "@/app/api/admin/facebook-import/route";
+import { POST as updateScoring } from "@/app/api/admin/scoring/route";
 import type { NextRequest } from "next/server";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -56,6 +60,13 @@ function requestJson(body: unknown) {
   }) as unknown as NextRequest;
 }
 
+function requestJsonTo(url: string, body: unknown, method = "POST") {
+  return new Request(url, {
+    method,
+    body: JSON.stringify(body)
+  }) as unknown as NextRequest;
+}
+
 function nextRequest(url: string) {
   return new Request(url) as unknown as NextRequest;
 }
@@ -70,7 +81,7 @@ describe("admin API authorization", () => {
     ["missing profile", { user, profile: null }],
     ["restricted moderator", { user, profile: moderatorProfile({ is_restricted: true }) }],
     ["ordinary user", { user, profile: moderatorProfile({ role: "user" }) }]
-  ])("blocks %s from manual imports and exports", async (_label, session) => {
+  ])("blocks %s from all admin mutations and exports", async (_label, session) => {
     adminMocks.getCurrentUserAndProfile.mockResolvedValue(session);
 
     const importResponse = await importFacebookComment(
@@ -84,10 +95,262 @@ describe("admin API authorization", () => {
         `https://protect30a.test/api/admin/export/comments?eventId=${eventId}`
       )
     );
+    const eventResponse = await updateEvent(
+      requestJsonTo(
+        "https://protect30a.test/api/admin/events",
+        { eventId, title: "Updated event", status: "live" },
+        "PATCH"
+      )
+    );
+    const moderateResponse = await moderateComment(
+      requestJsonTo("https://protect30a.test/api/admin/comments/moderate", {
+        commentId,
+        moderationStatus: "hidden"
+      })
+    );
+    const scoringResponse = await updateScoring(
+      requestJsonTo("https://protect30a.test/api/admin/scoring", {
+        commentWeight: 1,
+        likeWeight: 3,
+        shareWeight: 2,
+        featuredWeight: 10,
+        podcastInviteThreshold: 25
+      })
+    );
+    const badgesResponse = await updateBadges(
+      requestJsonTo("https://protect30a.test/api/admin/badges", {
+        firstVoiceComments: 1,
+        conversationStarterComments: 5,
+        communitySignalScore: 25,
+        podcastInviteScore: 25
+      })
+    );
 
     expect(importResponse.status).toBe(403);
     expect(exportResponse.status).toBe(403);
+    expect(eventResponse.status).toBe(403);
+    expect(moderateResponse.status).toBe(403);
+    expect(scoringResponse.status).toBe(403);
+    expect(badgesResponse.status).toBe(403);
     expect(adminMocks.createSupabaseAdminClient).not.toHaveBeenCalled();
+  });
+});
+
+describe("event setup endpoint", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    signInAsModerator();
+  });
+
+  it("updates podcast_events and writes audit metadata", async () => {
+    const eventUpdate = vi.fn(() => ({
+      eq: vi.fn(() => ({
+        select: vi.fn(() => ({
+          single: vi.fn().mockResolvedValue({
+            data: { id: eventId, title: "Updated live event" },
+            error: null
+          })
+        }))
+      }))
+    }));
+    const auditInsert = vi.fn().mockResolvedValue({ error: null });
+    adminMocks.createSupabaseAdminClient.mockReturnValue({
+      from: vi.fn((table: string) => {
+        if (table === "podcast_events") return { update: eventUpdate };
+        if (table === "audit_log") return { insert: auditInsert };
+        throw new Error(`Unexpected table ${table}`);
+      })
+    });
+
+    const response = await updateEvent(
+      requestJsonTo(
+        "https://protect30a.test/api/admin/events",
+        {
+          eventId,
+          title: "Updated live event",
+          status: "live",
+          startsAt: "2026-07-03T18:00:00-05:00",
+          livestreamUrl: "https://example.com/live",
+          replayUrl: "",
+          commentsEnabled: true,
+          leaderboardEnabled: false,
+          forcedEngagementMode: "realtime"
+        },
+        "PATCH"
+      )
+    );
+
+    await expect(response.json()).resolves.toEqual({
+      event: { id: eventId, title: "Updated live event" }
+    });
+    expect(response.status).toBe(200);
+    expect(eventUpdate).toHaveBeenCalledWith({
+      title: "Updated live event",
+      status: "live",
+      starts_at: "2026-07-03T23:00:00.000Z",
+      livestream_url: "https://example.com/live",
+      replay_url: null,
+      comments_enabled: true,
+      leaderboard_enabled: false,
+      forced_engagement_mode: "realtime"
+    });
+    expect(auditInsert).toHaveBeenCalledWith({
+      actor_user_id: user.id,
+      action: "admin_event_update",
+      entity_type: "podcast_event",
+      entity_id: eventId,
+      metadata: {
+        title: "Updated live event",
+        status: "live",
+        starts_at: "2026-07-03T23:00:00.000Z",
+        livestream_url: "https://example.com/live",
+        replay_url: null,
+        comments_enabled: true,
+        leaderboard_enabled: false,
+        forced_engagement_mode: "realtime"
+      }
+    });
+  });
+});
+
+describe("comment moderation endpoint", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    signInAsModerator();
+  });
+
+  it("updates moderation and featured state, then writes audit metadata", async () => {
+    const commentUpdate = vi.fn(() => ({
+      eq: vi.fn(() => ({
+        select: vi.fn(() => ({
+          single: vi.fn().mockResolvedValue({
+            data: { id: commentId },
+            error: null
+          })
+        }))
+      }))
+    }));
+    const auditInsert = vi.fn().mockResolvedValue({ error: null });
+    adminMocks.createSupabaseAdminClient.mockReturnValue({
+      from: vi.fn((table: string) => {
+        if (table === "comments") return { update: commentUpdate };
+        if (table === "audit_log") return { insert: auditInsert };
+        throw new Error(`Unexpected table ${table}`);
+      })
+    });
+
+    const response = await moderateComment(
+      requestJsonTo("https://protect30a.test/api/admin/comments/moderate", {
+        commentId,
+        moderationStatus: "hidden",
+        isFeatured: true
+      })
+    );
+
+    await expect(response.json()).resolves.toEqual({
+      comment: { id: commentId }
+    });
+    expect(response.status).toBe(200);
+    expect(commentUpdate).toHaveBeenCalledWith({
+      moderation_status: "hidden",
+      is_hidden: true,
+      is_featured: true
+    });
+    expect(auditInsert).toHaveBeenCalledWith({
+      actor_user_id: user.id,
+      action: "admin_comment_moderation",
+      entity_type: "comment",
+      entity_id: commentId,
+      metadata: {
+        moderation_status: "hidden",
+        is_hidden: true,
+        is_featured: true
+      }
+    });
+  });
+});
+
+describe("scoring settings endpoint", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    signInAsModerator();
+  });
+
+  it("writes scoring settings to the audit log", async () => {
+    const auditInsert = vi.fn().mockResolvedValue({ error: null });
+    adminMocks.createSupabaseAdminClient.mockReturnValue({
+      from: vi.fn((table: string) => {
+        expect(table).toBe("audit_log");
+        return { insert: auditInsert };
+      })
+    });
+
+    const response = await updateScoring(
+      requestJsonTo("https://protect30a.test/api/admin/scoring", {
+        commentWeight: 1,
+        likeWeight: 3,
+        shareWeight: 2,
+        featuredWeight: 10,
+        podcastInviteThreshold: 25
+      })
+    );
+
+    await expect(response.json()).resolves.toEqual({ ok: true });
+    expect(response.status).toBe(200);
+    expect(auditInsert).toHaveBeenCalledWith({
+      actor_user_id: user.id,
+      action: "admin_scoring_settings_update",
+      entity_type: "scoring_settings",
+      entity_id: null,
+      metadata: {
+        comment_weight: 1,
+        like_weight: 3,
+        share_weight: 2,
+        featured_weight: 10,
+        podcast_invite_threshold: 25
+      }
+    });
+  });
+});
+
+describe("badge settings endpoint", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    signInAsModerator();
+  });
+
+  it("writes badge settings to the audit log", async () => {
+    const auditInsert = vi.fn().mockResolvedValue({ error: null });
+    adminMocks.createSupabaseAdminClient.mockReturnValue({
+      from: vi.fn((table: string) => {
+        expect(table).toBe("audit_log");
+        return { insert: auditInsert };
+      })
+    });
+
+    const response = await updateBadges(
+      requestJsonTo("https://protect30a.test/api/admin/badges", {
+        firstVoiceComments: 1,
+        conversationStarterComments: 5,
+        communitySignalScore: 25,
+        podcastInviteScore: 25
+      })
+    );
+
+    await expect(response.json()).resolves.toEqual({ ok: true });
+    expect(response.status).toBe(200);
+    expect(auditInsert).toHaveBeenCalledWith({
+      actor_user_id: user.id,
+      action: "admin_badge_settings_update",
+      entity_type: "badge_settings",
+      entity_id: null,
+      metadata: {
+        first_voice_comments: 1,
+        conversation_starter_comments: 5,
+        community_signal_score: 25,
+        podcast_invite_score: 25
+      }
+    });
   });
 });
 
