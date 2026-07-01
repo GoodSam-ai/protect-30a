@@ -14,6 +14,14 @@ async function readSitemap() {
 }
 
 describe("legacy homepage content", () => {
+  it("keeps the Bing Webmaster Tools verification tag on the homepage", async () => {
+    const html = await readHomepage();
+
+    expect(html).toContain(
+      '<meta name="msvalidate.01" content="F27C16E2366BC46D030546DA75EFB12F">'
+    );
+  });
+
   it("invites locals, guests, and local businesses into the stormwater plan", async () => {
     const html = await readHomepage();
     const expectedCopy = [
