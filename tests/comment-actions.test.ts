@@ -1,0 +1,654 @@
+import {
+  commentInputSchema,
+  isRapidDuplicateComment,
+  reportInputSchema,
+  shareInputSchema
+} from "@/lib/live/validation";
+import {
+  createComment,
+  reportComment,
+  toggleCommentLike,
+  trackShare
+} from "@/lib/live/actions";
+import { DELETE as unlikeComment } from "@/app/api/comments/[commentId]/like/route";
+import { POST as createCommentRoute } from "@/app/api/comments/route";
+import { POST as likeComment } from "@/app/api/comments/[commentId]/like/route";
+import { POST as reportCommentRoute } from "@/app/api/comments/[commentId]/report/route";
+import { POST as trackShareRoute } from "@/app/api/shares/route";
+import type { NextRequest } from "next/server";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
+const actionMocks = vi.hoisted(() => ({
+  createSupabaseAdminClient: vi.fn(),
+  createSupabaseServerClient: vi.fn(),
+  getCurrentUserAndProfile: vi.fn()
+}));
+
+vi.mock("server-only", () => ({}));
+
+vi.mock("@/lib/auth/session", () => ({
+  getCurrentUserAndProfile: actionMocks.getCurrentUserAndProfile
+}));
+
+vi.mock("@/lib/supabase/server", () => ({
+  createSupabaseServerClient: actionMocks.createSupabaseServerClient
+}));
+
+vi.mock("@/lib/supabase/admin", () => ({
+  createSupabaseAdminClient: actionMocks.createSupabaseAdminClient
+}));
+
+const user = { id: "33333333-3333-4333-8333-333333333333" };
+const eventId = "11111111-1111-4111-8111-111111111111";
+const districtId = "22222222-2222-4222-8222-222222222222";
+const commentId = "44444444-4444-4444-8444-444444444444";
+
+function signIn() {
+  actionMocks.getCurrentUserAndProfile.mockResolvedValue({
+    user,
+    profile: {
+      id: user.id,
+      display_name: "Resident",
+      avatar_url: null,
+      role: "user",
+      primary_district_id: districtId,
+      is_restricted: false
+    }
+  });
+}
+
+function signOut() {
+  actionMocks.getCurrentUserAndProfile.mockResolvedValue({
+    user: null,
+    profile: null
+  });
+}
+
+function restrictProfile() {
+  actionMocks.getCurrentUserAndProfile.mockResolvedValue({
+    user,
+    profile: {
+      id: user.id,
+      display_name: "Resident",
+      avatar_url: null,
+      role: "user",
+      primary_district_id: districtId,
+      is_restricted: true
+    }
+  });
+}
+
+function removeProfile() {
+  actionMocks.getCurrentUserAndProfile.mockResolvedValue({
+    user,
+    profile: null
+  });
+}
+
+function requestJson(body: unknown) {
+  return new Request("https://protect30a.test/api", {
+    method: "POST",
+    body: JSON.stringify(body)
+  }) as unknown as NextRequest;
+}
+
+function nextRequest() {
+  return new Request("https://protect30a.test/api") as unknown as NextRequest;
+}
+
+function insertReturningSingle(data: unknown) {
+  return {
+    insert: vi.fn(() => ({
+      select: vi.fn(() => ({
+        single: vi.fn().mockResolvedValue({ data, error: null })
+      }))
+    }))
+  };
+}
+
+function noRecentDuplicateCommentTable() {
+  return {
+    select: vi.fn(() => ({
+      eq: vi.fn(() => ({
+        eq: vi.fn(() => ({
+          order: vi.fn(() => ({
+            limit: vi.fn(() => ({
+              maybeSingle: vi.fn().mockResolvedValue({
+                data: null,
+                error: { code: "PGRST116" }
+              })
+            }))
+          }))
+        }))
+      }))
+    }))
+  };
+}
+
+describe("comment validation", () => {
+  it("accepts valid comments with supported topics", () => {
+    expect(
+      commentInputSchema.parse({
+        eventId: "11111111-1111-4111-8111-111111111111",
+        districtId: "22222222-2222-4222-8222-222222222222",
+        body: "Stormwater drains near our street need attention.",
+        topic: "Stormwater"
+      })
+    ).toMatchObject({ topic: "Stormwater" });
+  });
+
+  it("rejects comments shorter than five characters", () => {
+    expect(() =>
+      commentInputSchema.parse({
+        eventId: "11111111-1111-4111-8111-111111111111",
+        body: "hey"
+      })
+    ).toThrow();
+  });
+
+  it("detects duplicate rapid posting", () => {
+    expect(
+      isRapidDuplicateComment({
+        previousBody: "Same concern",
+        nextBody: " same concern ",
+        previousCreatedAt: new Date("2026-06-26T12:00:00Z"),
+        now: new Date("2026-06-26T12:00:20Z")
+      })
+    ).toBe(true);
+  });
+
+  it("does not treat matching comments outside sixty seconds as rapid duplicates", () => {
+    expect(
+      isRapidDuplicateComment({
+        previousBody: "Same concern",
+        nextBody: " same concern ",
+        previousCreatedAt: new Date("2026-06-26T12:00:00Z"),
+        now: new Date("2026-06-26T12:01:01Z")
+      })
+    ).toBe(false);
+  });
+
+  it("does not treat future previous timestamps as rapid duplicates", () => {
+    expect(
+      isRapidDuplicateComment({
+        previousBody: "Same concern",
+        nextBody: " same concern ",
+        previousCreatedAt: new Date("2026-06-26T12:01:00Z"),
+        now: new Date("2026-06-26T12:00:20Z")
+      })
+    ).toBe(false);
+  });
+
+  it("validates reports", () => {
+    expect(
+      reportInputSchema.parse({
+        reason: "spam",
+        details: "Repeated unrelated link."
+      })
+    ).toEqual({ reason: "spam", details: "Repeated unrelated link." });
+  });
+
+  it("normalizes report reasons before validation", () => {
+    expect(
+      reportInputSchema.parse({
+        reason: " Spam ",
+        details: "Repeated unrelated link."
+      })
+    ).toEqual({ reason: "spam", details: "Repeated unrelated link." });
+  });
+
+  it("rejects unsupported report reasons", () => {
+    expect(() =>
+      reportInputSchema.parse({
+        reason: "copyright",
+        details: "This reason is not in the database constraint."
+      })
+    ).toThrow();
+  });
+
+  it("accepts report details at the database length boundary", () => {
+    expect(
+      reportInputSchema.parse({
+        reason: "other",
+        details: "x".repeat(1000)
+      }).details
+    ).toHaveLength(1000);
+  });
+
+  it("rejects report details beyond the database length boundary", () => {
+    expect(() =>
+      reportInputSchema.parse({
+        reason: "other",
+        details: "x".repeat(1001)
+      })
+    ).toThrow();
+  });
+
+  it("normalizes share platforms before validation", () => {
+    expect(
+      shareInputSchema.parse({
+        eventId: "11111111-1111-4111-8111-111111111111",
+        platform: " TikTok "
+      })
+    ).toEqual({
+      eventId: "11111111-1111-4111-8111-111111111111",
+      platform: "tiktok"
+    });
+  });
+
+  it("rejects unsupported share platforms", () => {
+    expect(() =>
+      shareInputSchema.parse({
+        eventId: "11111111-1111-4111-8111-111111111111",
+        platform: "linkedin"
+      })
+    ).toThrow();
+  });
+});
+
+describe("live engagement mutation actions", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.useRealTimers();
+    signIn();
+  });
+
+  it("rejects anonymous mutation attempts", async () => {
+    signOut();
+
+    await expect(
+      createComment({ eventId, body: "Please discuss stormwater." })
+    ).rejects.toThrow("Sign in required to comment.");
+    await expect(toggleCommentLike(commentId, true)).rejects.toThrow(
+      "Sign in required to like comments."
+    );
+    await expect(
+      reportComment(commentId, { reason: "spam" })
+    ).rejects.toThrow("Sign in required to report comments.");
+    await expect(trackShare({ eventId, platform: "instagram" })).rejects.toThrow(
+      "Sign in required to track shares."
+    );
+  });
+
+  it("rejects restricted profile mutation attempts before Supabase writes", async () => {
+    restrictProfile();
+
+    await expect(
+      createComment({ eventId, body: "Please discuss stormwater." })
+    ).rejects.toThrow("Your profile cannot post comments right now.");
+    await expect(toggleCommentLike(commentId, true)).rejects.toThrow(
+      "Your profile cannot like comments right now."
+    );
+    await expect(
+      reportComment(commentId, { reason: "spam" })
+    ).rejects.toThrow("Your profile cannot report comments right now.");
+    await expect(trackShare({ eventId, platform: "instagram" })).rejects.toThrow(
+      "Your profile cannot track shares right now."
+    );
+    expect(actionMocks.createSupabaseServerClient).not.toHaveBeenCalled();
+    expect(actionMocks.createSupabaseAdminClient).not.toHaveBeenCalled();
+  });
+
+  it("rejects missing profile mutation attempts before Supabase writes", async () => {
+    removeProfile();
+
+    await expect(
+      createComment({ eventId, body: "Please discuss stormwater." })
+    ).rejects.toThrow("Your profile cannot post comments right now.");
+    await expect(toggleCommentLike(commentId, true)).rejects.toThrow(
+      "Your profile cannot like comments right now."
+    );
+    await expect(
+      reportComment(commentId, { reason: "spam" })
+    ).rejects.toThrow("Your profile cannot report comments right now.");
+    await expect(trackShare({ eventId, platform: "instagram" })).rejects.toThrow(
+      "Your profile cannot track shares right now."
+    );
+    expect(actionMocks.createSupabaseServerClient).not.toHaveBeenCalled();
+    expect(actionMocks.createSupabaseAdminClient).not.toHaveBeenCalled();
+  });
+
+  it("validates and inserts a comment for the current user", async () => {
+    const insertedComment = {
+      id: commentId,
+      event_id: eventId,
+      district_id: districtId,
+      parent_comment_id: null,
+      body: "Please discuss stormwater planning.",
+      topic: "Stormwater",
+      is_featured: false,
+      created_at: "2026-06-26T12:00:00Z",
+      user_id: user.id,
+      source: "site"
+    };
+    const commentsTable = insertReturningSingle(insertedComment);
+    actionMocks.createSupabaseServerClient.mockResolvedValue({
+      from: vi
+        .fn()
+        .mockReturnValueOnce(noRecentDuplicateCommentTable())
+        .mockReturnValueOnce(commentsTable)
+    });
+
+    await expect(
+      createComment({
+        eventId,
+        districtId,
+        body: "  Please discuss stormwater planning.  ",
+        topic: "Stormwater"
+      })
+    ).resolves.toEqual({
+      id: commentId,
+      event_id: eventId,
+      district_id: districtId,
+      parent_comment_id: null,
+      body: "Please discuss stormwater planning.",
+      topic: "Stormwater",
+      is_featured: false,
+      created_at: "2026-06-26T12:00:00Z",
+      user_id: user.id,
+      like_count: 0,
+      liked_by_me: false,
+      author_display_name: "Resident",
+      author_avatar_url: null
+    });
+
+    expect(commentsTable.insert).toHaveBeenCalledWith({
+      event_id: eventId,
+      district_id: districtId,
+      parent_comment_id: null,
+      body: "Please discuss stormwater planning.",
+      topic: "Stormwater",
+      source: "site",
+      user_id: user.id
+    });
+  });
+
+  it("rejects rapid duplicate comments before inserting", async () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date("2026-06-26T12:00:20Z"));
+    const maybeSingle = vi.fn().mockResolvedValue({
+      data: {
+        body: "Please discuss stormwater planning.",
+        created_at: "2026-06-26T12:00:00Z"
+      },
+      error: null
+    });
+    const duplicateLimit = vi.fn(() => ({ maybeSingle }));
+    const duplicateOrder = vi.fn(() => ({ limit: duplicateLimit }));
+    const duplicateEqEvent = vi.fn(() => ({ order: duplicateOrder }));
+    const duplicateEqUser = vi.fn(() => ({ eq: duplicateEqEvent }));
+    const duplicateSelect = vi.fn(() => ({ eq: duplicateEqUser }));
+    const insert = vi.fn();
+    actionMocks.createSupabaseServerClient.mockResolvedValue({
+      from: vi.fn((table: string) => {
+        expect(table).toBe("comments");
+        return { select: duplicateSelect, insert };
+      })
+    });
+
+    await expect(
+      createComment({
+        eventId,
+        districtId,
+        body: "  Please discuss stormwater planning.  ",
+        topic: "Stormwater"
+      })
+    ).rejects.toThrow("Please wait before posting the same comment again.");
+    expect(insert).not.toHaveBeenCalled();
+  });
+
+  it("upserts and deletes comment likes for the current user", async () => {
+    const upsert = vi.fn().mockResolvedValue({ error: null });
+    const secondEq = vi.fn().mockResolvedValue({ error: null });
+    const firstEq = vi.fn(() => ({ eq: secondEq }));
+    const deleteLike = vi.fn(() => ({ eq: firstEq }));
+    actionMocks.createSupabaseServerClient.mockResolvedValue({
+      from: vi.fn(() => ({
+        upsert,
+        delete: deleteLike
+      }))
+    });
+
+    await expect(toggleCommentLike(commentId, true)).resolves.toEqual({
+      liked: true
+    });
+    expect(upsert).toHaveBeenCalledWith(
+      {
+        comment_id: commentId,
+        user_id: user.id
+      },
+      {
+        onConflict: "comment_id,user_id",
+        ignoreDuplicates: true
+      }
+    );
+
+    await expect(toggleCommentLike(commentId, false)).resolves.toEqual({
+      liked: false
+    });
+    expect(deleteLike).toHaveBeenCalledOnce();
+    expect(firstEq).toHaveBeenCalledWith("comment_id", commentId);
+    expect(secondEq).toHaveBeenCalledWith("user_id", user.id);
+  });
+
+  it("upserts a report and marks the comment reported through the admin client", async () => {
+    const upsert = vi.fn().mockResolvedValue({ error: null });
+    const secondEq = vi.fn().mockResolvedValue({ error: null });
+    const update = vi.fn(() => ({ eq: secondEq }));
+    actionMocks.createSupabaseServerClient.mockResolvedValue({
+      from: vi.fn((table: string) => {
+        expect(table).toBe("comment_reports");
+        return { upsert };
+      })
+    });
+    actionMocks.createSupabaseAdminClient.mockReturnValue({
+      from: vi.fn((table: string) => {
+        expect(table).toBe("comments");
+        return { update };
+      })
+    });
+
+    await expect(
+      reportComment(commentId, {
+        reason: " spam ",
+        details: "Repeated unrelated link."
+      })
+    ).resolves.toEqual({ ok: true });
+
+    expect(upsert).toHaveBeenCalledWith(
+      {
+        comment_id: commentId,
+        reporter_user_id: user.id,
+        reason: "spam",
+        details: "Repeated unrelated link."
+      },
+      {
+        onConflict: "comment_id,reporter_user_id",
+        ignoreDuplicates: true
+      }
+    );
+    expect(update).toHaveBeenCalledWith({ is_reported: true });
+    expect(secondEq).toHaveBeenCalledWith("id", commentId);
+  });
+
+  it("still marks duplicate reports as reported", async () => {
+    const upsert = vi.fn().mockResolvedValue({ error: null });
+    const secondEq = vi.fn().mockResolvedValue({ error: null });
+    const update = vi.fn(() => ({ eq: secondEq }));
+    actionMocks.createSupabaseServerClient.mockResolvedValue({
+      from: vi.fn((table: string) => {
+        expect(table).toBe("comment_reports");
+        return { upsert };
+      })
+    });
+    actionMocks.createSupabaseAdminClient.mockReturnValue({
+      from: vi.fn((table: string) => {
+        expect(table).toBe("comments");
+        return { update };
+      })
+    });
+
+    await expect(
+      reportComment(commentId, {
+        reason: "other"
+      })
+    ).resolves.toEqual({ ok: true });
+
+    expect(upsert).toHaveBeenCalledWith(
+      {
+        comment_id: commentId,
+        reporter_user_id: user.id,
+        reason: "other",
+        details: null
+      },
+      {
+        onConflict: "comment_id,reporter_user_id",
+        ignoreDuplicates: true
+      }
+    );
+    expect(update).toHaveBeenCalledWith({ is_reported: true });
+    expect(secondEq).toHaveBeenCalledWith("id", commentId);
+  });
+
+  it("tracks supported share platforms for the current user", async () => {
+    const upsert = vi.fn().mockResolvedValue({ error: null });
+    actionMocks.createSupabaseServerClient.mockResolvedValue({
+      from: vi.fn((table: string) => {
+        expect(table).toBe("event_shares");
+        return { upsert };
+      })
+    });
+
+    await expect(
+      trackShare({ eventId, platform: " Instagram " })
+    ).resolves.toEqual({ ok: true });
+    await expect(trackShare({ eventId, platform: "TikTok" })).resolves.toEqual({
+      ok: true
+    });
+
+    expect(upsert).toHaveBeenNthCalledWith(
+      1,
+      {
+        event_id: eventId,
+        user_id: user.id,
+        platform: "instagram"
+      },
+      {
+        onConflict: "event_id,user_id,platform",
+        ignoreDuplicates: true
+      }
+    );
+    expect(upsert).toHaveBeenNthCalledWith(
+      2,
+      {
+        event_id: eventId,
+        user_id: user.id,
+        platform: "tiktok"
+      },
+      {
+        onConflict: "event_id,user_id,platform",
+        ignoreDuplicates: true
+      }
+    );
+  });
+});
+
+describe("live engagement route handlers", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    signIn();
+  });
+
+  it("returns JSON success shapes from mutation routes", async () => {
+    const commentsTable = insertReturningSingle({
+      id: commentId,
+      event_id: eventId,
+      district_id: null,
+      parent_comment_id: null,
+      body: "Route comment",
+      topic: null,
+      is_featured: false,
+      created_at: "2026-06-26T12:00:00Z",
+      user_id: user.id
+    });
+    const insert = vi.fn().mockResolvedValue({ error: null });
+    const upsert = vi.fn().mockResolvedValue({ error: null });
+    const secondEq = vi.fn().mockResolvedValue({ error: null });
+    const firstEq = vi.fn(() => ({ eq: secondEq }));
+    const deleteLike = vi.fn(() => ({ eq: firstEq }));
+    let commentsCalls = 0;
+    actionMocks.createSupabaseServerClient.mockResolvedValue({
+      from: vi.fn((table: string) => {
+        if (table === "comments") {
+          commentsCalls += 1;
+          return commentsCalls === 1
+            ? noRecentDuplicateCommentTable()
+            : commentsTable;
+        }
+        return {
+          insert,
+          upsert,
+          delete: deleteLike
+        };
+      })
+    });
+    actionMocks.createSupabaseAdminClient.mockReturnValue({
+      from: vi.fn(() => ({
+        update: vi.fn(() => ({ eq: vi.fn().mockResolvedValue({ error: null }) }))
+      }))
+    });
+
+    await expect(
+      (await createCommentRoute(requestJson({ eventId, body: "Route comment" }))).json()
+    ).resolves.toEqual({
+      comment: {
+        id: commentId,
+        event_id: eventId,
+        district_id: null,
+        parent_comment_id: null,
+        body: "Route comment",
+        topic: null,
+        is_featured: false,
+        created_at: "2026-06-26T12:00:00Z",
+        user_id: user.id,
+        like_count: 0,
+        liked_by_me: false,
+        author_display_name: "Resident",
+        author_avatar_url: null
+      }
+    });
+    await expect(
+      (await likeComment(nextRequest(), {
+        params: Promise.resolve({ commentId })
+      })).json()
+    ).resolves.toEqual({ liked: true });
+    await expect(
+      (await unlikeComment(nextRequest(), {
+        params: Promise.resolve({ commentId })
+      })).json()
+    ).resolves.toEqual({ liked: false });
+    await expect(
+      (
+        await reportCommentRoute(requestJson({ reason: "other" }), {
+          params: Promise.resolve({ commentId })
+        })
+      ).json()
+    ).resolves.toEqual({ ok: true });
+    await expect(
+      (
+        await trackShareRoute(requestJson({ eventId, platform: "tiktok" }))
+      ).json()
+    ).resolves.toEqual({ ok: true });
+  });
+
+  it("returns stable JSON errors for invalid route input", async () => {
+    const response = await createCommentRoute(
+      requestJson({ eventId, body: "bad" })
+    );
+
+    await expect(response.json()).resolves.toEqual({
+      error: expect.any(String)
+    });
+    expect(response.status).toBe(400);
+  });
+});
