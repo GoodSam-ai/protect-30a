@@ -1,0 +1,13 @@
+drop policy if exists "admins manage districts" on public.districts;
+drop policy if exists "moderators read profiles" on public.profiles;
+drop policy if exists "admins manage profiles" on public.profiles;
+drop policy if exists "admins manage events" on public.podcast_events;
+drop policy if exists "admins moderate comments" on public.comments;
+drop policy if exists "moderators read likes" on public.comment_likes;
+drop policy if exists "moderators read reports" on public.comment_reports;
+drop policy if exists "admins read shares" on public.event_shares;
+drop policy if exists "moderators read influencer scores" on public.district_influencer_scores;
+drop policy if exists "admins manage influencer scores" on public.district_influencer_scores;
+drop policy if exists "admins read audit log" on public.audit_log;
+drop policy if exists "moderators insert audit log" on public.audit_log;
+drop policy if exists "admins manage admin settings" on public.admin_settings;

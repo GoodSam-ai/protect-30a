@@ -66,8 +66,10 @@ describe("SharePanel", () => {
     await waitFor(() =>
       expect(writeTextMock).toHaveBeenCalledWith(canonicalShareUrl)
     );
-    expect(screen.getByRole("status")).toHaveTextContent(
-      "Copied canonical live room link."
+    await waitFor(() =>
+      expect(screen.getByRole("status")).toHaveTextContent(
+        "Copied canonical live room link."
+      )
     );
 
     fireEvent.click(screen.getByRole("button", { name: "Share" }));
@@ -97,8 +99,10 @@ describe("SharePanel", () => {
     await waitFor(() =>
       expect(writeTextMock).toHaveBeenLastCalledWith(canonicalShareUrl)
     );
-    expect(screen.getByRole("status")).toHaveTextContent(
-      "Copied canonical live room link for TikTok."
+    await waitFor(() =>
+      expect(screen.getByRole("status")).toHaveTextContent(
+        "Copied canonical live room link for TikTok."
+      )
     );
 
     fireEvent.click(
@@ -108,8 +112,10 @@ describe("SharePanel", () => {
       expect(writeTextMock).toHaveBeenCalledTimes(2)
     );
     expect(writeTextMock).toHaveBeenLastCalledWith(canonicalShareUrl);
-    expect(screen.getByRole("status")).toHaveTextContent(
-      "Copied canonical live room link for Instagram."
+    await waitFor(() =>
+      expect(screen.getByRole("status")).toHaveTextContent(
+        "Copied canonical live room link for Instagram."
+      )
     );
   });
 

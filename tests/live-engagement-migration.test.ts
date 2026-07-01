@@ -6,6 +6,18 @@ const migration = readFileSync(
   resolve("supabase/migrations/202606260001_live_engagement.sql"),
   "utf8"
 );
+const securityInvokerViewsMigration = readFileSync(
+  resolve("supabase/migrations/202607010002_security_invoker_public_views.sql"),
+  "utf8"
+);
+const securityDefinerGrantsMigration = readFileSync(
+  resolve("supabase/migrations/202607010003_security_definer_function_grants.sql"),
+  "utf8"
+);
+const adminPolicyRemovalMigration = readFileSync(
+  resolve("supabase/migrations/202607010004_remove_direct_admin_rls_helpers.sql"),
+  "utf8"
+);
 
 function extractViewSelectList(
   viewName: string,
@@ -288,5 +300,55 @@ describe("live engagement migration contracts", () => {
     expect(migration).toContain(
       "before insert on public.event_shares\nfor each row\nexecute function public.prepare_event_share_insert()"
     );
+  });
+
+  it("marks public engagement views as security invoker", () => {
+    expect(securityInvokerViewsMigration).toContain(
+      "create or replace view public.visible_comments\nwith (security_invoker = true)"
+    );
+    expect(securityInvokerViewsMigration).toContain(
+      "create or replace view public.top_commenters_for_event\nwith (security_invoker = true)"
+    );
+    expect(securityInvokerViewsMigration).toContain(
+      "alter view public.live_event_metrics set (security_invoker = true)"
+    );
+  });
+
+  it("removes direct execution grants from exposed security definer helpers", () => {
+    expect(securityDefinerGrantsMigration).toContain("security invoker");
+    expect(securityDefinerGrantsMigration).toContain(
+      'create policy "public read visible participant profiles"'
+    );
+    expect(securityDefinerGrantsMigration).toContain(
+      "drop function if exists public.public_profile_display_name(uuid)"
+    );
+    expect(securityDefinerGrantsMigration).toContain(
+      "where n.nspname = 'public'\n      and p.prosecdef"
+    );
+    expect(securityDefinerGrantsMigration).toContain(
+      "'revoke all on function %s from public, anon, authenticated'"
+    );
+  });
+
+  it("removes admin RLS policies that invoke direct public admin helpers", () => {
+    for (const policyName of [
+      "admins manage districts",
+      "moderators read profiles",
+      "admins manage profiles",
+      "admins manage events",
+      "admins moderate comments",
+      "moderators read likes",
+      "moderators read reports",
+      "admins read shares",
+      "moderators read influencer scores",
+      "admins manage influencer scores",
+      "admins read audit log",
+      "moderators insert audit log",
+      "admins manage admin settings"
+    ]) {
+      expect(adminPolicyRemovalMigration).toContain(
+        `drop policy if exists "${policyName}"`
+      );
+    }
   });
 });
