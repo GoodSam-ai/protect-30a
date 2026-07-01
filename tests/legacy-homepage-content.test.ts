@@ -3,9 +3,14 @@ import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 
 const homepagePath = join(process.cwd(), "public/legacy/index.html");
+const sitemapPath = join(process.cwd(), "public/sitemap.xml");
 
 async function readHomepage() {
   return readFile(homepagePath, "utf8");
+}
+
+async function readSitemap() {
+  return readFile(sitemapPath, "utf8");
 }
 
 describe("legacy homepage content", () => {
@@ -31,6 +36,22 @@ describe("legacy homepage content", () => {
     ];
 
     expect(expectedCopy.filter((copy) => !html.includes(copy))).toEqual([]);
+  });
+
+  it("links the homepage navigation to the official South Walton resource hub", async () => {
+    const html = await readHomepage();
+
+    expect(html).toContain('href="/south-walton-resources"');
+    expect(html).toContain('data-track-label="Official South Walton Resources"');
+    expect(html).toContain(">Resources</a>");
+  });
+
+  it("includes the official South Walton resource hub in the sitemap", async () => {
+    const xml = await readSitemap();
+
+    expect(xml).toContain(
+      "<loc>https://protect30a.org/south-walton-resources</loc>"
+    );
   });
 
   it("keeps each lake card compact with a read-more dropdown", async () => {
