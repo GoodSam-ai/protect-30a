@@ -10,6 +10,9 @@ export type EnabledAuthProvider = AuthProviderConfig;
 
 type OAuthProviderConfig = EnabledAuthProvider & { id: Provider };
 
+const signInUnavailableMessage =
+  "Sign-in is unavailable because Supabase is not configured.";
+
 function isOAuthProvider(provider: EnabledAuthProvider): provider is OAuthProviderConfig {
   return provider.id !== "email";
 }
@@ -29,16 +32,20 @@ export function SignInPanelClient({
   const [message, setMessage] = useState<string | null>(null);
 
   async function signInWithProvider(provider: Provider) {
-    const supabase = createSupabaseBrowserClient();
-    const origin = window.location.origin;
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider,
-      options: {
-        redirectTo: buildAuthCallbackUrl(origin, redirectTo)
-      }
-    });
+    try {
+      const supabase = createSupabaseBrowserClient();
+      const origin = window.location.origin;
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider,
+        options: {
+          redirectTo: buildAuthCallbackUrl(origin, redirectTo)
+        }
+      });
 
-    if (error) setMessage(error.message);
+      if (error) setMessage(error.message);
+    } catch {
+      setMessage(signInUnavailableMessage);
+    }
   }
 
   async function sendMagicLink() {
@@ -49,16 +56,20 @@ export function SignInPanelClient({
       return;
     }
 
-    const supabase = createSupabaseBrowserClient();
-    const origin = window.location.origin;
-    const { error } = await supabase.auth.signInWithOtp({
-      email: trimmedEmail,
-      options: {
-        emailRedirectTo: buildAuthCallbackUrl(origin, redirectTo)
-      }
-    });
+    try {
+      const supabase = createSupabaseBrowserClient();
+      const origin = window.location.origin;
+      const { error } = await supabase.auth.signInWithOtp({
+        email: trimmedEmail,
+        options: {
+          emailRedirectTo: buildAuthCallbackUrl(origin, redirectTo)
+        }
+      });
 
-    setMessage(error ? error.message : "Check your email for the sign-in link.");
+      setMessage(error ? error.message : "Check your email for the sign-in link.");
+    } catch {
+      setMessage(signInUnavailableMessage);
+    }
   }
 
   return (

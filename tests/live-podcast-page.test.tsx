@@ -51,8 +51,17 @@ describe("LivePodcastPage", () => {
     expect(
       screen.getByRole("heading", { name: /district focus/i })
     ).toBeInTheDocument();
-    expect(screen.getAllByText(fixtureDistricts[0].name).length).toBeGreaterThan(
-      0
+    expect(screen.getByRole("link", { name: "Inlet Beach" })).toHaveAttribute(
+      "href",
+      "/districts/inlet-beach/"
+    );
+    expect(screen.getByRole("link", { name: "Inlet Beach" })).toHaveAttribute(
+      "aria-current",
+      "true"
+    );
+    expect(screen.getByRole("link", { name: "Watersound" })).toHaveAttribute(
+      "href",
+      "/districts/watersound-seacrest-prominence-origins/"
     );
     expect(
       screen.getByRole("heading", { name: /community pulse/i })

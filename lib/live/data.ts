@@ -301,10 +301,13 @@ export async function getLiveMetrics(
   if (!hasSupabaseEnv()) return commentMetrics;
 
   const supabase = await createSupabaseServerClient();
+  const districtInfluencerSelect =
+    "week_start, district_id, district_name, district_slug, display_name, avatar_url, comments_count, likes_received_count, shares_count, featured_comments_count, engagement_score, rank, updated_at, top_comment_text";
   const [
     topCommentsResult,
     eventLeadersResult,
     weeklyLeadersResult,
+    allTimeLeadersResult,
     eventMetricsResult,
     districtScoresResult,
     settingsResult
@@ -331,12 +334,16 @@ export async function getLiveMetrics(
         .limit(5),
       supabase
         .from("weekly_district_influencers")
-        .select(
-          "week_start, district_id, district_name, district_slug, display_name, avatar_url, comments_count, likes_received_count, shares_count, featured_comments_count, engagement_score, rank, updated_at, top_comment_text"
-        )
+        .select(districtInfluencerSelect)
         .eq("week_start", getCurrentWeekStartDate())
         .order("week_start", { ascending: false })
         .order("rank", { ascending: true })
+        .limit(8),
+      supabase
+        .from("weekly_district_influencers")
+        .select(districtInfluencerSelect)
+        .order("engagement_score", { ascending: false })
+        .order("display_name", { ascending: true })
         .limit(8),
       supabase
         .from("live_event_metrics")
@@ -359,6 +366,7 @@ export async function getLiveMetrics(
   if (topCommentsResult.error) throw topCommentsResult.error;
   if (eventLeadersResult.error) throw eventLeadersResult.error;
   if (weeklyLeadersResult.error) throw weeklyLeadersResult.error;
+  if (allTimeLeadersResult.error) throw allTimeLeadersResult.error;
   if (eventMetricsResult.error) throw eventMetricsResult.error;
   if (districtScoresResult.error) throw districtScoresResult.error;
   if (settingsResult.error) throw settingsResult.error;
@@ -382,6 +390,9 @@ export async function getLiveMetrics(
   const weeklyDistrictLeaders = (
     (weeklyLeadersResult.data ?? []) as WeeklyDistrictInfluencerRow[]
   ).map((leader) => mapWeeklyDistrictInfluencerRow(leader, engagementSettings));
+  const allTimeDistrictLeaders = (
+    (allTimeLeadersResult.data ?? []) as WeeklyDistrictInfluencerRow[]
+  ).map((leader) => mapWeeklyDistrictInfluencerRow(leader, engagementSettings));
 
   return {
     ...commentMetrics,
@@ -391,7 +402,7 @@ export async function getLiveMetrics(
     topComments,
     eventLeaders,
     weeklyDistrictLeaders,
-    allTimeDistrictLeaders: [],
+    allTimeDistrictLeaders,
     districtEngagementScores:
       districtEngagementScores.length > 0
         ? districtEngagementScores

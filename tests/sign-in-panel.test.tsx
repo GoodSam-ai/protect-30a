@@ -100,4 +100,35 @@ describe("SignInPanelClient", () => {
       "Check your email for the sign-in link."
     );
   });
+
+  it("shows a setup message when OAuth cannot create a Supabase client", async () => {
+    supabaseMocks.createSupabaseBrowserClient.mockImplementation(() => {
+      throw new Error("Supabase browser environment variables are missing.");
+    });
+    render(<SignInPanelClient providers={providers} />);
+
+    fireEvent.click(screen.getByRole("button", { name: "Google" }));
+
+    expect(supabaseMocks.signInWithOAuth).not.toHaveBeenCalled();
+    expect(await screen.findByRole("status")).toHaveTextContent(
+      "Sign-in is unavailable because Supabase is not configured."
+    );
+  });
+
+  it("shows a setup message when email sign-in cannot create a Supabase client", async () => {
+    supabaseMocks.createSupabaseBrowserClient.mockImplementation(() => {
+      throw new Error("Supabase browser environment variables are missing.");
+    });
+    render(<SignInPanelClient providers={providers} />);
+
+    fireEvent.change(screen.getByLabelText("Email address"), {
+      target: { value: "resident@example.test" }
+    });
+    fireEvent.click(screen.getByRole("button", { name: "Email link" }));
+
+    expect(supabaseMocks.signInWithOtp).not.toHaveBeenCalled();
+    expect(await screen.findByRole("status")).toHaveTextContent(
+      "Sign-in is unavailable because Supabase is not configured."
+    );
+  });
 });

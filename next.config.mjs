@@ -6,6 +6,8 @@ const nextConfig = {
       { source: "/", destination: "/legacy/index.html" },
       { source: "/show", destination: "/legacy/show/index.html" },
       { source: "/show/", destination: "/legacy/show/index.html" },
+      { source: "/source-library", destination: "/source-library/index.html" },
+      { source: "/source-library/", destination: "/source-library/index.html" },
       { source: "/districts", destination: "/districts/index.html" },
       { source: "/districts/", destination: "/districts/index.html" },
       { source: "/districts/:slug", destination: "/districts/:slug/index.html" },

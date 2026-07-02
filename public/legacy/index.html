@@ -192,6 +192,18 @@ nav.menu-open .nav-burger span:nth-child(3){transform:translateY(-7px) rotate(-4
 .count-unit b{display:block;font-family:var(--font-display);font-size:2.1rem;line-height:1;color:var(--sand)}
 .count-unit span{font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.7)}
 .count-band .sub{margin-top:14px;font-size:.95rem;color:rgba(255,255,255,.8);max-width:640px;margin-left:auto;margin-right:auto}
+.act-this-week{background:var(--sand-light);padding:34px 24px;border-bottom:1px solid rgba(14,59,56,.12)}
+.act-this-week-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.5fr);gap:24px;align-items:start}
+.act-this-week h2{font-size:clamp(1.5rem,3vw,2rem);color:var(--teal-deep);line-height:1.12;margin-bottom:8px}
+.act-this-week p{color:var(--ink-soft)}
+.action-strip{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.action-tile{display:flex;gap:12px;align-items:flex-start;background:var(--white);border:1px solid rgba(14,59,56,.14);border-radius:14px;padding:16px;text-decoration:none;box-shadow:0 8px 22px rgba(14,59,56,.07);transition:transform .2s,box-shadow .2s}
+.action-tile:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+.action-tile b{display:block;color:var(--teal-deep);line-height:1.2}
+.action-tile span{display:block;margin-top:4px;color:var(--ink-soft);font-size:.9rem;line-height:1.4}
+.action-kicker{flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:var(--aqua-pale);color:var(--teal-deep);font-weight:800}
+@media(max-width:820px){.act-this-week-inner{grid-template-columns:1fr}}
+@media(max-width:620px){.action-strip{grid-template-columns:1fr}}
 
 /* ---------- STATS ---------- */
 .stats{background:var(--cream)}
@@ -580,6 +592,7 @@ footer a:hover{text-decoration:underline}
     <li><a href="#lakes" data-track-event="district_navigation" data-track-label="Our Dune Lakes" data-track-section="nav">Our Dune Lakes</a></li>
     <li><a href="/show" data-track-event="district_navigation" data-track-label="The Show" data-track-section="nav">The Show</a></li>
     <li><a href="/south-walton-resources" data-track-event="district_navigation" data-track-label="Official South Walton Resources" data-track-section="nav">Resources</a></li>
+    <li><a href="/source-library" data-track-event="district_navigation" data-track-label="Sources and Evidence" data-track-section="nav">Sources</a></li>
     <li><a href="#wq-explorer" data-track-event="district_navigation" data-track-label="Water Quality" data-track-section="nav">Water Quality</a></li>
     <li><a href="#faq" data-track-event="district_navigation" data-track-label="FAQ" data-track-section="nav">FAQ</a></li>
     <li class="keep"><a class="nav-cta" href="#help" data-track-event="district_navigation" data-track-label="Show Support" data-track-section="nav">Show Support</a></li>
@@ -617,6 +630,34 @@ footer a:hover{text-decoration:underline}
   </div>
   <p class="sub">Under Florida law, the county must adopt its funding resolution <b>before January 1, 2027</b> for the first projects to be funded in 2027. Miss it, and everything slips a full year.</p>
 </div>
+
+<section class="act-this-week" aria-labelledby="act-this-week-title">
+  <div class="act-this-week-inner">
+    <div>
+      <span class="eyebrow">Action path</span>
+      <h2 id="act-this-week-title">Act this week</h2>
+      <p>The deadline is real, so the next step should be simple: send support, track public meetings, share the issue, and review the sources behind the plan.</p>
+    </div>
+    <div class="action-strip">
+      <a class="action-tile" href="mailto:dan.curry@mywaltonfl.gov,danny.glidewell@mywaltonfl.gov,brad.drake@mywaltonfl.gov,donna.johns@mywaltonfl.gov,tony.anderson@mywaltonfl.gov?subject=Please%20support%2030A%20stormwater%20funding%20in%202026&amp;body=Commissioners%2C%0A%0APlease%20support%20moving%20the%2030A%20stormwater%20funding%20plan%20forward%20in%202026%20so%20the%20county%20can%20meet%20the%20January%201%2C%202027%20funding%20deadline.%2030A%20needs%20practical%20drainage%20and%20water-quality%20projects%20that%20protect%20neighborhoods%2C%20roads%2C%20the%20Gulf%2C%20and%20our%20rare%20coastal%20dune%20lakes.%0A%0AThank%20you." data-track-event="support_email_click" data-track-label="Top action commissioner email" data-track-section="act-this-week">
+        <span class="action-kicker">1</span>
+        <span><b>Open a pre-written commissioner email</b><span>Personalize one short note before sending.</span></span>
+      </a>
+      <a class="action-tile" href="mailto:doug@goodsamaritaninstitute.org?subject=Add%20me%20to%20Protect30A%20meeting%20alerts" data-track-event="support_email_click" data-track-label="Top action meeting alerts" data-track-section="act-this-week">
+        <span class="action-kicker">2</span>
+        <span><b>Get meeting alerts</b><span>Receive reminders before major notices, workshops, and hearings.</span></span>
+      </a>
+      <a class="action-tile" href="https://www.mywaltonfl.gov" target="_blank" rel="noopener" data-track-event="district_navigation" data-track-label="Top action county schedule" data-track-section="act-this-week">
+        <span class="action-kicker">3</span>
+        <span><b>Track upcoming meetings</b><span>Check official county agendas and public notices.</span></span>
+      </a>
+      <a class="action-tile" href="/source-library" data-track-event="source_library_click" data-track-label="Top action source library" data-track-section="act-this-week">
+        <span class="action-kicker">4</span>
+        <span><b>Review the sources</b><span>Open the evidence page behind the stormwater plan.</span></span>
+      </a>
+    </div>
+  </div>
+</section>
 
 <!-- WHY NOW -->
 <section class="stats" id="why">
@@ -3289,6 +3330,7 @@ footer a:hover{text-decoration:underline}
       <h4>The fine print, proudly cited</h4>
       <p>This plan is grounded in Florida law, verified to primary sources:</p>
       <ul class="src-list" style="margin-top:8px">
+        <li><a href="/source-library" data-track-event="source_library_click" data-track-label="Footer source library" data-track-section="footer">Sources &amp; Evidence — public source library</a></li>
         <li><a href="https://www.flsenate.gov/Laws/Statutes/2025/125.01" target="_blank" rel="noopener" data-track-event="source_link_click" data-track-label="FS 125.01 county MSBU authority" data-track-section="footer">FS § 125.01(1)(q) — county MSBU authority</a></li>
         <li><a href="https://www.flsenate.gov/Laws/Statutes/2025/0197.3632" target="_blank" rel="noopener" data-track-event="source_link_click" data-track-label="FS 197.3632 uniform collection" data-track-section="footer">FS § 197.3632 — uniform method of collection (the Jan 1, 2027 gate)</a></li>
         <li><a href="https://www.flsenate.gov/Laws/Statutes/2018/0403.0893" target="_blank" rel="noopener" data-track-event="source_link_click" data-track-label="FS 403.0893 stormwater utilities" data-track-section="footer">FS § 403.0893 — stormwater utilities &amp; benefit areas</a></li>

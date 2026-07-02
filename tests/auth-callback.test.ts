@@ -117,4 +117,21 @@ describe("auth callback route", () => {
       "https://example.test/live?auth_error=exchange_failed"
     );
   });
+
+  it("redirects to a safe auth error URL when Supabase is not configured", async () => {
+    supabaseMocks.createSupabaseServerClient.mockRejectedValue(
+      new Error("Supabase server environment variables are missing.")
+    );
+
+    const response = await GET(
+      new NextRequest(
+        "https://example.test/auth/callback?code=auth-code&next=%2Fadmin"
+      )
+    );
+
+    expect(supabaseMocks.exchangeCodeForSession).not.toHaveBeenCalled();
+    expect(response.headers.get("location")).toBe(
+      "https://example.test/live?auth_error=exchange_failed"
+    );
+  });
 });

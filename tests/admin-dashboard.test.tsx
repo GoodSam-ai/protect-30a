@@ -161,6 +161,25 @@ describe("admin dashboard route guard", () => {
     );
   });
 
+  it("renders a setup error when admin credentials are missing", async () => {
+    dashboardMocks.getCurrentUserAndProfile.mockResolvedValue({
+      user: { id: adminProfile.id },
+      profile: adminProfile
+    });
+    dashboardMocks.getAdminDashboardData.mockRejectedValue(
+      new Error("Supabase admin environment variables are missing.")
+    );
+
+    render(await AdminPage());
+
+    expect(
+      screen.getByRole("heading", { name: "Admin setup required" })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/Supabase admin credentials are not configured/i)
+    ).toBeInTheDocument();
+  });
+
   it("loads reported comments for the queue after the admin guard", async () => {
     dashboardMocks.getCurrentUserAndProfile.mockResolvedValue({
       user: { id: moderatorProfile.id },

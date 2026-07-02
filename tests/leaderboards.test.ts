@@ -418,6 +418,7 @@ describe("live dashboard data", () => {
       "top_comments_for_event",
       "top_commenters_for_event",
       "weekly_district_influencers",
+      "weekly_district_influencers",
       "live_event_metrics",
       "event_district_engagement_scores",
       "admin_settings"
@@ -491,6 +492,16 @@ describe("live dashboard data", () => {
         options: { ascending: true }
       },
       {
+        table: "weekly_district_influencers",
+        column: "engagement_score",
+        options: { ascending: false }
+      },
+      {
+        table: "weekly_district_influencers",
+        column: "display_name",
+        options: { ascending: true }
+      },
+      {
         table: "event_district_engagement_scores",
         column: "rank",
         options: { ascending: true }
@@ -499,6 +510,7 @@ describe("live dashboard data", () => {
     expect(query.calls.limit).toEqual([
       { table: "top_comments_for_event", count: 5 },
       { table: "top_commenters_for_event", count: 5 },
+      { table: "weekly_district_influencers", count: 8 },
       { table: "weekly_district_influencers", count: 8 },
       { table: "event_district_engagement_scores", count: 8 }
     ]);
@@ -524,6 +536,13 @@ describe("live dashboard data", () => {
       "Emery Resident"
     );
     expect(metrics.weeklyDistrictLeaders[0]).toMatchObject({
+      districtName: "Inlet Beach",
+      displayName: "Avery Resident",
+      engagementScore: 53,
+      topCommentText: "Weekly influencer text from the view.",
+      podcastInvitationEligible: false
+    });
+    expect(metrics.allTimeDistrictLeaders[0]).toMatchObject({
       districtName: "Inlet Beach",
       displayName: "Avery Resident",
       engagementScore: 53,
