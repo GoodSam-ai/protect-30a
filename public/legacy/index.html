@@ -201,6 +201,15 @@ nav.menu-open .nav-burger span:nth-child(3){transform:translateY(-7px) rotate(-4
 .stat-card .num{font-family:var(--font-display);font-size:2.9rem;font-weight:700;color:var(--teal);line-height:1.05}
 .stat-card .unit{font-size:1.05rem;color:var(--teal-soft);font-weight:600}
 .stat-card p{margin-top:10px;font-size:.93rem;color:var(--ink-soft)}
+.visitor-resource-callout{background:var(--cream);padding:0 24px 76px}
+.visitor-resource-inner{max-width:1100px;margin:0 auto;padding:28px 0;border-top:1px solid rgba(14,59,56,.16);border-bottom:1px solid rgba(14,59,56,.16);display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center}
+.visitor-resource-inner h2{font-size:clamp(1.35rem,2.6vw,1.85rem);line-height:1.18;color:var(--teal-deep);margin-bottom:8px}
+.visitor-resource-inner p{max-width:720px;color:var(--ink-soft);font-size:1rem}
+.visitor-resource-action{justify-self:end;white-space:nowrap}
+@media(max-width:720px){
+  .visitor-resource-inner{grid-template-columns:1fr;align-items:start}
+  .visitor-resource-action{justify-self:start;white-space:normal}
+}
 
 /* ---------- PROBLEM ---------- */
 .problem{background:linear-gradient(180deg,var(--sand-light),var(--cream))}
@@ -621,6 +630,18 @@ footer a:hover{text-decoration:underline}
       <div class="stat-card reveal"><div class="num" data-count="2027">2027</div><div class="unit">first projects funded</div><p>If we act this year, the first locally funded stormwater projects can begin with the November 2027 cycle.</p></div>
       <div class="stat-card reveal"><div class="num" data-count="1">1</div><div class="unit">year lost if we wait</div><p>Miss the January 1, 2027 deadline and the whole program slips to 2028 — another year of flooding without funded fixes.</p></div>
     </div>
+  </div>
+</section>
+
+<!-- OFFICIAL VISITOR RESOURCES -->
+<section class="visitor-resource-callout" aria-labelledby="visitor-resource-title">
+  <div class="visitor-resource-inner reveal">
+    <div>
+      <span class="eyebrow">Official resources</span>
+      <h2 id="visitor-resource-title">Looking for official South Walton visitor resources?</h2>
+      <p>Beach access, safety, events, and neighborhood guides are maintained by Visit South Walton. Protect30A links to those official resources while keeping stormwater and civic action here.</p>
+    </div>
+    <a class="btn btn-teal visitor-resource-action" href="/south-walton-resources" data-track-event="resource_hub_click" data-track-label="Open Resource Hub" data-track-section="visitor-resource-callout">Open Resource Hub</a>
   </div>
 </section>
 

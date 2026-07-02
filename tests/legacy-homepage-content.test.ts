@@ -54,6 +54,20 @@ describe("legacy homepage content", () => {
     expect(html).toContain(">Resources</a>");
   });
 
+  it("adds a modest homepage callout to the official South Walton resource hub", async () => {
+    const html = await readHomepage();
+
+    expect(html).toContain("Looking for official South Walton visitor resources?");
+    expect(html).toContain(
+      "Beach access, safety, events, and neighborhood guides are maintained by Visit South Walton."
+    );
+    expect(html).toContain(
+      "Protect30A links to those official resources while keeping stormwater and civic action here."
+    );
+    expect(html).toContain('href="/south-walton-resources"');
+    expect(html).toContain(">Open Resource Hub</a>");
+  });
+
   it("includes the official South Walton resource hub in the sitemap", async () => {
     const xml = await readSitemap();
 
