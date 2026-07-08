@@ -35,6 +35,25 @@
   "@context": "https://schema.org",
   "@graph": [
     {
+      "@type": "WebSite",
+      "@id": "https://protect30a.org/#website",
+      "url": "https://protect30a.org/",
+      "name": "Protect 30A",
+      "inLanguage": "en",
+      "publisher": {"@id": "https://protect30a.org/#org"}
+    },
+    {
+      "@type": ["Organization", "NGO"],
+      "@id": "https://protect30a.org/#org",
+      "name": "Protect 30A",
+      "url": "https://protect30a.org/",
+      "description": "Independent citizen advocacy — not a government agency. A South Walton community effort to stop flooding, protect the coastal dune lakes, and keep 30A stormwater funding working on 30A.",
+      "founder": {"@type": "Person", "name": "Doug Liles"},
+      "areaServed": {"@type": "Place", "name": "South Walton County, Florida (30A corridor)"},
+      "sameAs": ["https://open.spotify.com/show/033BT9WKfiVI2mrFWc75yS"],
+      "logo": "https://protect30a.org/og-image.jpg"
+    },
+    {
       "@type": "WebPage",
       "@id": "https://protect30a.org/",
       "url": "https://protect30a.org/",
@@ -528,6 +547,12 @@ footer a:hover{text-decoration:underline}
 //# sourceMappingURL=chart.umd.js.map
 
 </script>
+<link rel="stylesheet" href="/assets/pillars.css">
+<script type="module" src="/assets/pillars.js" defer></script>
+<script src="/assets/content.js" defer></script>
+<script src="/assets/metrics.js" defer></script>
+<script src="/assets/records-notice.js" defer></script>
+<script src="/assets/action-center.js" defer></script>
 </head>
 <body>
 
@@ -539,13 +564,42 @@ footer a:hover{text-decoration:underline}
     Protect 30A
   </a>
   <ul class="nav-links" id="nav-menu">
-    <li><a href="#why" data-track-event="district_navigation" data-track-label="Why Now" data-track-section="nav">Why Now</a></li>
-    <li><a href="#plan" data-track-event="district_navigation" data-track-label="The Plan" data-track-section="nav">The Plan</a></li>
-    <li><a href="#timeline" data-track-event="district_navigation" data-track-label="Timeline" data-track-section="nav">Timeline</a></li>
-    <li><a href="#lakes" data-track-event="district_navigation" data-track-label="Our Dune Lakes" data-track-section="nav">Our Dune Lakes</a></li>
-    <li><a href="/show" data-track-event="district_navigation" data-track-label="The Show" data-track-section="nav">The Show</a></li>
-    <li><a href="#wq-explorer" data-track-event="district_navigation" data-track-label="Water Quality" data-track-section="nav">Water Quality</a></li>
-    <li><a href="#faq" data-track-event="district_navigation" data-track-label="FAQ" data-track-section="nav">FAQ</a></li>
+    <li class="has-menu">
+      <button class="nav-top" type="button" aria-expanded="false" aria-controls="menu-plan" data-track-pillar="all">Why &amp; Plan</button>
+      <ul class="nav-panel" id="menu-plan">
+        <li><a href="#why" data-track-event="district_navigation" data-track-label="Why Now" data-track-section="nav">Why Now</a></li>
+        <li><a href="#plan" data-track-event="district_navigation" data-track-label="The Plan" data-track-section="nav">The Plan</a></li>
+        <li><a href="#timeline" data-track-event="district_navigation" data-track-label="Timeline" data-track-section="nav">Timeline</a></li>
+        <li><a href="#faq" data-track-event="district_navigation" data-track-label="FAQ" data-track-section="nav">FAQ</a></li>
+      </ul>
+    </li>
+    <li class="has-menu">
+      <button class="nav-top" type="button" aria-expanded="false" aria-controls="menu-engage" data-track-pillar="engagement">Engage</button>
+      <ul class="nav-panel" id="menu-engage">
+        <li><a href="/act" data-track-event="district_navigation" data-track-label="Take Action" data-track-section="nav">Take Action</a></li>
+        <li><a href="/act#calendar" data-track-event="district_navigation" data-track-label="Meetings &amp; Events" data-track-section="nav">Meetings &amp; Events</a></li>
+        <li><a href="/show" data-track-event="district_navigation" data-track-label="The Show" data-track-section="nav">The Show</a></li>
+        <li><a href="/act#hoa-toolkit" data-track-event="district_navigation" data-track-label="HOA Toolkit" data-track-section="nav">HOA Toolkit</a></li>
+      </ul>
+    </li>
+    <li class="has-menu">
+      <button class="nav-top" type="button" aria-expanded="false" aria-controls="menu-transparency" data-track-pillar="transparency">Transparency</button>
+      <ul class="nav-panel" id="menu-transparency">
+        <li><a href="/records" data-track-event="district_navigation" data-track-label="Records Library" data-track-section="nav">Records Library</a></li>
+        <li><a href="/records#methodology" data-track-event="district_navigation" data-track-label="How We Know" data-track-section="nav">How We Know</a></li>
+        <li><a href="#wq-explorer" data-track-event="district_navigation" data-track-label="Water Quality Data" data-track-section="nav">Water Quality Data</a></li>
+        <li><a href="/records#money" data-track-event="district_navigation" data-track-label="Where the Money Goes" data-track-section="nav">Where the Money Goes</a></li>
+      </ul>
+    </li>
+    <li class="has-menu">
+      <button class="nav-top" type="button" aria-expanded="false" aria-controls="menu-impact" data-track-pillar="district_impact">Impact</button>
+      <ul class="nav-panel" id="menu-impact">
+        <li><a href="/districts/" data-track-event="district_navigation" data-track-label="District Hub" data-track-section="nav">District Hub</a></li>
+        <li><a href="/impact#find-district" data-track-event="district_navigation" data-track-label="Find Your District" data-track-section="nav">Find Your District</a></li>
+        <li><a href="/impact#tracker" data-track-event="district_navigation" data-track-label="Project Tracker" data-track-section="nav">Project Tracker</a></li>
+        <li><a href="#lakes" data-track-event="district_navigation" data-track-label="Our Dune Lakes" data-track-section="nav">Our Dune Lakes</a></li>
+      </ul>
+    </li>
     <li class="keep"><a class="nav-cta" href="#help" data-track-event="district_navigation" data-track-label="Show Support" data-track-section="nav">Show Support</a></li>
   </ul>
   <button class="nav-burger" id="nav-burger" aria-label="Open menu" aria-expanded="false" aria-controls="nav-menu">
@@ -581,6 +635,52 @@ footer a:hover{text-decoration:underline}
   </div>
   <p class="sub">Under Florida law, the county must adopt its funding resolution <b>before January 1, 2027</b> for the first projects to be funded in 2027. Miss it, and everything slips a full year.</p>
 </div>
+
+<!-- THREE PILLARS -->
+<section id="pillars" aria-labelledby="pillars-title">
+  <div class="wrap">
+    <div class="pillar-head">
+      <span class="eyebrow">Three ways to follow — and shape — the 30A effort</span>
+      <h2 id="pillars-title">Pick your way in.</h2>
+      <p>Add your voice, check the evidence for yourself, or see what it means for your own street. Every path is open to every neighbor.</p>
+    </div>
+    <div class="pillar-cards">
+      <article class="cta-card">
+        <span class="cta-icon" aria-hidden="true">
+          <svg viewBox="0 0 48 48" fill="none" focusable="false"><path d="M24 6c6 4 10 4 15 3-1 8-4 20-15 33C13 29 10 17 9 9c5 1 9 1 15-3Z" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path d="M24 12v24M24 20l-6-4M24 26l6-4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <h3>Engage</h3>
+        <p>Add your voice. Speak at hearings, join events, and use neighbor-to-neighbor tools to build support across the corridor.</p>
+        <div class="cta-links">
+          <a class="btn btn-gold" href="/act" data-track-event="district_navigation" data-track-section="pillars" data-track-pillar="engagement" data-track-label="Engage — Take Action">Take Action</a>
+          <a class="btn btn-ghost" href="#help" data-track-event="district_navigation" data-track-section="pillars" data-track-label="Engage — Show Support">Show Support</a>
+        </div>
+      </article>
+      <article class="cta-card">
+        <span class="cta-icon" aria-hidden="true">
+          <svg viewBox="0 0 48 48" fill="none" focusable="false"><circle cx="21" cy="21" r="12" stroke="currentColor" stroke-width="2.2"/><path d="m30 30 10 10" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><path d="M14 21c3-2.5 5-2.5 7 0s4 2.5 7 0" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+        </span>
+        <h3>Transparency</h3>
+        <p>See the evidence. Open the public records, water-quality data, and methods behind every claim — then check where the money goes.</p>
+        <div class="cta-links">
+          <a class="btn btn-gold" href="/records" data-track-event="district_navigation" data-track-section="pillars" data-track-pillar="transparency" data-track-label="Transparency — Records Library">Records Library</a>
+          <a class="btn btn-ghost" href="#wq-explorer" data-track-event="district_navigation" data-track-section="pillars" data-track-label="Transparency — Water Quality Data">Water Quality Data</a>
+        </div>
+      </article>
+      <article class="cta-card">
+        <span class="cta-icon" aria-hidden="true">
+          <svg viewBox="0 0 48 48" fill="none" focusable="false"><path d="M24 42s13-11 13-22a13 13 0 1 0-26 0c0 11 13 22 13 22Z" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><circle cx="24" cy="20" r="4.5" stroke="currentColor" stroke-width="2.2"/></svg>
+        </span>
+        <h3>District Impact</h3>
+        <p>What it means for your street. Find your district, track nearby projects, and see how the plan protects our dune lakes.</p>
+        <div class="cta-links">
+          <a class="btn btn-gold" href="/impact" data-track-event="district_navigation" data-track-section="pillars" data-track-pillar="district_impact" data-track-label="District Impact — Find Your District">Find Your District</a>
+          <a class="btn btn-ghost" href="/districts/" data-track-event="district_navigation" data-track-section="pillars" data-track-label="District Impact — District Hub">District Hub</a>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
 
 <!-- WHY NOW -->
 <section class="stats" id="why">
@@ -3085,12 +3185,104 @@ footer a:hover{text-decoration:underline}
   </div>
 </section>
 
-<!-- CTA -->
+<!-- CTA / ACTION CENTER (Phase 1) -->
+<style>
+/* ---- Action Center: design-on-dark form styling (scoped to #help) ----
+   #help is dark teal; inputs use light backgrounds with --ink text and
+   light labels so contrast >= 4.5:1. Keyboard-operable, 44px targets,
+   visible focus, reduced-motion friendly. */
+#help .ac-lede-note{color:var(--aqua);font-weight:600;margin:-4px 0 20px}
+#help .ac-modules{display:grid;gap:20px;margin-top:28px}
+@media(min-width:820px){#help .ac-modules{grid-template-columns:1fr 1fr}}
+#help .ac-card{
+  background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.18);
+  border-radius:var(--radius);padding:26px 24px;color:#fff;
+}
+#help .ac-card.ac-wide{grid-column:1/-1}
+#help .ac-card h3{
+  font-family:var(--font-display);font-weight:600;font-size:1.3rem;
+  color:#fff;margin:0 0 6px;display:flex;align-items:center;gap:9px;
+}
+#help .ac-card > p{color:var(--aqua-pale);margin:0 0 16px;font-size:.98rem;line-height:1.6}
+#help .ac-field{display:block;margin:0 0 14px}
+#help .ac-field > .ac-label{
+  display:block;font-size:.9rem;font-weight:600;color:var(--sand);margin:0 0 6px;
+}
+#help .ac-input,#help select.ac-input,#help textarea.ac-input{
+  width:100%;box-sizing:border-box;min-height:44px;padding:11px 13px;
+  font:inherit;font-size:1rem;color:var(--ink);background:var(--white);
+  border:1px solid rgba(14,59,56,.25);border-radius:10px;line-height:1.4;
+}
+#help textarea.ac-input{min-height:150px;resize:vertical}
+#help .ac-input::placeholder{color:#6b7a77}
+#help .ac-input:focus,#help select.ac-input:focus,#help textarea.ac-input:focus,
+#help .ac-check input:focus-visible,#help .ac-btnrow .btn:focus-visible,
+#help .ac-disclose > summary:focus-visible{
+  outline:3px solid var(--gold);outline-offset:2px;
+}
+#help .ac-check{
+  display:flex;gap:10px;align-items:flex-start;margin:0 0 14px;
+  color:var(--aqua-pale);font-size:.92rem;line-height:1.5;cursor:pointer;
+}
+#help .ac-check input[type=checkbox]{
+  width:20px;height:20px;min-width:20px;margin:1px 0 0;accent-color:var(--gold);cursor:pointer;
+}
+#help .ac-check .ac-req{color:var(--gold);font-weight:700}
+#help .ac-check a{color:#fff;text-decoration:underline}
+#help .ac-btnrow{display:flex;gap:12px;flex-wrap:wrap;margin-top:4px}
+#help .ac-btnrow .btn{min-height:44px;display:inline-flex;align-items:center;justify-content:center}
+#help .btn-line{
+  background:transparent;color:#fff;border:2px solid rgba(255,255,255,.6);
+  padding:11px 22px;border-radius:999px;font-weight:700;text-decoration:none;
+  display:inline-flex;align-items:center;justify-content:center;min-height:44px;
+}
+#help .btn-line:hover{background:#fff;color:var(--teal-deep)}
+#help .ac-status{margin:12px 0 0;font-size:.92rem;font-weight:600;min-height:1.2em;color:var(--aqua-pale)}
+#help .ac-status[data-tone="err"]{color:#ffd9c2}
+#help .ac-status[data-tone="ok"]{color:#bff0d0}
+#help .ac-count{
+  font-family:var(--font-display);font-size:1.15rem;font-weight:600;
+  color:var(--sand);margin:0 0 16px;
+}
+#help .ac-wall-list{list-style:none;margin:14px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:8px}
+#help .ac-wall-list .pp-wall-item,
+#help .pp-wall-list .pp-wall-item{
+  display:inline-flex;gap:6px;align-items:baseline;
+  background:rgba(255,255,255,.14);border-radius:999px;padding:6px 13px;font-size:.9rem;color:#fff;
+}
+#help .pp-wall-item .pp-wall-hood{color:var(--aqua);font-size:.82rem}
+#help .pp-wall-empty{color:var(--aqua-pale);font-size:.92rem;margin:14px 0 0;font-style:italic}
+#help .ac-disclose{margin:6px 0 0;border-top:1px solid rgba(255,255,255,.15);padding-top:12px}
+#help .ac-disclose > summary{
+  cursor:pointer;color:var(--sand);font-weight:600;font-size:.92rem;list-style:none;
+  min-height:32px;display:flex;align-items:center;gap:6px;
+}
+#help .ac-disclose > summary::-webkit-details-marker{display:none}
+#help .ac-disclose > summary::before{content:"▸";transition:transform .2s;color:var(--aqua)}
+#help .ac-disclose[open] > summary::before{transform:rotate(90deg)}
+#help .ac-disclose p{color:var(--aqua-pale);font-size:.9rem;line-height:1.6;margin:8px 0 0}
+#help .ac-share-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:4px}
+#help .ac-share-row .btn{min-height:44px;display:inline-flex;align-items:center;justify-content:center}
+#help .ac-privacy-link{display:inline-block;margin-top:6px;color:#fff;text-decoration:underline;font-size:.88rem}
+/* records-notice.js block, restyled for the dark section */
+#help .p30a-records-notice{
+  margin:14px 0;padding:12px 14px;border-radius:10px;
+  background:rgba(0,0,0,.18);border:1px solid rgba(255,255,255,.18);
+  font-size:.82rem;line-height:1.55;color:var(--aqua-pale);
+}
+#help .p30a-records-notice__link{color:#fff;text-decoration:underline;font-weight:600;white-space:nowrap}
+@media(prefers-reduced-motion:reduce){
+  #help .ac-disclose > summary::before{transition:none}
+  #help .btn,#help .btn-line{transition:none}
+}
+</style>
 <section class="cta" id="help">
+  <a id="act" tabindex="-1" aria-hidden="true"></a>
   <div class="wrap">
     <span class="eyebrow reveal" style="color:var(--aqua)">Make it happen</span>
     <h2 class="section-title reveal">This only works if 30A shows up.</h2>
-    <p class="lede reveal">Deadlines like January 1, 2027 are met by communities that make themselves heard. Four ways to help this week:</p>
+    <p class="lede reveal">Deadlines like January 1, 2027 are met by communities that make themselves heard. Five ways to help this week:</p>
+    <div class="reveal" data-disclosure="B" style="margin:10px 0 22px"></div>
     <div class="cta-grid">
       <div class="cta-card reveal">
         <div class="cico">✉️</div><h3>Send a note of support</h3>
@@ -3113,6 +3305,170 @@ footer a:hover{text-decoration:underline}
         <a class="btn btn-teal" id="sponsor-btn" href="mailto:doug@goodsamaritaninstitute.org?subject=Protect%2030A%20community%20sponsorship%20inquiry" data-track-event="sponsor_inquiry" data-track-label="Community sponsorship inquiry" data-track-section="help">Ask about sponsorship</a>
       </div>
     </div>
+
+    <!-- ===================== ACTION CENTER MODULES ===================== -->
+    <div class="ac-modules">
+
+      <!-- R-16 · PLEDGE WALL -->
+      <div class="ac-card ac-wide reveal">
+        <h3><span aria-hidden="true">🤝</span> Add your name — pledge to help</h3>
+        <p id="pp-pledge-count" class="ac-count" aria-live="polite">Be the first to pledge.</p>
+        <p>A public show of support tells the Commission that 30A residents want this plan. Pledging is voluntary civic engagement — not a government form.</p>
+        <form id="pp-pledge-form" data-records-notice novalidate>
+          <label class="ac-field" for="pp-pledge-first">
+            <span class="ac-label">First name <span class="ac-req" aria-hidden="true">*</span></span>
+            <input class="ac-input" type="text" id="pp-pledge-first" name="first" autocomplete="given-name" required maxlength="60" placeholder="e.g., Sam">
+          </label>
+          <label class="ac-field" for="pp-pledge-hood">
+            <span class="ac-label">Neighborhood</span>
+            <select class="ac-input" id="pp-pledge-hood" name="neighborhood">
+              <option value="">Choose your area…</option>
+              <option>Inlet Beach</option>
+              <option>Rosemary Beach</option>
+              <option>Alys Beach</option>
+              <option>Watersound / Seacrest / Prominence / Origins</option>
+              <option>Seagrove / Seaside / WaterColor</option>
+              <option>Grayton / Blue Mountain</option>
+              <option>Santa Rosa Beach / Gulf Place / Dune Allen</option>
+              <option>Sandestin / Miramar Beach / Seascape</option>
+              <option value="Other / not sure">Other / not sure</option>
+            </select>
+          </label>
+          <label class="ac-check" for="pp-pledge-public">
+            <input type="checkbox" id="pp-pledge-public" name="consentPublic">
+            <span>Show my first name + neighborhood on the public wall below.</span>
+          </label>
+          <label class="ac-check" for="pp-pledge-records">
+            <input type="checkbox" id="pp-pledge-records" name="consentRecords" required>
+            <span><span class="ac-req" aria-hidden="true">*</span> I understand this is a public advocacy effort and my submission may be a public record.</span>
+          </label>
+          <div class="ac-btnrow">
+            <button class="btn btn-gold" type="submit" id="pp-pledge-submit"
+              data-track-event="pledge_submit_click" data-track-pillar="engagement"
+              data-track-label="Submit pledge" data-track-section="help">Add my pledge</button>
+          </div>
+          <p class="ac-status" id="pp-pledge-status" role="status" aria-live="polite"></p>
+        </form>
+        <div id="pp-pledge-wall" class="ac-wall" aria-live="polite">
+          <p class="pp-wall-empty">Consenting neighbors appear here first-name only.</p>
+        </div>
+      </div>
+
+      <!-- R-17 · COMMISSIONER EMAIL GENERATOR -->
+      <div class="ac-card reveal">
+        <h3><span aria-hidden="true">✉️</span> Personalize your commissioner email</h3>
+        <p>We drafted the ask. Add your name and neighborhood, then open it in your email app or copy the text. It goes to all five Walton County Commissioners.</p>
+        <label class="ac-field" for="pp-email-name">
+          <span class="ac-label">Your name</span>
+          <input class="ac-input" type="text" id="pp-email-name" autocomplete="name" maxlength="80" placeholder="[Your name]">
+        </label>
+        <label class="ac-field" for="pp-email-neighborhood">
+          <span class="ac-label">Your neighborhood / street</span>
+          <input class="ac-input" type="text" id="pp-email-neighborhood" maxlength="80" placeholder="[Your neighborhood]">
+        </label>
+        <label class="ac-field" for="pp-email-preview">
+          <span class="ac-label">Preview</span>
+          <textarea class="ac-input" id="pp-email-preview" rows="9" readonly aria-label="Email preview (read only)"></textarea>
+        </label>
+        <div class="ac-btnrow">
+          <a class="btn btn-gold" href="mailto:dan.curry@mywaltonfl.gov,danny.glidewell@mywaltonfl.gov,brad.drake@mywaltonfl.gov,donna.johns@mywaltonfl.gov,tony.anderson@mywaltonfl.gov?subject=Please%20adopt%20the%2030A%20stormwater%20resolution%20of%20intent%20in%202026&body=Dear%20Commissioners%2C%0A%0AAs%20a%2030A%20resident%2C%20I%20urge%20the%20County%20to%20adopt%20the%20resolution%20of%20intent%20under%20FS%20197.3632%20before%20January%201%2C%202027%2C%20so%20the%20first%20stormwater%20projects%20can%20be%20funded%20in%202027.%0A%0AThank%20you." id="pp-email-open" role="button"
+            data-track-event="commission_email_open" data-track-pillar="engagement"
+            data-track-label="Open commissioner email in app" data-track-section="help">Open in email app</a>
+          <button class="btn btn-line" type="button" id="pp-email-copy"
+            data-track-event="commission_email_copy" data-track-pillar="engagement"
+            data-track-label="Copy commissioner email text" data-track-section="help">Copy email text</button>
+        </div>
+        <details class="ac-disclose">
+          <summary>Why this works</summary>
+          <p>Personal notes from real residents move commissioners far more than form letters. Naming your neighborhood shows the plan has support across 30A. The ask cites the exact statutory step — adopting the resolution of intent under FS § 197.3632 before January 1, 2027 — so it lands as an informed request, not a complaint.</p>
+        </details>
+      </div>
+
+      <!-- R-18 · SHARE ROW -->
+      <div class="ac-card reveal">
+        <h3><span aria-hidden="true">🔗</span> Share the plan</h3>
+        <p>Send this to your HOA, your neighborhood group, or guests who love this place. Support grows one share at a time.</p>
+        <div class="ac-share-row" id="pp-share-row">
+          <button class="btn btn-gold" type="button" id="pp-share-native"
+            data-track-event="share_native" data-track-pillar="engagement"
+            data-track-label="Native share" data-track-section="help">Share…</button>
+          <a class="btn btn-line" href="https://twitter.com/intent/tweet?text=30A%20needs%20a%20real%20stormwater%20plan.%20See%20how%20the%20funding%20works%20and%20how%20to%20help%20before%20the%20Jan%201%2C%202027%20deadline%3A&url=https%3A%2F%2Fprotect30a.org%2F" id="pp-share-x" target="_blank" rel="noopener"
+            data-track-event="share_x" data-track-pillar="engagement"
+            data-track-label="Share on X" data-track-section="help">Post on X</a>
+          <a class="btn btn-line" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fprotect30a.org%2F" id="pp-share-fb" target="_blank" rel="noopener"
+            data-track-event="share_facebook" data-track-pillar="engagement"
+            data-track-label="Share on Facebook" data-track-section="help">Facebook</a>
+          <a class="btn btn-line" href="mailto:?subject=Protect%2030A%20%E2%80%94%20South%20Walton%20Stormwater%20Plan&body=30A%20needs%20a%20real%20stormwater%20plan.%20See%20how%20the%20funding%20works%20and%20how%20to%20help%20before%20the%20Jan%201%2C%202027%20deadline%3A%0A%0Ahttps%3A%2F%2Fprotect30a.org%2F" id="pp-share-email"
+            data-track-event="share_email" data-track-pillar="engagement"
+            data-track-label="Share by email" data-track-section="help">Email</a>
+          <button class="btn btn-line" type="button" id="pp-share-copy"
+            data-track-event="share_copy" data-track-pillar="engagement"
+            data-track-label="Copy link" data-track-section="help">Copy link</button>
+        </div>
+      </div>
+
+      <!-- R-19 · RSVP / "I'll show up" -->
+      <div class="ac-card reveal">
+        <h3><span aria-hidden="true">🗣️</span> I'll show up</h3>
+        <p>Three minutes at a podium from a real neighbor beats a hundred pages of staff reports. Pick a meeting, RSVP, and add it to your calendar. We'll only use your email to send you a reminder — it is never shared with any official.</p>
+        <form id="pp-rsvp-form" data-records-notice novalidate>
+          <label class="ac-field" for="pp-rsvp-hearing">
+            <span class="ac-label">Which meeting? <span class="ac-req" aria-hidden="true">*</span></span>
+            <select class="ac-input" id="pp-rsvp-hearing" name="meeting" required>
+              <option value="">Loading meetings…</option>
+            </select>
+          </label>
+          <label class="ac-field" for="pp-rsvp-first">
+            <span class="ac-label">First name <span class="ac-req" aria-hidden="true">*</span></span>
+            <input class="ac-input" type="text" id="pp-rsvp-first" name="first" autocomplete="given-name" required maxlength="60" placeholder="e.g., Sam">
+          </label>
+          <label class="ac-field" for="pp-rsvp-email">
+            <span class="ac-label">Email (optional — for a reminder)</span>
+            <input class="ac-input" type="email" id="pp-rsvp-email" name="email" autocomplete="email" maxlength="120" placeholder="you@example.com">
+          </label>
+          <label class="ac-check" for="pp-rsvp-consent">
+            <input type="checkbox" id="pp-rsvp-consent" name="consent" required>
+            <span><span class="ac-req" aria-hidden="true">*</span> Send me a reminder about this meeting. I understand this is a private community advocacy effort and my submission may be a public record.</span>
+          </label>
+          <div class="ac-btnrow">
+            <button class="btn btn-gold" type="submit" id="pp-rsvp-submit"
+              data-track-event="hearing_rsvp_click" data-track-pillar="engagement"
+              data-track-label="Submit RSVP" data-track-section="help">Count me in</button>
+            <button class="btn btn-line" type="button" id="pp-rsvp-ics"
+              data-track-event="ics_download_click" data-track-pillar="engagement"
+              data-track-label="Add hearing to calendar" data-track-section="help">Add to calendar (.ics)</button>
+          </div>
+          <p class="ac-status" id="pp-rsvp-status" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+
+      <!-- R-20 · EMAIL-LIST SIGNUP -->
+      <div class="ac-card ac-wide reveal">
+        <h3><span aria-hidden="true">📬</span> Get occasional updates</h3>
+        <p>Meeting dates, milestones, and ways to help — a few times a year, no spam.</p>
+        <form id="pp-signup-form" data-records-notice novalidate>
+          <label class="ac-field" for="pp-signup-email">
+            <span class="ac-label">Email <span class="ac-req" aria-hidden="true">*</span></span>
+            <input class="ac-input" type="email" id="pp-signup-email" name="email" autocomplete="email" required maxlength="120" placeholder="you@example.com">
+          </label>
+          <label class="ac-check" for="pp-signup-consent">
+            <input type="checkbox" id="pp-signup-consent" name="consent" required>
+            <span><span class="ac-req" aria-hidden="true">*</span> Yes, send me occasional updates. I understand this is a private community advocacy effort and my email may be a public record.</span>
+          </label>
+          <div class="ac-btnrow">
+            <button class="btn btn-gold" type="submit" id="pp-signup-submit"
+              data-track-event="email_signup_click" data-track-pillar="engagement"
+              data-track-label="Submit email signup" data-track-section="help">Keep me posted</button>
+          </div>
+          <p class="ac-status" id="pp-signup-status" role="status" aria-live="polite"></p>
+          <a class="ac-privacy-link" href="/records-privacy/"
+            data-track-event="records_privacy_link" data-track-pillar="engagement"
+            data-track-label="Records privacy from signup" data-track-section="help">How we handle your information &amp; public records ↗</a>
+        </form>
+      </div>
+
+    </div>
+    <!-- =================== /ACTION CENTER MODULES ===================== -->
   </div>
 </section>
 
@@ -3178,6 +3534,7 @@ document.addEventListener('click',e=>{
   p30aTrack(target.dataset.trackEvent,{
     label:target.dataset.trackLabel||target.textContent.trim(),
     section:target.dataset.trackSection||'',
+    pillar:target.dataset.trackPillar||'',
     target:target.dataset.trackTarget||target.getAttribute('href')||'',
     href:target.href||''
   });

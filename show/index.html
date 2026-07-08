@@ -159,6 +159,10 @@
     section{padding:62px 0}
   }
 </style>
+<link rel="stylesheet" href="/assets/pillars.css">
+<script type="module" src="/assets/pillars.js" defer></script>
+<script src="/assets/content.js" defer></script>
+<script src="/assets/metrics.js" defer></script>
 </head>
 <body>
 <a id="top"></a>
@@ -166,6 +170,7 @@
 <header class="nav">
   <div class="wrap">
     <a class="brand" href="#top"><span class="dot"></span> Protect 30A</a>
+    <!-- TODO: mirror pillar dropdown nav (P0-C) — deferred: this page uses a bespoke .navlinks nav with its own mobile-toggle JS (setMenu / .menu-btn) and fixed-position mobile CSS that differs from the shared .nav-links system pillars.js targets. Injecting .nav-top/.nav-panel dropdowns here risks conflicting with the existing toggle script. Pillar destinations added below as plain, reachable links; full dropdown mirror to be applied when the show nav is reconciled with the shared pillar assets. -->
     <nav class="navlinks" id="nav">
       <a class="back" href="https://protect30a.org/#plan">← The Stormwater Plan</a>
       <a href="#show">The Show</a>
@@ -173,6 +178,9 @@
       <a href="#listen">Listen</a>
       <a href="#sponsor">Sponsor</a>
       <a href="#community">Community</a>
+      <a href="/act">Engage</a>
+      <a href="/records">Transparency</a>
+      <a href="/impact#find-district">Impact</a>
       <a class="cta" href="#sponsor">Become a sponsor</a>
     </nav>
     <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="nav">☰</button>
@@ -442,6 +450,7 @@
       </div>
     </div>
     <div>© <span id="yr"></span> Protect 30A · A community initiative. Independent of any government body. Sponsorships clearly disclosed per FTC 16 CFR Part 255.</div>
+    <div data-disclosure="A" style="margin-top:18px"></div>
   </div>
 </footer>
 

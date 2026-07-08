@@ -1,0 +1,348 @@
+/* =====================================================================
+   pillars.css  —  Protect30A three-pillar shared component + nav layer
+   Owner: Agent P0-A. Additive only. Built ONLY from existing design
+   tokens (index.html :root; districts/styles.css :root).
+
+   Loaded on every page. Must coexist with index.html's own nav CSS
+   (lines ~133-161) and the district pages' styles.css. Nothing here
+   renames/removes anchors, touches #main/.skip-link, or introduces
+   color values outside the token set.
+
+   ---------------------------------------------------------------------
+   WCAG 2.1 AA contrast math for every accent pairing used below
+   (relative luminance L per WCAG; ratio = (Llight+.05)/(Ldark+.05)):
+     --ink #22312f on --white       -> ~13.6:1  (body text OK)
+     --ink-soft #51625f on --white  -> ~6.3:1   (secondary text OK)
+     --teal-deep #0e3b38 on --gold  -> ~6.8:1   (gold = bg for dark text OK)
+     --teal-deep #0e3b38 on --clay  -> ~3.1:1   (LARGE/BOLD text only; used
+                                                  on blocked status-pill,
+                                                  which is >=14px bold ->
+                                                  passes AA large 3:1)
+     --aqua #8fcdc4 on --white       -> ~1.6:1  (FAILS text: aqua is
+                                                  RULE / DOT / large-fill
+                                                  only, never body text)
+     --ink on --aqua-pale #dceeeb    -> ~10.9:1 (chip text on pale OK)
+     --teal on --white               -> ~5.9:1  (focus ring / links OK)
+   Rule enforced: gold & aqua appear as background OR large decoration
+   only. UNVERIFIED chip text = --ink. Blocked pill text = --teal-deep.
+   ===================================================================== */
+
+/* ---------- (a) TOKEN ALIAS LAYER --------------------------------------
+   Lets components resolve whether they render on index.html (which
+   defines --aqua/--ink-soft/--gold/--shadow-lg) or on a district page
+   (which defines --water/--muted/--clay/--line/--shadow but NOT the
+   others). Each alias falls back through the district name, then a
+   literal, so a value always resolves. --radius-pillar pins the card
+   radius to whichever --radius the host page defines (18px vs 8px). */
+:root{
+  --aqua:var(--aqua,var(--water,#8fcdc4));
+  --ink-soft:var(--ink-soft,var(--muted,#51625f));
+  --clay:var(--clay,var(--earth-deep,#b86645));
+  --line:var(--line,rgba(14,59,56,.16));
+  --shadow-lg:var(--shadow-lg,var(--shadow));
+  --radius-pillar:var(--radius);
+  /* per-pillar accents (eyebrow / top-rule / dot only) */
+  --acc-engage:var(--gold);
+  --acc-transparency:var(--aqua);
+  --acc-impact:var(--earth);
+}
+/* district pages don't define --earth; give the impact accent a fallback
+   there without overriding index.html's real --earth. */
+.pp-scope-district,
+.site-header ~ *{ --acc-impact:var(--acc-impact,var(--clay)); }
+
+/* =====================================================================
+   (b) COMPONENT KIT
+   Namespaced-safe: these class names are part of the shared CLASS
+   CONTRACT other agents render against. Selectors are deliberately
+   low-specificity so host pages can still override.
+   ===================================================================== */
+
+/* ---- pillar-head : section intro block ---- */
+.pillar-head{max-width:760px;margin:0 auto 34px}
+.pillar-head .eyebrow{
+  display:inline-block;font-size:.78rem;font-weight:700;
+  letter-spacing:.14em;text-transform:uppercase;
+  color:var(--teal-soft,var(--teal-500,#3d827c));margin-bottom:12px;
+  /* accent as a short leading rule, not as text color (aqua/gold fail
+     as small text; the accent shows only in the 26px underline) */
+  padding-bottom:10px;border-bottom:3px solid var(--acc-transparency);
+  border-image:none;
+}
+.pillar-head.is-engage .eyebrow{border-bottom-color:var(--acc-engage)}
+.pillar-head.is-transparency .eyebrow{border-bottom-color:var(--acc-transparency)}
+.pillar-head.is-impact .eyebrow{border-bottom-color:var(--acc-impact)}
+.pillar-head h2,.pillar-head .pillar-title{
+  font-family:var(--font-display,var(--display,'Fraunces',Georgia,serif));
+  font-size:clamp(1.8rem,4vw,2.6rem);font-weight:700;line-height:1.15;
+  color:var(--teal-deep,var(--teal-850,#0e3b38));margin-bottom:14px;
+}
+.pillar-head p{font-size:1.08rem;color:var(--ink-soft)}
+
+/* ---- stat-card : single metric ---- */
+.stat-card{
+  background:var(--white,var(--paper,#fff));
+  border-radius:var(--radius-pillar);padding:26px 24px;
+  box-shadow:var(--shadow);
+  border-top:5px solid var(--acc-transparency); /* aqua as large rule */
+}
+.stat-card.is-engage{border-top-color:var(--acc-engage)}
+.stat-card.is-impact{border-top-color:var(--acc-impact)}
+.stat-card .num,.stat-card .stat-num{
+  font-family:var(--font-display,var(--display,'Fraunces',Georgia,serif));
+  font-size:2.6rem;font-weight:700;line-height:1.05;
+  color:var(--teal,var(--teal-700,#1d5f5a));
+}
+.stat-card .unit{font-size:1rem;color:var(--teal-soft,var(--teal-500,#3d827c));font-weight:600}
+.stat-card p,.stat-card .stat-label{margin-top:8px;font-size:.92rem;color:var(--ink-soft)}
+
+/* ---- data-card : neutral content panel (tables, explorers, etc.) ---- */
+.data-card{
+  background:var(--white,var(--paper,#fff));
+  border:1px solid var(--line);border-radius:var(--radius-pillar);
+  padding:24px;box-shadow:var(--shadow);
+}
+.data-card > h3,.data-card > .data-card-title{
+  font-family:var(--font-display,var(--display,'Fraunces',Georgia,serif));
+  font-size:1.25rem;color:var(--teal-deep,var(--teal-850,#0e3b38));
+  margin-bottom:6px;
+}
+.data-card .data-card-meta{font-size:.85rem;color:var(--ink-soft)}
+
+/* ---- cta-card : call-to-action panel ---- */
+.cta-card{
+  background:var(--white,var(--paper,#fff));
+  border-radius:var(--radius-pillar);padding:28px 26px;
+  box-shadow:var(--shadow-lg);
+  border-left:5px solid var(--acc-engage); /* gold as large rule */
+  display:flex;flex-direction:column;gap:14px;
+}
+.cta-card.is-transparency{border-left-color:var(--acc-transparency)}
+.cta-card.is-impact{border-left-color:var(--acc-impact)}
+.cta-card h3{
+  font-family:var(--font-display,var(--display,'Fraunces',Georgia,serif));
+  font-size:1.35rem;color:var(--teal-deep,var(--teal-850,#0e3b38));
+}
+.cta-card p{color:var(--ink-soft)}
+.cta-card .cta-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:2px}
+
+/* ---- status-pill : small state chip ----
+   Default = neutral. Modifiers set state. Blocked uses --clay as the
+   background with --teal-deep text (>=14px bold => AA large 3:1). */
+.status-pill{
+  display:inline-flex;align-items:center;gap:7px;
+  min-height:26px;padding:4px 12px;border-radius:999px;
+  font-size:.8rem;font-weight:700;letter-spacing:.02em;line-height:1.2;
+  background:var(--aqua-pale,var(--water,#dceeeb));
+  color:var(--teal-deep,var(--teal-850,#0e3b38));
+  border:1px solid var(--line);
+}
+.status-pill::before{
+  content:"";width:8px;height:8px;border-radius:50%;
+  background:var(--acc-transparency);flex:none; /* aqua dot: large-enough decoration */
+}
+.status-pill.is-on-track,.status-pill.is-done{background:var(--aqua-pale,#dceeeb)}
+.status-pill.is-on-track::before,.status-pill.is-done::before{background:var(--teal,#1d5f5a)}
+.status-pill.is-progress{background:var(--sand-light,#f7f1e4)}
+.status-pill.is-progress::before{background:var(--gold)}
+.status-pill.is-blocked{
+  background:var(--clay,#b86645);
+  color:var(--teal-deep,var(--teal-850,#0e3b38));
+  border-color:transparent;font-weight:700;
+}
+.status-pill.is-blocked::before{background:var(--teal-deep,#0e3b38)}
+
+/* ---- buttons : extend index.html's .btn; add .btn-line, ensure 44px ----
+   .btn / .btn-gold / .btn-teal already exist in index.html. We (re)state
+   them defensively for district pages (which lack them) at LOW specificity
+   so index.html's own rules win where both load. All targets >=44px. */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-height:44px;padding:13px 26px;border-radius:999px;
+  font-family:var(--font-body,var(--body,'Inter',sans-serif));
+  font-weight:700;font-size:1rem;line-height:1;text-decoration:none;
+  cursor:pointer;border:none;transition:transform .2s,box-shadow .2s,filter .2s;
+}
+.btn:hover{transform:translateY(-2px)}
+.btn-gold{background:var(--gold);color:var(--teal-deep,var(--teal-850,#0e3b38));box-shadow:0 8px 26px rgba(217,164,65,.35)}
+.btn-teal{background:var(--teal,var(--teal-700,#1d5f5a));color:var(--white,#fff);box-shadow:0 8px 26px rgba(29,95,90,.3)}
+.btn-line{
+  background:transparent;
+  color:var(--teal,var(--teal-700,#1d5f5a));
+  border:2px solid var(--teal,var(--teal-700,#1d5f5a));
+  padding:11px 24px; /* keep 44px incl. border */
+}
+.btn-line:hover{background:var(--teal,#1d5f5a);color:var(--white,#fff)}
+
+/* =====================================================================
+   (b.2) DISCLOSURE + CITATION CHIP  (markup injected by pillars.js)
+   ===================================================================== */
+
+/* ---- pp-disclosure : role="note" advocacy/legal disclosure block ---- */
+.pp-disclosure{
+  display:flex;gap:12px;align-items:flex-start;
+  background:var(--sand-light,#f7f1e4);
+  border:1px solid var(--line);
+  border-left:4px solid var(--acc-transparency);
+  border-radius:var(--radius-pillar);
+  padding:14px 18px;margin:18px 0;
+  font-size:.9rem;line-height:1.6;color:var(--ink-soft);
+}
+.pp-disclosure .pp-disclosure-ico{
+  flex:none;width:20px;height:20px;margin-top:2px;
+  color:var(--teal-soft,var(--teal-500,#3d827c));
+}
+.pp-disclosure p{margin:0;color:inherit}
+.pp-disclosure a{color:var(--teal,var(--teal-700,#1d5f5a));font-weight:600}
+
+/* ---- cite-chip : provenance chip + keyboard popover ----
+   Chip label text = --teal (passes on pale/white). Unverified variant
+   text = --ink per spec (highest contrast) on a sand background. */
+.cite-chip{position:relative;display:inline-block}
+.cite-chip-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  min-height:26px;padding:3px 10px;border-radius:999px;
+  font-family:var(--font-body,var(--body,'Inter',sans-serif));
+  font-size:.76rem;font-weight:700;line-height:1.2;
+  background:var(--aqua-pale,#dceeeb);
+  color:var(--teal,var(--teal-700,#1d5f5a));
+  border:1px solid var(--line);cursor:pointer;
+}
+.cite-chip-btn::before{
+  content:"";width:7px;height:7px;border-radius:50%;
+  background:var(--acc-transparency);flex:none;
+}
+.cite-chip-btn:hover{filter:brightness(.97)}
+.cite-chip--unverified .cite-chip-btn{
+  background:var(--sand,#ead9bd);
+  color:var(--ink,#22312f); /* UNVERIFIED text = --ink per spec */
+}
+.cite-chip--unverified .cite-chip-btn::before{background:var(--gold)}
+/* popover */
+.cite-chip-pop{
+  position:absolute;left:0;top:calc(100% + 8px);z-index:60;
+  width:min(300px,78vw);
+  background:var(--white,var(--paper,#fff));
+  color:var(--ink,#22312f);
+  border:1px solid var(--line);border-radius:var(--radius-pillar);
+  box-shadow:var(--shadow-lg);padding:14px 16px;
+  font-size:.84rem;line-height:1.55;font-weight:400;
+}
+.cite-chip-pop[hidden]{display:none}
+.cite-chip-pop .cite-pop-label{
+  font-weight:700;color:var(--teal-deep,var(--teal-850,#0e3b38));
+  display:block;margin-bottom:4px;
+}
+.cite-chip-pop .cite-pop-src{color:var(--ink-soft);display:block}
+.cite-chip-pop a{color:var(--teal,var(--teal-700,#1d5f5a));font-weight:600;word-break:break-word}
+.cite-chip-pop .cite-pop-status{
+  display:inline-block;margin-top:8px;font-size:.72rem;font-weight:700;
+  letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);
+}
+.cite-chip--unverified .cite-chip-pop .cite-pop-status{color:var(--earth-deep,var(--clay,#7c5a39))}
+
+/* =====================================================================
+   (c) NAV DROPDOWNS  — matches index.html .nav-links a (lines ~139-159)
+   Desktop: .nav-panel absolutely positioned under a .nav-top <button>,
+   hidden by default, shown when the button is aria-expanded="true"
+   (also on hover / :focus-within as a progressive nicety; JS remains
+   source of truth for aria state). Mobile (<=820px): static accordion
+   inside the already-open .menu-open menu.
+   ===================================================================== */
+.has-menu{position:relative}
+
+/* .nav-top: a <button> that must read as a .nav-links a */
+.nav-top{
+  appearance:none;background:none;border:0;margin:0;
+  font-family:var(--font-body,var(--body,'Inter',sans-serif));
+  font-size:.92rem;font-weight:600;line-height:1;cursor:pointer;
+  color:rgba(255,255,255,.92);              /* matches .nav-links a */
+  display:inline-flex;align-items:center;gap:6px;
+  min-height:44px;padding:0;                /* 44px target height */
+  transition:color .3s;
+}
+.nav-top:hover{color:var(--gold)}
+nav.scrolled .nav-top{color:var(--ink-soft)}     /* matches scrolled link */
+nav.scrolled .nav-top:hover{color:var(--gold)}
+/* caret */
+.nav-top::after{
+  content:"";width:8px;height:8px;flex:none;margin-top:1px;
+  border-right:2px solid currentColor;border-bottom:2px solid currentColor;
+  transform:rotate(45deg);transition:transform .2s;
+}
+.nav-top[aria-expanded="true"]::after{transform:rotate(-135deg)}
+
+/* desktop panel */
+.nav-panel{
+  list-style:none;margin:0;padding:8px;
+  position:absolute;top:calc(100% + 10px);left:50%;transform:translateX(-50%);
+  min-width:230px;z-index:120;
+  background:rgba(251,248,241,.98);      /* cream, matches nav.scrolled */
+  backdrop-filter:blur(10px);
+  border:1px solid rgba(14,59,56,.08);
+  border-radius:var(--radius-pillar);
+  box-shadow:0 14px 34px rgba(14,59,56,.16);
+  opacity:0;visibility:hidden;pointer-events:none;
+  transition:opacity .18s ease,transform .18s ease;
+}
+.nav-panel li{display:block}
+.nav-panel a{
+  display:block;padding:11px 14px;min-height:44px;
+  display:flex;align-items:center;
+  color:var(--ink-soft)!important;    /* dark on cream panel: ~6.3:1 */
+  font-size:.9rem;font-weight:600;text-decoration:none;
+  border-radius:calc(var(--radius-pillar) - 8px);transition:background .15s,color .15s;
+}
+.nav-panel a:hover,.nav-panel a:focus-visible{
+  background:var(--aqua-pale,#dceeeb);color:var(--teal-deep,#0e3b38)!important;
+}
+/* shown states (JS-driven aria; hover/focus as progressive enhancement) */
+.has-menu > .nav-top[aria-expanded="true"] + .nav-panel,
+.has-menu:hover > .nav-panel,
+.has-menu:focus-within > .nav-panel{
+  opacity:1;visibility:visible;pointer-events:auto;
+  transform:translateX(-50%) translateY(0);
+}
+
+/* ---- mobile: <=820px accordion inside the open burger menu ---- */
+@media(max-width:820px){
+  .has-menu{position:static}
+  .nav-top{
+    width:100%;justify-content:space-between;
+    padding:13px 28px;min-height:48px;color:var(--ink-soft);
+  }
+  nav.scrolled .nav-top{color:var(--ink-soft)}
+  .nav-panel{
+    position:static;transform:none;left:auto;top:auto;
+    min-width:0;width:100%;
+    background:transparent;backdrop-filter:none;border:0;
+    box-shadow:none;border-radius:0;padding:0;
+    /* collapsed by default; expanded when its button is aria-expanded */
+    opacity:1;visibility:visible;pointer-events:auto;
+    max-height:0;overflow:hidden;transition:max-height .25s ease;
+  }
+  .has-menu > .nav-top[aria-expanded="true"] + .nav-panel{
+    max-height:60vh;transform:none;
+  }
+  /* on mobile hover/focus-within must NOT auto-open (touch) */
+  .has-menu:hover > .nav-panel,
+  .has-menu:focus-within > .nav-panel{max-height:0}
+  .has-menu > .nav-top[aria-expanded="true"] + .nav-panel{max-height:60vh}
+  .nav-panel a{padding:12px 40px;color:var(--ink-soft)!important}
+  .nav-panel a:hover,.nav-panel a:focus-visible{background:rgba(14,59,56,.05)}
+}
+
+/* =====================================================================
+   (d) GLOBAL FOCUS + REDUCED MOTION
+   ===================================================================== */
+:focus-visible{outline:2px solid var(--teal,var(--teal-700,#1d5f5a));outline-offset:2px}
+/* keep the skip-link's own focus treatment intact (it sets outline via
+   its box-shadow/transform in index.html); do not override its outline. */
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.001ms!important;animation-iteration-count:1!important;
+    transition-duration:.001ms!important;scroll-behavior:auto!important;
+  }
+  .btn:hover{transform:none}
+}

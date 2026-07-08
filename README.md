@@ -7,6 +7,10 @@ Community stormwater plan for South Walton's 30A corridor. The 30A corridor's bu
 ## Key routes
 
 - `/` - South Walton stormwater plan
+- `/act/` - action center for pledges, commissioner email, RSVP, and toolkit links
+- `/records/` - records, methodology, money, and public-records posture
+- `/impact/` - impact tracker and district-finding surface
+- `/records-privacy/` - public-records and privacy notice
 - `/show` - Protect30A weekly community media show
 - `/districts/` - district hub for videos, podcast episodes, and sources
 - `/districts/inlet-beach/`

@@ -1,0 +1,4 @@
+{
+  "_readme": "EPISODES — podcast / video segments related to the stormwater plan and specific districts. Row schema: {title, date (ISO8601 date), districtSlug (must match a real district route slug or '' for site-wide), topic, mediaUrl}. Keep this list empty until a real published mediaUrl is available. TO EDIT: GitHub → PR → Vercel Preview → merge. No per-property dollar figures.",
+  "episodes": []
+}

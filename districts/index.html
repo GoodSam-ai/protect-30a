@@ -21,6 +21,10 @@
 <meta name="twitter:image" content="https://protect30a.org/og-image.jpg">
 <script src="/canonical-host.js"></script>
 <link rel="stylesheet" href="/districts/styles.css">
+<link rel="stylesheet" href="/assets/pillars.css">
+<script type="module" src="/assets/pillars.js" defer></script>
+<script src="/assets/content.js" defer></script>
+<script src="/assets/metrics.js" defer></script>
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -28,11 +32,45 @@
   <div class="nav-wrap">
     <a class="brand" href="/"><span class="brand-mark"></span>Protect 30A</a>
     <nav class="nav-links" aria-label="Primary navigation">
-      <a href="/">Stormwater Plan</a>
-      <a href="/show">The Show</a>
-      <a href="/districts/">District Hub</a>
-      <a href="https://www.youtube.com/channel/UC6J6C6CwZYozQglRpEKVxGQ" target="_blank" rel="noopener">YouTube</a>
-      <a class="pill" href="https://open.spotify.com/show/033BT9WKfiVI2mrFWc75yS" target="_blank" rel="noopener">Spotify</a>
+      <span class="has-menu">
+        <button type="button" class="nav-top" aria-expanded="false" aria-controls="menu-why">Why &amp; Plan</button>
+        <ul class="nav-panel" id="menu-why">
+          <li><a href="/#why">Why it matters</a></li>
+          <li><a href="/#plan">The plan</a></li>
+          <li><a href="/#timeline">Timeline</a></li>
+          <li><a href="/#faq">FAQ</a></li>
+        </ul>
+      </span>
+      <span class="has-menu">
+        <button type="button" class="nav-top" aria-expanded="false" aria-controls="menu-engage">Engage</button>
+        <ul class="nav-panel" id="menu-engage">
+          <li><a href="/act">Take action</a></li>
+          <li><a href="/act#calendar">Calendar</a></li>
+          <li><a href="/show">The Show</a></li>
+          <li><a href="/act#hoa-toolkit">HOA toolkit</a></li>
+          <li><a href="https://www.youtube.com/channel/UC6J6C6CwZYozQglRpEKVxGQ" target="_blank" rel="noopener">YouTube</a></li>
+          <li><a href="https://open.spotify.com/show/033BT9WKfiVI2mrFWc75yS" target="_blank" rel="noopener">Spotify</a></li>
+        </ul>
+      </span>
+      <span class="has-menu">
+        <button type="button" class="nav-top" aria-expanded="false" aria-controls="menu-transparency">Transparency</button>
+        <ul class="nav-panel" id="menu-transparency">
+          <li><a href="/records">Records</a></li>
+          <li><a href="/records#methodology">Methodology</a></li>
+          <li><a href="/#wq-explorer">Water-quality explorer</a></li>
+          <li><a href="/records#money">Money</a></li>
+        </ul>
+      </span>
+      <span class="has-menu">
+        <button type="button" class="nav-top" aria-expanded="false" aria-controls="menu-impact">Impact</button>
+        <ul class="nav-panel" id="menu-impact">
+          <li><a href="/districts/">Districts</a></li>
+          <li><a href="/impact#find-district">Find your district</a></li>
+          <li><a href="/impact#tracker">Project tracker</a></li>
+          <li><a href="/#lakes">Coastal dune lakes</a></li>
+        </ul>
+      </span>
+      <a class="pill" href="/#help">Show Support</a>
     </nav>
   </div>
 </header>
@@ -150,6 +188,7 @@
       <a href="mailto:doug@goodsamaritaninstitute.org">Contact</a>
     </div>
   </div>
+  <div class="wrap"><div data-disclosure="A"></div></div>
 </footer>
 
 <script type="application/ld+json">

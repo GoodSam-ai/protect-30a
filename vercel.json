@@ -1,6 +1,21 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "functions": {
+    "api/*.js": {
+      "maxDuration": 10
+    }
+  },
   "redirects": [
+    {
+      "source": "/transparency",
+      "destination": "/records",
+      "permanent": true
+    },
+    {
+      "source": "/transparency/:path*",
+      "destination": "/records/:path*",
+      "permanent": true
+    },
     {
       "source": "/",
       "has": [{ "type": "header", "key": "host", "value": "protect30a.com" }],

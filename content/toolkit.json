@@ -1,0 +1,4 @@
+{
+  "_readme": "TOOLKIT — downloadable resources (one-pagers, fact sheets, hearing guides) for residents and stakeholders. Row schema: {title, audience:'residents'|'STR-owners'|'HOAs'|'officials'|'press', summary, pdf (path under /assets or absolute URL)}. Keep this list empty until a real committed PDF or public URL is available. TO EDIT: GitHub → PR → Vercel Preview → merge. Keep 'special assessment' language; never state per-property dollar figures; flag any unconfirmed claim '[UNVERIFIED]'.",
+  "toolkit": []
+}
