@@ -1,0 +1,67 @@
+{
+  "_readme": "PROJECTS TRACKER — candidate and completed stormwater projects grouped by drainage basin and mapped to districts. IMPORTANT HONESTY FRAME: meta.status='candidate' and meta.adopted=false mean this is a WORKING LIST for public discussion, NOT an adopted capital plan. Any project with status:'concept' is illustrative/aspirational and needs professional engineering (PE) review before it is real — carry needs_pe_review:true and candidate:true on such rows. Only mark status:'completed' when there is a citable source in the project's sources[] array. Schema: meta{status,adopted,last_reviewed,disclaimer,attribution_cba}; legend[]; basins[]{id,district_slug,name,projects[]{id,name,type,status:'concept'|'planned'|'in-progress'|'completed',summary,sources[],needs_pe_review,candidate}}. district_slug MUST match a real district route slug. TO EDIT: GitHub → PR → Vercel Preview → merge. Never add per-property dollar figures. Use 'special assessment', never 'tax'. Flag anything unconfirmed with '[UNVERIFIED]'.",
+  "meta": {
+    "status": "candidate",
+    "adopted": false,
+    "last_reviewed": "2026-06-30",
+    "disclaimer": "This is a candidate project list compiled to support public discussion of the 30A stormwater plan. It is not an adopted capital improvement plan. Projects marked 'concept' are illustrative and require professional engineering review, permitting, and Board action before they could proceed. No per-property assessment amounts are stated or implied.",
+    "attribution_cba": "Cost/benefit framing follows a benefit-received basis consistent with special-assessment law (benefit to assessed parcels), not a per-parcel tax figure. Any cost figures shown at the program level are planning estimates and are labeled as such."
+  },
+  "legend": [
+    { "status": "completed", "label": "Completed", "meaning": "Constructed and citable via sources[]." },
+    { "status": "in-progress", "label": "In progress", "meaning": "Design/permitting/construction underway; confirm status at source." },
+    { "status": "planned", "label": "Planned", "meaning": "Programmed with a funding path but not yet started." },
+    { "status": "concept", "label": "Concept (needs PE review)", "meaning": "Illustrative candidate only; not engineered, funded, or adopted." }
+  ],
+  "basins": [
+    {
+      "id": "oyster-lake-basin",
+      "district_slug": "santa-rosa-beach-gulf-place-dune-allen",
+      "name": "Oyster Lake Basin (Dune Allen)",
+      "projects": [
+        {
+          "id": "oyster-lake-outfall-restoration",
+          "name": "Oyster Lake outfall / coastal dune lake water-quality improvements",
+          "type": "water-quality",
+          "status": "completed",
+          "summary": "Improvements associated with the Oyster Lake coastal dune lake outfall area intended to reduce untreated stormwater reaching the lake. Included here as a sourced exemplar of a completed water-quality effort in this basin.",
+          "sources": [
+            {
+              "label": "Walton County / TDC coastal dune lakes program (confirm specific project record)",
+              "url": "https://www.mywaltonfl.gov/"
+            }
+          ],
+          "needs_pe_review": false,
+          "candidate": false
+        },
+        {
+          "id": "oyster-lake-basin-treatment-train-concept",
+          "name": "Basin treatment-train retrofit (concept)",
+          "type": "treatment",
+          "status": "concept",
+          "summary": "[UNVERIFIED] Illustrative concept: add baffle boxes / bioretention along contributing storm drains to pre-treat runoff before it reaches Oyster Lake. Location, sizing, and feasibility all pending engineering study.",
+          "sources": [],
+          "needs_pe_review": true,
+          "candidate": true
+        }
+      ]
+    },
+    {
+      "id": "western-lake-basin",
+      "district_slug": "grayton-blue-mountain",
+      "name": "Western Lake Basin (Grayton Beach)",
+      "projects": [
+        {
+          "id": "grayton-conveyance-upgrade-concept",
+          "name": "Grayton Beach street conveyance & infiltration upgrade (concept)",
+          "type": "conveyance",
+          "status": "concept",
+          "summary": "[UNVERIFIED] Illustrative candidate to reduce street ponding in the Grayton Beach grid via regraded swales and added infiltration. Not surveyed, engineered, or funded; shown to illustrate the kind of project the program could evaluate.",
+          "sources": [],
+          "needs_pe_review": true,
+          "candidate": true
+        }
+      ]
+    }
+  ]
+}

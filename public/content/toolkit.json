@@ -1,0 +1,17 @@
+{
+  "_readme": "TOOLKIT — downloadable resources (one-pagers, fact sheets, hearing guides) for residents and stakeholders. This file is an ARRAY; the first element is this metadata object, remaining elements are toolkit rows. Row schema: {title, audience:'residents'|'STR-owners'|'HOAs'|'officials'|'press', summary, pdf (path under /assets or absolute URL)}. pdf paths below are PLACEHOLDERS — the referenced files do not exist yet; create and commit the PDFs (or swap to real URLs) before linking publicly, or the download will 404. TO EDIT: GitHub → PR → Vercel Preview → merge. Keep 'special assessment' language; never state per-property dollar figures; flag any unconfirmed claim '[UNVERIFIED]'.",
+  "toolkit": [
+    {
+      "title": "Stormwater plan: one-page overview",
+      "audience": "residents",
+      "summary": "Plain-language summary of the flooding problem, the proposed dedicated special assessment (not a tax), and how the uniform-method timeline works. No per-property amounts.",
+      "pdf": "/assets/toolkit/stormwater-overview-onepager-PLACEHOLDER.pdf"
+    },
+    {
+      "title": "How to comment at a BCC hearing",
+      "audience": "residents",
+      "summary": "Step-by-step guide to finding the agenda (mywaltonfl.gov), signing up to speak, and making an effective public comment on the stormwater assessment.",
+      "pdf": "/assets/toolkit/how-to-comment-at-bcc-PLACEHOLDER.pdf"
+    }
+  ]
+}

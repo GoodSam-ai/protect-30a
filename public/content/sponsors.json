@@ -1,0 +1,12 @@
+{
+  "_readme": "SPONSORS — community sponsors / supporting organizations, shown as a logo wall. This file is an ARRAY; the first element is this metadata object, remaining elements are sponsor rows. Row schema: {name, tier:'lead'|'supporting'|'community', logo (path under /assets or absolute URL), url, alt (accessible alt text for the logo image)}. Seeded intentionally near-empty — add real sponsors only with permission to display their name/logo. Do NOT imply endorsement of any specific assessment amount or political position beyond what the sponsor has agreed to. TO EDIT: GitHub → PR → Vercel Preview → merge. No per-property dollar figures anywhere on the site.",
+  "sponsors": [
+    {
+      "name": "[Example Sponsor — replace or remove]",
+      "tier": "community",
+      "logo": "/assets/sponsors/example-placeholder.svg",
+      "url": "https://example.org",
+      "alt": "Placeholder sponsor logo — replace with a real sponsor once permission is confirmed"
+    }
+  ]
+}
