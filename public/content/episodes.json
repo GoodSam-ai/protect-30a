@@ -1,19 +1,4 @@
 {
-  "_readme": "EPISODES — podcast / video segments related to the stormwater plan and specific districts (e.g., 'AI for Good: Transforming Communities' civic segments). This file is an ARRAY; the first element is this metadata object, remaining elements are episode rows. Row schema: {title, date (ISO8601 date), districtSlug (must match a real district route slug or '' for site-wide), topic, mediaUrl}. Placeholder rows below are clearly labeled — replace mediaUrl with the real published link before promoting. TO EDIT: GitHub → PR → Vercel Preview → merge. No per-property dollar figures.",
-  "episodes": [
-    {
-      "title": "Why 30A floods: coastal dune lakes, runoff, and a plan to fund fixes",
-      "date": "2026-06-15",
-      "districtSlug": "",
-      "topic": "Stormwater 101 — how the plan and a dedicated special assessment would work (site-wide overview).",
-      "mediaUrl": "https://example.com/episodes/why-30a-floods-PLACEHOLDER"
-    },
-    {
-      "title": "Grayton Beach & Western Lake: local flooding, local fixes",
-      "date": "2026-06-22",
-      "districtSlug": "grayton-blue-mountain",
-      "topic": "District spotlight on Grayton / Blue Mountain drainage and candidate projects.",
-      "mediaUrl": "https://example.com/episodes/grayton-western-lake-PLACEHOLDER"
-    }
-  ]
+  "_readme": "EPISODES — podcast / video segments related to the stormwater plan and specific districts. Row schema: {title, date (ISO8601 date), districtSlug (must match a real district route slug or '' for site-wide), topic, mediaUrl}. Keep this list empty until a real published mediaUrl is available. TO EDIT: GitHub → PR → Vercel Preview → merge. No per-property dollar figures.",
+  "episodes": []
 }

@@ -65,6 +65,29 @@
     el.textContent = msg || "";
     el.setAttribute("data-tone", tone || "");
   }
+  function submitJson(url, payload) {
+    return fetch(url, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      credentials: "omit",
+      body: JSON.stringify(payload)
+    }).then(function (r) {
+      if (r && r.ok) return r;
+      var status = r && r.status ? r.status : 0;
+      var err = new Error("request_failed");
+      err.status = status;
+      if (r && r.json) {
+        return r.json().then(
+          function (body) {
+            err.code = body && body.error;
+            throw err;
+          },
+          function () { throw err; }
+        );
+      }
+      throw err;
+    });
+  }
   function fallbackName(v) { return (v && v.trim()) || "[Your name]"; }
   function fallbackHood(v) { return (v && v.trim()) || "[Your neighborhood]"; }
 
@@ -364,18 +387,11 @@
         try { form.reset(); } catch (_) {}
         loadPledgeWall();
       }
-      fetch("/api/pledge", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        credentials: "omit",
-        body: JSON.stringify(payload)
-      }).then(function (r) {
-        // Degrade gracefully: any response (even non-ok / no datastore) -> thanks.
-        thankYou();
-        return r;
-      }).catch(function () {
-        thankYou();
-      });
+      submitJson("/api/pledge", payload)
+        .then(function () { thankYou(); })
+        .catch(function () {
+          setStatus(statusEl, "We could not record your pledge right now. Please try again.", "err");
+        });
     });
   }
 
@@ -598,11 +614,11 @@
       // OUR list for a reminder; it is NEVER forwarded to any official and is
       // never rendered anywhere. formType "rsvp" to the validate-only capture fn.
       var fields = {
-        meetingId: meetingId,
-        meetingTitle: m ? (m.title || "") : "",
+        hearingId: meetingId,
+        hearingTitle: m ? (m.title || "") : "",
         first: first,
         email: emailEl ? emailEl.value.trim() : "",
-        consent: !!(consentEl && consentEl.checked)
+        consentReminder: !!(consentEl && consentEl.checked)
       };
       setStatus(statusEl, "Locking in your RSVP…", "");
       var done = false;
@@ -619,13 +635,11 @@
         try { form.reset(); } catch (_) {}
         populateHearings(sel);
       }
-      fetch("/api/capture", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        credentials: "omit",
-        body: JSON.stringify({ formType: "rsvp", fields: fields })
-      }).then(function () { thankYou(); })
-        .catch(function () { thankYou(); });
+      submitJson("/api/capture", { formType: "rsvp", fields: fields })
+        .then(function () { thankYou(); })
+        .catch(function () {
+          setStatus(statusEl, "We could not save your RSVP right now. Please try again.", "err");
+        });
     });
   }
 
@@ -663,13 +677,11 @@
         civic("email_signup", { pillar: "engagement", section: "help" });
         try { form.reset(); } catch (_) {}
       }
-      fetch("/api/capture", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        credentials: "omit",
-        body: JSON.stringify({ formType: "signup", fields: { email: email, consent: !!(consentEl && consentEl.checked) } })
-      }).then(function () { thankYou(); })
-        .catch(function () { thankYou(); });
+      submitJson("/api/capture", { formType: "signup", fields: { email: email, consent: !!(consentEl && consentEl.checked) } })
+        .then(function () { thankYou(); })
+        .catch(function () {
+          setStatus(statusEl, "We could not subscribe you right now. Please try again.", "err");
+        });
     });
   }
 
