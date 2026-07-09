@@ -1,0 +1,69 @@
+{
+  "_readme": "PLACES / ALIASES — maps common neighborhood and place names people search for to their canonical district route slug, so visitors can find 'their' area. This file is an ARRAY; the first element is this metadata object, remaining elements are place rows. Row schema: {alias, slug, district, basins:[], lakes:[]}. slug MUST match a real district route slug (e.g. seagrove-seaside-watercolor, santa-rosa-beach-gulf-place-dune-allen, grayton-blue-mountain, watersound-seacrest-prominence-origins, rosemary-beach, inlet-beach, alys-beach, sandestin-miramar-beach-seascape, 30a-stormwater). NOTE ON basins/lakes COLUMNS: these are '[UNVERIFIED]' — coastal dune lake and drainage-basin associations per neighborhood have NOT been confirmed against an authoritative hydrologic map and must be treated as illustrative until verified. TO EDIT: GitHub → PR → Vercel Preview → merge. Do not add per-property dollar figures.",
+  "_basins_lakes_note": "[UNVERIFIED] — basins[] and lakes[] entries are illustrative associations pending confirmation against an authoritative Walton County / NWFWMD hydrologic basin map. Do not present them as definitive.",
+  "places": [
+    {
+      "alias": "Seaside",
+      "slug": "seagrove-seaside-watercolor",
+      "district": "Seagrove / Seaside / WaterColor",
+      "basins": [],
+      "lakes": []
+    },
+    {
+      "alias": "WaterColor",
+      "slug": "seagrove-seaside-watercolor",
+      "district": "Seagrove / Seaside / WaterColor",
+      "basins": [],
+      "lakes": ["Western Lake [UNVERIFIED association]"]
+    },
+    {
+      "alias": "Seagrove Beach",
+      "slug": "seagrove-seaside-watercolor",
+      "district": "Seagrove / Seaside / WaterColor",
+      "basins": [],
+      "lakes": []
+    },
+    {
+      "alias": "Dune Allen",
+      "slug": "santa-rosa-beach-gulf-place-dune-allen",
+      "district": "Santa Rosa Beach / Gulf Place / Dune Allen",
+      "basins": ["Oyster Lake Basin [UNVERIFIED association]"],
+      "lakes": ["Oyster Lake [UNVERIFIED association]", "Stallworth Lake [UNVERIFIED association]"]
+    },
+    {
+      "alias": "Gulf Place",
+      "slug": "santa-rosa-beach-gulf-place-dune-allen",
+      "district": "Santa Rosa Beach / Gulf Place / Dune Allen",
+      "basins": [],
+      "lakes": []
+    },
+    {
+      "alias": "WaterSound",
+      "slug": "watersound-seacrest-prominence-origins",
+      "district": "WaterSound / Seacrest / Prominence / The Origins",
+      "basins": [],
+      "lakes": ["Camp Creek Lake [UNVERIFIED association]"]
+    },
+    {
+      "alias": "Seacrest Beach",
+      "slug": "watersound-seacrest-prominence-origins",
+      "district": "WaterSound / Seacrest / Prominence / The Origins",
+      "basins": [],
+      "lakes": []
+    },
+    {
+      "alias": "Grayton Beach",
+      "slug": "grayton-blue-mountain",
+      "district": "Grayton Beach / Blue Mountain Beach",
+      "basins": ["Western Lake Basin [UNVERIFIED association]"],
+      "lakes": ["Western Lake [UNVERIFIED association]"]
+    },
+    {
+      "alias": "Blue Mountain Beach",
+      "slug": "grayton-blue-mountain",
+      "district": "Grayton Beach / Blue Mountain Beach",
+      "basins": [],
+      "lakes": ["Big Redfish Lake [UNVERIFIED association]"]
+    }
+  ]
+}

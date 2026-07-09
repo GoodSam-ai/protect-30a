@@ -1,0 +1,45 @@
+{
+  "_readme": "RECORDS MANIFEST — index of public records, source documents, and authorities behind the stormwater plan. This is a transparency aid, not a legal repository; all listed items are public records (FL Ch. 119) and contain no PII. Schema per row: {id, title, date (ISO8601 date), type, sourceAuthority, sourceUrl, confidence:'verified'|'inferred', note}. confidence 'verified' = we have a direct, checkable source (URL/document) confirming title/date/scope; confidence 'inferred' = referenced from secondary discussion or plan narrative and NOT yet confirmed against a primary source — always flag inferred rows with a '[UNVERIFIED]' note describing what still needs confirmation. TO EDIT: edit on GitHub → PR → Vercel Preview → merge to prod. Prefer exact citations (statute §, grant ID, resolution number). Never add per-property dollar amounts. Use 'special assessment', never 'tax'.",
+  "records": [
+    {
+      "id": "fs-197-3632-uniform-method",
+      "title": "FS § 197.3632 — Uniform method for collection of non-ad-valorem assessments",
+      "date": "2024-07-01",
+      "type": "statute",
+      "sourceAuthority": "Florida Legislature (Online Sunshine)",
+      "sourceUrl": "http://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0100-0199/0197/Sections/0197.3632.html",
+      "confidence": "verified",
+      "note": "Governs the intent-resolution (before Jan 1), notice, hearing, and Sep 15 roll-certification steps the plan relies on. Date reflects the current statutory version; confirm the effective year applicable to program adoption."
+    },
+    {
+      "id": "fs-403-0893-stormwater-authority",
+      "title": "FS § 403.0893 — Stormwater funding; dedicated funds and assessments",
+      "date": "2024-07-01",
+      "type": "statute",
+      "sourceAuthority": "Florida Legislature (Online Sunshine)",
+      "sourceUrl": "http://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0400-0499/0403/Sections/0403.0893.html",
+      "confidence": "verified",
+      "note": "Statutory authority for local stormwater management utilities/assessments. Confirm citation applicability to Walton County's chosen funding vehicle."
+    },
+    {
+      "id": "walton-meetings-agendas-portal",
+      "title": "Walton County Meetings & Agendas portal",
+      "date": "2026-06-30",
+      "type": "public-portal",
+      "sourceAuthority": "Walton County, FL (mywaltonfl.gov)",
+      "sourceUrl": "https://www.mywaltonfl.gov/162/Meetings-Agendas",
+      "confidence": "verified",
+      "note": "Primary source for BCC agendas, minutes, and meeting cadence (2nd & 4th Tuesday, 4:00 PM Central). Date is the last-reviewed date, not a document date."
+    },
+    {
+      "id": "dep-grant-lpa0381",
+      "title": "FDEP Grant LPA0381 — stormwater / water-quality grant (scope TBD)",
+      "date": "2025-01-01",
+      "type": "grant-agreement",
+      "sourceAuthority": "Florida Department of Environmental Protection (FDEP)",
+      "sourceUrl": "https://floridadep.gov/",
+      "confidence": "inferred",
+      "note": "[UNVERIFIED] — grant scope/status pending confirmation from a source document. The grant ID LPA0381 is referenced in project discussion but the executed agreement, funded scope, award amount, period of performance, and current status have not yet been confirmed against a primary FDEP document. Date is a placeholder. Do NOT publish dollar figures or scope claims until the agreement is obtained."
+    }
+  ]
+}

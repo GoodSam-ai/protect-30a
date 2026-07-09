@@ -1,0 +1,39 @@
+{
+  "_readme": "DISTRICT DATA — per-district detail record consumed by the district page. This is a WORKED EXAMPLE for grayton-blue-mountain; copy its shape for other districts (filename must equal the district route slug + .json). Schema: {slug, name, floodingNotes:[{text, source}], basins:[], lakes:[], phase1Examples:[], localAsk:{hearingRef, emailTemplate}, sources:[]}. HONESTY RULES: every floodingNotes[].source should be a real citation; where a claim is illustrative or not yet confirmed, keep '[UNVERIFIED]'/'[ILLUSTRATIVE]' inline in the text. basins/lakes associations are '[UNVERIFIED]' pending an authoritative hydrologic map. phase1Examples are candidate/illustrative projects, NOT adopted. localAsk.emailTemplate is a suggested resident message — it must contain NO per-property dollar figures and use 'special assessment', never 'tax'. TO EDIT: GitHub → PR → Vercel Preview → merge.",
+  "slug": "grayton-blue-mountain",
+  "name": "Grayton Beach / Blue Mountain Beach",
+  "floodingNotes": [
+    {
+      "text": "The Grayton Beach street grid sits low and close to Western Lake, a coastal dune lake, so heavy rain can pond on streets and carry untreated runoff toward the lake. [ILLUSTRATIVE summary — confirm specifics against county drainage studies before citing as fact.]",
+      "source": "https://www.mywaltonfl.gov/"
+    },
+    {
+      "text": "Coastal dune lakes like Western Lake are rare and water-quality-sensitive; reducing untreated stormwater reaching them is a core goal of the plan. [UNVERIFIED for this district's specific loadings — general characterization.]",
+      "source": "https://floridadep.gov/"
+    }
+  ],
+  "basins": ["Western Lake Basin [UNVERIFIED association]"],
+  "lakes": ["Western Lake [UNVERIFIED association]", "Big Redfish Lake [UNVERIFIED association]"],
+  "phase1Examples": [
+    {
+      "name": "Street conveyance & infiltration upgrade (concept)",
+      "status": "concept",
+      "summary": "[ILLUSTRATIVE / needs PE review] Regrade swales and add infiltration to reduce street ponding in the Grayton grid. Not surveyed, engineered, funded, or adopted.",
+      "candidate": true
+    }
+  ],
+  "localAsk": {
+    "hearingRef": "Bring this to a Walton County BCC regular meeting (2nd & 4th Tuesday, 4:00 PM Central). Confirm the agenda at mywaltonfl.gov/162/Meetings-Agendas.",
+    "emailTemplate": "Subject: Support dedicated stormwater funding for Grayton Beach / Blue Mountain\n\nDear Commissioners,\n\nAs a resident/property owner near Grayton Beach and Western Lake, I support creating a dedicated stormwater program funded by a special assessment so we can reduce street flooding and protect our coastal dune lakes. Please advance the plan's public-notice and hearing steps and keep the community informed.\n\nThank you,\n[Your name]\n[Your street / neighborhood]"
+  },
+  "sources": [
+    {
+      "label": "Walton County (general county site — replace with specific drainage/study record when available)",
+      "url": "https://www.mywaltonfl.gov/"
+    },
+    {
+      "label": "Florida DEP (coastal dune lakes / water quality context)",
+      "url": "https://floridadep.gov/"
+    }
+  ]
+}
