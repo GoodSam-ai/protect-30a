@@ -10,7 +10,7 @@
 
 ## Global Constraints
 
-- Preserve the current Action Center markup, copy, route paths, and non-persistent Phase-0 semantics.
+- Preserve the current Action Center markup, copy, route paths, and non-persistent Phase-0 semantics, while also preserving the release candidate's existing homepage additions and their tests.
 - Do not add storage, analytics, public form submissions, or retention/moderation behavior.
 - Do not change public content except invalid-email prevention and keyboard/focus fixes.
 - Do not deploy until focused tests, the existing full suite, type-check, lint, production build, and preview smoke checks pass.
@@ -66,6 +66,60 @@ Expected: PASS.
 ```bash
 git add public tests/legacy-action-center-contract.test.ts
 git commit -m "fix: preserve Action Center in Next release"
+```
+
+### Task 5: Reconcile the Action Center with the newer homepage
+
+**Files:**
+- Modify: `public/legacy/index.html`
+- Modify: `tests/legacy-action-center-contract.test.ts`
+- Modify: `public/assets/action-center.js`
+- Modify: `public/assets/content.js`
+- Modify: `public/assets/metrics.js`
+- Modify: `public/assets/records-notice.js`
+- Modify: `public/content/*`
+
+**Interfaces:**
+- Consumes: the original release-candidate homepage at commit `433baa4` and the production Action Center at `origin/feature/phase-0-pillars`.
+- Produces: one homepage that keeps the release-candidate Bing, visitor-resource, community-action, compact-lake, and Act-this-week content and the currently deployed Action Center controls.
+
+- [ ] **Step 1: Write a failing combined-surface test**
+
+```ts
+it("keeps newer homepage content alongside the Action Center", async () => {
+  const html = await readFile(join(process.cwd(), "public/legacy/index.html"), "utf8");
+  expect(html).toContain('content="F27C16E2366BC46D030546DA75EFB12F"');
+  expect(html).toContain("Looking for official South Walton visitor resources?");
+  expect(html).toContain('<section class="act-this-week"');
+  expect(html).toContain('id="pp-pledge-form"');
+  expect(html).toContain('id="pp-rsvp-form"');
+  expect(html).toContain('id="pp-signup-form"');
+});
+```
+
+- [ ] **Step 2: Run focused static tests to verify the conflict**
+
+Run: `npx vitest run tests/legacy-action-center-contract.test.ts tests/legacy-homepage-content.test.ts tests/protect30a-recommendations.test.ts`
+
+Expected: FAIL because the production snapshot removed the release-candidate homepage content.
+
+- [ ] **Step 3: Merge only the Action Center into the release-candidate homepage**
+
+Restore `public/legacy/index.html` from `433baa4`, then replace only its `#help` CTA section with the current production Action Center's scoped style and section. Retain the candidate homepage content before and after `#help`, including its metadata, community section, Act-this-week panel, compact lake cards, footer source-library link, and inline navigation code.
+
+Restore the current production Action Center script/content dependencies under the same `public/assets/*` and `public/content/*` URLs. Add its two script includes (`records-notice.js`, `action-center.js`) without removing the candidate's existing script includes.
+
+- [ ] **Step 4: Run focused static tests**
+
+Run: `npx vitest run tests/legacy-action-center-contract.test.ts tests/legacy-homepage-content.test.ts tests/protect30a-recommendations.test.ts`
+
+Expected: PASS.
+
+- [ ] **Step 5: Commit the reconciled homepage**
+
+```bash
+git add public tests/legacy-action-center-contract.test.ts
+git commit -m "fix: merge Action Center into current homepage"
 ```
 
 ### Task 2: Preserve the public Action Center API contracts as Next route handlers

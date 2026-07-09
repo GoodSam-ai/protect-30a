@@ -13,7 +13,7 @@ Release the newer Next.js application on `protect30a.org` while preserving the c
 ## Release design
 
 1. Use the newer Next.js release candidate as the base because it contains the routes currently absent from `protect30a.org`.
-2. Preserve the current public homepage by migrating the current production static homepage and its Action Center dependencies into the Next.js app's `public/` tree. The exact existing Action Center text, controls, content files, and response semantics remain intact.
+2. Preserve both release lines: retain the newer release candidate's homepage additions and merge the current production Action Center into that homepage. The existing Action Center text, controls, content files, and response semantics remain intact; the source library, visitor-resource, Bing-verification, community-action, compact-lake, and Act-this-week additions remain intact too.
 3. Port the two current Vercel Node functions to Next App Router route handlers at the same public URLs, `/api/capture` and `/api/pledge`. Preserve their method restrictions, allowlists, honeypot behavior, sensitive-field rejection, response shapes, and intentionally non-persistent Phase-0 behavior. Do not add a data store, collect additional data, or modify retention/moderation policy.
 4. Make only the following behavior corrections:
    - Email signup and optional RSVP reminder email reject values that are invalid for their existing `type=email` fields before any request is sent.
@@ -29,7 +29,7 @@ Release the newer Next.js application on `protect30a.org` while preserving the c
 
 ## Files and responsibilities
 
-- `public/legacy/index.html`: serves the preserved production homepage through the existing `/` rewrite; retains Action Center markup and adds only the keyboard focus correction.
+- `public/legacy/index.html`: serves the combined homepage through the existing `/` rewrite; retains both the release-candidate sections and the Action Center markup, then adds only the keyboard focus correction.
 - `public/assets/action-center.js`: retains Action Center behavior; adds precise client-side email validity checks.
 - `public/assets/pillars.js`: owns accessible primary-dropdown behavior, including mobile collapsed-panel focusability.
 - `app/api/capture/route.ts` and `app/api/pledge/route.ts`: Next App Router compatibility handlers for the two currently public Action Center endpoints.
