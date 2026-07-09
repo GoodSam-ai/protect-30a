@@ -45,11 +45,30 @@ export function initNav() {
     return id ? document.getElementById(id) : null;
   };
 
+  const syncPanelAccess = (btn) => {
+    const panel = panelFor(btn);
+    if (!panel) return;
+    const isMobile = window.innerWidth <= 820;
+    const isExpanded = btn.getAttribute('aria-expanded') === 'true';
+    if (isMobile && !isExpanded) {
+      panel.setAttribute('inert', '');
+      panel.setAttribute('aria-hidden', 'true');
+    } else {
+      panel.removeAttribute('inert');
+      panel.removeAttribute('aria-hidden');
+    }
+  };
+
+  const closeBtn = (btn) => {
+    btn.setAttribute('aria-expanded', 'false');
+    syncPanelAccess(btn);
+  };
+
   const closeAll = (except) => {
     tops.forEach((btn) => {
       if (btn === except) return;
       if (btn.getAttribute('aria-expanded') === 'true') {
-        btn.setAttribute('aria-expanded', 'false');
+        closeBtn(btn);
       }
     });
   };
@@ -57,10 +76,11 @@ export function initNav() {
   const openBtn = (btn) => {
     closeAll(btn);
     btn.setAttribute('aria-expanded', 'true');
+    syncPanelAccess(btn);
   };
   const toggleBtn = (btn) => {
     const isOpen = btn.getAttribute('aria-expanded') === 'true';
-    if (isOpen) btn.setAttribute('aria-expanded', 'false');
+    if (isOpen) closeBtn(btn);
     else openBtn(btn);
   };
 
@@ -69,6 +89,7 @@ export function initNav() {
     if (btn.dataset.p30aNav === '1') return;
     btn.dataset.p30aNav = '1';
     if (!btn.hasAttribute('aria-expanded')) btn.setAttribute('aria-expanded', 'false');
+    syncPanelAccess(btn);
 
     btn.addEventListener('click', (e) => {
       e.preventDefault();
@@ -81,7 +102,7 @@ export function initNav() {
         case 'Escape':
           if (btn.getAttribute('aria-expanded') === 'true') {
             e.preventDefault();
-            btn.setAttribute('aria-expanded', 'false');
+            closeBtn(btn);
             btn.focus();
           }
           break;
@@ -97,16 +118,17 @@ export function initNav() {
           prev && prev.focus();
           break;
         }
-        case 'ArrowDown':
         case 'Enter':
-        case ' ': {
-          // open and move into the panel (Enter/Space also handled by click,
-          // but we intercept to place focus on the first link)
-          if (e.key === 'ArrowDown') e.preventDefault();
+        case ' ':
+          e.preventDefault();
+          toggleBtn(btn);
+          break;
+        case 'ArrowDown': {
+          e.preventDefault();
           openBtn(btn);
           const panel = panelFor(btn);
           const first = panel && panel.querySelector('a,button,[tabindex]');
-          if (e.key === 'ArrowDown' && first) first.focus();
+          if (first) first.focus();
           break;
         }
         default:
@@ -132,7 +154,7 @@ export function initNav() {
           (items[idx - 1] || btn).focus();
         } else if (e.key === 'Escape') {
           e.preventDefault();
-          btn.setAttribute('aria-expanded', 'false');
+          closeBtn(btn);
           btn.focus();
         } else if (e.key === 'Tab') {
           // tabbing out of the panel closes it (no focus trap)
@@ -153,6 +175,7 @@ export function initNav() {
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') closeAll();
   });
+  window.addEventListener('resize', () => tops.forEach(syncPanelAccess));
 }
 
 /* =====================================================================

@@ -90,6 +90,11 @@
   }
   function fallbackName(v) { return (v && v.trim()) || "[Your name]"; }
   function fallbackHood(v) { return (v && v.trim()) || "[Your neighborhood]"; }
+  function hasValidEmail(input, value) {
+    if (!value) return false;
+    if (input && typeof input.checkValidity === "function") return input.checkValidity();
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+  }
 
   /* Shared toast (reuse the existing #copied-toast from index.html). */
   var TOAST_TIMER = null;
@@ -609,6 +614,12 @@
         if (consentEl) consentEl.focus();
         return;
       }
+      var email = emailEl ? emailEl.value.trim() : "";
+      if (email && !hasValidEmail(emailEl, email)) {
+        setStatus(statusEl, "Please enter a valid email.", "err");
+        if (emailEl) emailEl.focus();
+        return;
+      }
       var m = findMeeting(meetingId);
       // SUNSHINE: this is resident -> event intake ONLY. We send the email to
       // OUR list for a reminder; it is NEVER forwarded to any official and is
@@ -617,7 +628,7 @@
         hearingId: meetingId,
         hearingTitle: m ? (m.title || "") : "",
         first: first,
-        email: emailEl ? emailEl.value.trim() : "",
+        email: email,
         consentReminder: !!(consentEl && consentEl.checked)
       };
       setStatus(statusEl, "Locking in your RSVP…", "");
@@ -656,8 +667,7 @@
     on(form, "submit", function (e) {
       e.preventDefault();
       var email = emailEl ? emailEl.value.trim() : "";
-      // Minimal validity check; the capture fn is authoritative (validate-only).
-      if (!email || email.indexOf("@") < 1) {
+      if (!hasValidEmail(emailEl, email)) {
         setStatus(statusEl, "Please enter a valid email.", "err");
         if (emailEl) emailEl.focus();
         return;

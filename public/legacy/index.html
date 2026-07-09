@@ -3770,7 +3770,7 @@ if(burger&&nav){
     burger.setAttribute('aria-expanded',String(open));
     burger.setAttribute('aria-label',open?'Close menu':'Open menu');
     if(open&&menu&&innerWidth<=820){
-      requestAnimationFrame(()=>menu.querySelector('a')?.focus());
+      requestAnimationFrame(()=>menu.querySelector('.nav-top,.nav-cta')?.focus());
     }else if(!open&&menu?.contains(document.activeElement)){
       burger.focus();
     }
