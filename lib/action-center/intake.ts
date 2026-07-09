@@ -40,6 +40,7 @@ const PLEDGE_SENSITIVE_KEYS = [
 ];
 
 const HONEYPOT_FIELDS = ["website", "url", "company_website", "_hp"];
+const MAX_JSON_BODY_BYTES = 100 * 1024;
 const RATE_LIMIT_WINDOW_MS = 60 * 1000;
 const RATE_LIMIT_MAX = 20;
 
@@ -53,12 +54,40 @@ export function json(body: unknown, status = 200, headers?: HeadersInit) {
   return Response.json(body, { status, headers });
 }
 
-export async function readJson(request: Request): Promise<Record<string, unknown> | null> {
+export async function readJson(request: Request): Promise<unknown | null> {
   try {
-    const value: unknown = await request.json();
-    return value && typeof value === "object" && !Array.isArray(value)
-      ? (value as Record<string, unknown>)
-      : null;
+    if (!request.body) return {};
+
+    const reader = request.body.getReader();
+    const chunks: Uint8Array[] = [];
+    let size = 0;
+
+    try {
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        size += value.byteLength;
+        if (size > MAX_JSON_BODY_BYTES) {
+          await reader.cancel();
+          return null;
+        }
+        chunks.push(value);
+      }
+    } finally {
+      reader.releaseLock();
+    }
+
+    if (size === 0) return {};
+
+    const bytes = new Uint8Array(size);
+    let offset = 0;
+    for (const chunk of chunks) {
+      bytes.set(chunk, offset);
+      offset += chunk.byteLength;
+    }
+
+    return JSON.parse(new TextDecoder().decode(bytes)) as unknown;
   } catch {
     return null;
   }
@@ -75,12 +104,36 @@ function hasSensitiveKey(body: Record<string, unknown>, sensitiveKeys: readonly 
   return Object.keys(body).some((key) => sensitiveKeys.includes(key.toLowerCase()));
 }
 
-function clientKey(request: Request) {
-  const forwardedFor = request.headers.get("x-forwarded-for");
-  return forwardedFor?.split(",")[0].trim() || "unknown";
+function usableClientValue(value: string | null | undefined) {
+  const candidate = value?.trim();
+  return candidate && candidate.toLowerCase() !== "unknown" && !candidate.startsWith("_")
+    ? candidate
+    : null;
 }
 
-function rateLimited(bucket: RateBucket, key: string) {
+function firstHeaderValue(value: string | null) {
+  return usableClientValue(value?.split(",")[0]);
+}
+
+function forwardedClientValue(value: string | null) {
+  const match = value?.match(/(?:^|,)\s*for=(?:"?)([^;,\"]+)/i);
+  return usableClientValue(match?.[1]);
+}
+
+function clientKey(request: Request) {
+  return (
+    firstHeaderValue(request.headers.get("x-forwarded-for")) ??
+    firstHeaderValue(request.headers.get("x-vercel-forwarded-for")) ??
+    firstHeaderValue(request.headers.get("x-real-ip")) ??
+    firstHeaderValue(request.headers.get("cf-connecting-ip")) ??
+    firstHeaderValue(request.headers.get("true-client-ip")) ??
+    forwardedClientValue(request.headers.get("forwarded"))
+  );
+}
+
+function rateLimited(bucket: RateBucket, key: string | null) {
+  if (!key) return false;
+
   const now = Date.now();
   const entry = bucket.get(key);
 
@@ -123,13 +176,17 @@ export async function handleCapture(request: Request) {
   }
 
   const body = await readJson(request);
-  if (!body) return json({ ok: false, error: "invalid_json" }, 400);
+  if (body === null || typeof body !== "object") {
+    return json({ ok: false, error: "invalid_json" }, 400);
+  }
 
-  if (isHoneypotTripped(body)) {
+  const recordBody = body as Record<string, unknown>;
+
+  if (isHoneypotTripped(recordBody)) {
     return json({ ok: true, formType: null, receivedCount: 0 });
   }
 
-  const { formType, fields } = body;
+  const { formType, fields } = recordBody;
   if (!isCaptureFormType(formType)) {
     return json({ ok: false, error: "invalid_formType" }, 400);
   }
@@ -160,17 +217,21 @@ export async function handlePledge(request: Request) {
   }
 
   const body = await readJson(request);
-  if (!body) return json({ ok: false, error: "invalid_json" }, 400);
+  if (body === null || typeof body !== "object" || Array.isArray(body)) {
+    return json({ ok: false, error: "invalid_json" }, 400);
+  }
 
-  if (isHoneypotTripped(body)) return json({ ok: true });
+  const recordBody = body as Record<string, unknown>;
 
-  if (hasSensitiveKey(body, PLEDGE_SENSITIVE_KEYS)) {
+  if (isHoneypotTripped(recordBody)) return json({ ok: true });
+
+  if (hasSensitiveKey(recordBody, PLEDGE_SENSITIVE_KEYS)) {
     return json({ ok: false, error: "sensitive_field_rejected" }, 422);
   }
 
   const pledge: Record<string, unknown> = {};
   for (const key of PLEDGE_ALLOWLIST) {
-    if (Object.prototype.hasOwnProperty.call(body, key)) pledge[key] = body[key];
+    if (Object.prototype.hasOwnProperty.call(recordBody, key)) pledge[key] = recordBody[key];
   }
 
   if (pledge.consentRecords !== true) {

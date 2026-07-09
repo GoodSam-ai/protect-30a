@@ -25,6 +25,21 @@ function request(method: string, body?: BodyInit | null, forwardedFor?: string) 
   });
 }
 
+function requestWithHeaders(
+  method: string,
+  body: BodyInit | null,
+  headers: Record<string, string>
+) {
+  return new Request("https://protect30a.test/api/action-center", {
+    method,
+    headers: {
+      "content-type": "application/json",
+      ...headers
+    },
+    body
+  });
+}
+
 async function capturePost(request: Request) {
   const route = await import(pathToFileURL(captureRoutePath).href);
   return route.POST(request) as Promise<Response>;
@@ -126,6 +141,38 @@ describe("Action Center API contracts", () => {
     expect(await invalidFields.json()).toEqual({ ok: false, error: "invalid_fields" });
   });
 
+  it("keeps capture's legacy empty-body and top-level-array parsing semantics", async () => {
+    const empty = await capturePost(request("POST"));
+    const array = await capturePost(request("POST", JSON.stringify([])));
+
+    expect(await empty.json()).toEqual({ ok: false, error: "invalid_formType" });
+    expect(await array.json()).toEqual({ ok: false, error: "invalid_formType" });
+  });
+
+  it("keeps pledge's legacy empty-body and top-level-array parsing semantics", async () => {
+    const empty = await pledgePost(request("POST"));
+    const array = await pledgePost(request("POST", JSON.stringify([])));
+
+    expect(await empty.json()).toEqual({ ok: false, error: "records_consent_required" });
+    expect(await array.json()).toEqual({ ok: false, error: "invalid_json" });
+  });
+
+  it("rejects oversized capture and pledge JSON bodies", async () => {
+    const oversized = "x".repeat(100 * 1024);
+    const capture = await capturePost(
+      request(
+        "POST",
+        JSON.stringify({ formType: "signup", fields: { consent: true, ignored: oversized } })
+      )
+    );
+    const pledge = await pledgePost(
+      request("POST", JSON.stringify({ consentRecords: true, ignored: oversized }))
+    );
+
+    expect(await capture.json()).toEqual({ ok: false, error: "invalid_json" });
+    expect(await pledge.json()).toEqual({ ok: false, error: "invalid_json" });
+  });
+
   it("enforces capture's POST-only method contract", async () => {
     const response = await captureRequest(request("GET"));
 
@@ -213,5 +260,48 @@ describe("Action Center API contracts", () => {
     expect(responses.slice(0, 20).every((response) => response.status === 200)).toBe(true);
     expect(responses[20].status).toBe(429);
     expect(await responses[20].json()).toEqual({ ok: false, error: "rate_limited" });
+  });
+
+  it("uses x-real-ip when x-forwarded-for is unavailable", async () => {
+    const requests = Array.from({ length: 21 }, () =>
+      capturePost(
+        requestWithHeaders(
+          "POST",
+          JSON.stringify({ formType: "signup", fields: { consent: true } }),
+          { "x-real-ip": "198.51.100.12" }
+        )
+      )
+    );
+    const responses = await Promise.all(requests);
+
+    expect(responses.slice(0, 20).every((response) => response.status === 200)).toBe(true);
+    expect(responses[20].status).toBe(429);
+    expect(await responses[20].json()).toEqual({ ok: false, error: "rate_limited" });
+  });
+
+  it("does not share a rate-limit bucket when no client identity is forwarded", async () => {
+    const requests = Array.from({ length: 21 }, () =>
+      capturePost(
+        request("POST", JSON.stringify({ formType: "signup", fields: { consent: true } }))
+      )
+    );
+    const responses = await Promise.all(requests);
+
+    expect(responses.every((response) => response.status === 200)).toBe(true);
+  });
+
+  it("does not treat an unknown forwarded identity as a shared client", async () => {
+    const requests = Array.from({ length: 21 }, () =>
+      capturePost(
+        requestWithHeaders(
+          "POST",
+          JSON.stringify({ formType: "signup", fields: { consent: true } }),
+          { "x-forwarded-for": "unknown" }
+        )
+      )
+    );
+    const responses = await Promise.all(requests);
+
+    expect(responses.every((response) => response.status === 200)).toBe(true);
   });
 });
