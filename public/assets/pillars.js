@@ -5,11 +5,11 @@
    Loaded as <script type="module" src="/assets/pillars.js"></script>
    on every page. Everything is defensive: if the target elements are
    absent the function is a silent no-op (no thrown errors). Coexists
-   with index.html's existing burger menu (#nav-burger toggling
-   nav.menu-open) — this file never touches that toggle.
+   with index.html's existing burger menu. Standalone pillar pages opt
+   into the lightweight burger handler with data-p30a-mobile-nav.
 
-   Exposes exactly one global: window.p30aPillars = {initNav,
-   initDisclosures, initCites}. Auto-inits on DOMContentLoaded.
+   Exposes exactly one global: window.p30aPillars. Auto-inits on
+   DOMContentLoaded.
    ===================================================================== */
 
 /* ---------- small helpers ---------- */
@@ -179,6 +179,36 @@ export function initNav() {
 }
 
 /* =====================================================================
+   Standalone pillar-page mobile navigation
+   The legacy homepage keeps its established burger handler. These static
+   routes opt in explicitly so they do not ship a visible burger with no
+   working menu on small screens.
+   ===================================================================== */
+export function initStandaloneMobileNav() {
+  const nav = document.getElementById('nav');
+  const burger = nav && nav.querySelector('#nav-burger[data-p30a-mobile-nav]');
+  if (!nav || !burger || burger.dataset.p30aMobileNavReady === '1') return;
+
+  burger.dataset.p30aMobileNavReady = '1';
+  const setOpen = (open) => {
+    nav.classList.toggle('menu-open', open);
+    burger.setAttribute('aria-expanded', String(open));
+    burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+  };
+
+  burger.addEventListener('click', () => {
+    setOpen(!nav.classList.contains('menu-open'));
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && nav.classList.contains('menu-open')) {
+      setOpen(false);
+      burger.focus();
+    }
+  });
+}
+
+/* =====================================================================
    (b) DISCLOSURE injector
    For each [data-disclosure="A|B|C|D|E|F"] element, inject the matching
    Variant copy as an accessible role="note" .pp-disclosure block.
@@ -320,6 +350,7 @@ export function initCites() {
    BOOTSTRAP
    ===================================================================== */
 function initAll() {
+  try { initStandaloneMobileNav(); } catch (e) { console.warn('[p30aPillars] initStandaloneMobileNav failed', e); }
   try { initNav(); } catch (e) { console.warn('[p30aPillars] initNav failed', e); }
   try { initDisclosures(); } catch (e) { console.warn('[p30aPillars] initDisclosures failed', e); }
   try { initCites(); } catch (e) { console.warn('[p30aPillars] initCites failed', e); }
@@ -333,5 +364,5 @@ if (document.readyState === 'loading') {
 
 /* single safe global */
 if (typeof window !== 'undefined') {
-  window.p30aPillars = { initNav, initDisclosures, initCites };
+  window.p30aPillars = { initNav, initStandaloneMobileNav, initDisclosures, initCites };
 }

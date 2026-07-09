@@ -44,6 +44,21 @@ function mobileNavMarkup() {
     </nav>`;
 }
 
+function staticPillarMobileNavMarkup() {
+  return `
+    <nav id="nav">
+      <a class="nav-logo" href="/">Protect 30A</a>
+      <ul class="nav-links" id="nav-menu">
+        <li class="has-menu">
+          <button class="nav-top" aria-expanded="false" aria-controls="menu-plan">Why &amp; Plan</button>
+          <ul class="nav-panel" id="menu-plan"><li><a href="#why">Why now</a></li></ul>
+        </li>
+        <li class="keep"><a class="nav-cta" href="#help">Show support</a></li>
+      </ul>
+      <button id="nav-burger" data-p30a-mobile-nav aria-expanded="false" aria-label="Open menu" aria-controls="nav-menu"><span></span></button>
+    </nav>`;
+}
+
 async function loadLegacyMobileMenuHandler() {
   const html = await readFile(legacyHomepagePath, "utf8");
   const start = html.indexOf("// ---------- nav scroll state ----------");
@@ -148,6 +163,25 @@ describe("Action Center browser behavior", () => {
 
     expect(panel).not.toHaveAttribute("inert");
     expect(panel).not.toHaveAttribute("aria-hidden");
+  });
+
+  it("toggles the mobile menu on standalone pillar pages", async () => {
+    document.body.innerHTML = staticPillarMobileNavMarkup();
+    await loadNav();
+    const nav = document.getElementById("nav")!;
+    const burger = document.getElementById("nav-burger")!;
+
+    burger.click();
+
+    expect(nav).toHaveClass("menu-open");
+    expect(burger).toHaveAttribute("aria-expanded", "true");
+    expect(burger).toHaveAttribute("aria-label", "Close menu");
+
+    burger.click();
+
+    expect(nav).not.toHaveClass("menu-open");
+    expect(burger).toHaveAttribute("aria-expanded", "false");
+    expect(burger).toHaveAttribute("aria-label", "Open menu");
   });
 
   it("focuses the first visible primary control when the mobile menu opens", async () => {
