@@ -19,6 +19,40 @@ const unrestrictedProfile: PublicProfile = {
 };
 
 describe("LivePodcastPage", () => {
+  it("provides minimal Protect30A site navigation outside the live room main content", () => {
+    render(
+      <LivePodcastPage
+        event={fixtureEvent}
+        districts={fixtureDistricts}
+        comments={fixtureComments}
+        metrics={fixtureMetrics}
+        profile={null}
+      />
+    );
+
+    const navigation = screen.getByRole("navigation", {
+      name: "Protect30A site"
+    });
+
+    expect(navigation).toBeInTheDocument();
+    expect(screen.getByRole("main")).not.toContainElement(navigation);
+    expect(screen.getByRole("main")).toHaveAttribute("id", "main-content");
+    expect(
+      screen.getByRole("link", { name: "Skip to main content" })
+    ).toHaveAttribute("href", "#main-content");
+    expect(
+      screen.getByRole("link", { name: "Protect30A home" })
+    ).toHaveAttribute("href", "/");
+    expect(screen.getByRole("link", { name: "Districts" })).toHaveAttribute(
+      "href",
+      "/districts/"
+    );
+    expect(screen.getByRole("link", { name: "Resources" })).toHaveAttribute(
+      "href",
+      "/south-walton-resources"
+    );
+  });
+
   it("renders the public resident live room with logged-out engagement surfaces", () => {
     render(
       <LivePodcastPage

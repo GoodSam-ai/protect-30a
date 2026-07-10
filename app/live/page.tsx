@@ -6,6 +6,14 @@ import {
   getLiveMetrics,
   getVisibleComments
 } from "@/lib/live/data";
+import { getCanonicalUrl } from "@/lib/site-config";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: getCanonicalUrl("/live")
+  }
+};
 
 export default async function LivePage() {
   const [event, districts, session] = await Promise.all([

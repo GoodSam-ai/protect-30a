@@ -7,8 +7,15 @@ describe("SouthWaltonResourcesPage", () => {
     render(<SouthWaltonResourcesPage />);
 
     const nav = screen.getByRole("navigation", { name: /protect30a site/i });
+    const main = screen.getByRole("main");
 
     expect(nav).toBeInTheDocument();
+    expect(main).not.toContainElement(nav);
+    expect(main).toHaveAttribute("id", "main-content");
+    expect(screen.getByRole("link", { name: "Skip to main content" })).toHaveAttribute(
+      "href",
+      "#main-content"
+    );
     expect(
       screen.getByRole("link", { name: "Protect 30A home" })
     ).toHaveAttribute("href", "/");

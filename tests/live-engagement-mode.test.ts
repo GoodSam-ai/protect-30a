@@ -8,6 +8,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const liveDataMocks = vi.hoisted(() => ({
   buildLiveMetricsFromComments: vi.fn(),
+  getEventById: vi.fn(),
   getLiveMetrics: vi.fn(),
   getVisibleComments: vi.fn()
 }));
@@ -17,6 +18,7 @@ const authMocks = vi.hoisted(() => ({
 
 vi.mock("@/lib/live/data", () => ({
   buildLiveMetricsFromComments: liveDataMocks.buildLiveMetricsFromComments,
+  getEventById: liveDataMocks.getEventById,
   getLiveMetrics: liveDataMocks.getLiveMetrics,
   getVisibleComments: liveDataMocks.getVisibleComments
 }));
@@ -99,6 +101,9 @@ describe("GET /api/live/[eventId]", () => {
       user: null,
       profile: null
     });
+    liveDataMocks.getEventById.mockResolvedValue({
+      id: "10000000-0000-4000-8000-000000000001"
+    });
     liveDataMocks.getLiveMetrics.mockResolvedValue({
       totalComments: 0,
       totalLikes: 0,
@@ -123,7 +128,26 @@ describe("GET /api/live/[eventId]", () => {
       error: "Invalid event id."
     });
     expect(response.status).toBe(400);
+    expect(liveDataMocks.getEventById).not.toHaveBeenCalled();
     expect(liveDataMocks.getVisibleComments).not.toHaveBeenCalled();
+  });
+
+  it("returns a controlled 404 JSON error for a valid missing event id", async () => {
+    const eventId = "99999999-9999-4999-8999-999999999999";
+    liveDataMocks.getEventById.mockResolvedValue(null);
+
+    const response = await GET(new Request(`http://localhost/api/live/${eventId}`), {
+      params: Promise.resolve({ eventId })
+    });
+
+    await expect(response.json()).resolves.toEqual({
+      error: "Event not found."
+    });
+    expect(response.status).toBe(404);
+    expect(liveDataMocks.getEventById).toHaveBeenCalledWith(eventId);
+    expect(authMocks.getCurrentUserAndProfile).not.toHaveBeenCalled();
+    expect(liveDataMocks.getVisibleComments).not.toHaveBeenCalled();
+    expect(liveDataMocks.getLiveMetrics).not.toHaveBeenCalled();
   });
 
   it("returns refreshed dashboard metrics from the view-backed live metrics loader", async () => {
@@ -184,6 +208,7 @@ describe("GET /api/live/[eventId]", () => {
     });
 
     expect(response.status).toBe(200);
+    expect(response.headers.get("Cache-Control")).toBe("private, no-store");
     expect(liveDataMocks.getVisibleComments).toHaveBeenCalledWith(eventId, viewerId);
   });
 

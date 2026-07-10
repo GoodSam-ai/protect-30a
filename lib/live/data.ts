@@ -202,6 +202,22 @@ export async function getEventBySlug(slug: string) {
   return data;
 }
 
+export async function getEventById(eventId: string) {
+  if (!hasSupabaseEnv()) {
+    return eventId === fixtureEvent.id ? fixtureEvent : null;
+  }
+
+  const supabase = await createSupabaseServerClient();
+  const { data, error } = await supabase
+    .from("podcast_events")
+    .select("*")
+    .eq("id", eventId)
+    .maybeSingle();
+
+  if (error) throw error;
+  return data;
+}
+
 export async function getVisibleComments(
   eventId: string,
   viewerUserId: string | null = null

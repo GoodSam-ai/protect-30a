@@ -6,13 +6,27 @@ import {
   getLiveMetrics,
   getVisibleComments
 } from "@/lib/live/data";
+import { getCanonicalUrl } from "@/lib/site-config";
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-export default async function EventPage({
-  params
-}: {
+type EventPageProps = {
   params: Promise<{ slug: string }>;
-}) {
+};
+
+export async function generateMetadata({
+  params
+}: EventPageProps): Promise<Metadata> {
+  const { slug } = await params;
+
+  return {
+    alternates: {
+      canonical: getCanonicalUrl(`/live/${slug}`)
+    }
+  };
+}
+
+export default async function EventPage({ params }: EventPageProps) {
   const { slug } = await params;
   const event = await getEventBySlug(slug);
   if (!event) notFound();
