@@ -209,7 +209,13 @@ function ResourceLink({
 
 export function SouthWaltonResourcesPage() {
   return (
-    <main className="min-h-screen bg-[#f7f4ed] text-[#22312f]">
+    <>
+      <a
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-white focus:px-4 focus:py-3 focus:font-bold focus:text-[#0e3b38] focus:shadow-lg"
+        href="#main-content"
+      >
+        Skip to main content
+      </a>
       <nav
         aria-label="Protect30A site"
         className="sticky top-0 z-30 border-b border-[#d8d4c8] bg-[#fbf8f1]/95 text-[#22312f] shadow-sm backdrop-blur"
@@ -244,6 +250,10 @@ export function SouthWaltonResourcesPage() {
         </div>
       </nav>
 
+      <main
+        className="min-h-screen bg-[#f7f4ed] text-[#22312f]"
+        id="main-content"
+      >
       <section className="border-b border-[#d8d4c8] bg-[#0e3b38] text-white">
         <div className="mx-auto grid max-w-7xl gap-10 px-5 py-10 md:grid-cols-[1.05fr_0.95fr] md:px-8 md:py-14">
           <div className="flex flex-col justify-center">
@@ -408,6 +418,7 @@ export function SouthWaltonResourcesPage() {
           ))}
         </div>
       </section>
-    </main>
+      </main>
+    </>
   );
 }

@@ -9,7 +9,7 @@
       "end": "2026-07-14T18:00:00",
       "tz": "America/Chicago",
       "status": "noticed",
-      "agendaUrl": "https://www.mywaltonfl.gov/162/Meetings-Agendas",
+      "agendaUrl": "https://www.mywaltonfl.gov/AgendaCenter",
       "why": "The BCC is the adopting body for a countywide stormwater MSBU/assessment program. Regular meetings are where stormwater items are noticed, discussed, and voted. Verified cadence: 2nd & 4th Tuesday, 4:00 PM Central.",
       "note": "Cadence '2nd & 4th Tuesday, 4:00 PM' verified from the Walton County Meetings & Agendas page. Confirm the specific date, room, and that a stormwater item is on the published agenda before relying on any single occurrence."
     },
@@ -21,7 +21,7 @@
       "end": "2026-07-28T18:00:00",
       "tz": "America/Chicago",
       "status": "noticed",
-      "agendaUrl": "https://www.mywaltonfl.gov/162/Meetings-Agendas",
+      "agendaUrl": "https://www.mywaltonfl.gov/AgendaCenter",
       "why": "Second regular BCC meeting of the month (4th Tuesday, 4:00 PM Central). Same verified cadence.",
       "note": "Cadence verified; confirm agenda contents at the source URL. Individual dates auto-derived from the '2nd & 4th Tuesday' rule and should be reconciled against the official calendar."
     },
@@ -33,7 +33,7 @@
       "end": "2026-12-31T23:59:00",
       "tz": "America/Chicago",
       "status": "projected",
-      "agendaUrl": "https://www.mywaltonfl.gov/162/Meetings-Agendas",
+      "agendaUrl": "https://www.mywaltonfl.gov/AgendaCenter",
       "why": "Florida non-ad-valorem assessment programs require statutory published notice ahead of adoption. Plan timeline places this window in Dec 2026 so the program can be certified for the 2027 tax roll.",
       "note": "[INFERRED from plan timeline] — not officially noticed. Statutory notice requirements: see FS Ch. 197 (uniform method) and FS § 197.3632. Dates are illustrative planning targets."
     },
@@ -45,7 +45,7 @@
       "end": "2026-12-15T18:00:00",
       "tz": "America/Chicago",
       "status": "projected",
-      "agendaUrl": "https://www.mywaltonfl.gov/162/Meetings-Agendas",
+      "agendaUrl": "https://www.mywaltonfl.gov/AgendaCenter",
       "why": "To use the uniform method of collection on the tax bill for a given year, a local government must adopt a resolution of intent before January 1 of that year (FS § 197.3632(3)(a)).",
       "note": "[INFERRED from plan timeline] — projected milestone. The Jan 1 deadline is statutory; the specific meeting date is illustrative and not yet noticed."
     },
@@ -57,7 +57,7 @@
       "end": "2027-08-31T18:00:00",
       "tz": "America/Chicago",
       "status": "projected",
-      "agendaUrl": "https://www.mywaltonfl.gov/162/Meetings-Agendas",
+      "agendaUrl": "https://www.mywaltonfl.gov/AgendaCenter",
       "why": "Public hearings let residents comment on the proposed special assessment methodology and the preliminary assessment roll before certification.",
       "note": "[INFERRED from plan timeline] — projected window across summer 2027; individual hearing dates will be officially noticed later."
     },
@@ -69,7 +69,7 @@
       "end": "2027-09-15T23:59:00",
       "tz": "America/Chicago",
       "status": "projected",
-      "agendaUrl": "https://www.mywaltonfl.gov/162/Meetings-Agendas",
+      "agendaUrl": "https://www.mywaltonfl.gov/AgendaCenter",
       "why": "Under the uniform method, the non-ad-valorem assessment roll must be certified to the Tax Collector by September 15 (FS § 197.3632(5)(a)) to appear on that year's combined tax bill.",
       "note": "[INFERRED from plan timeline] — the Sep 15 deadline is statutory; certification is contingent on prior adoption steps completing."
     },
@@ -81,7 +81,7 @@
       "end": "2027-11-30T23:59:00",
       "tz": "America/Chicago",
       "status": "projected",
-      "agendaUrl": "https://www.mywaltonfl.gov/162/Meetings-Agendas",
+      "agendaUrl": "https://www.mywaltonfl.gov/AgendaCenter",
       "why": "Combined tax bills mail in November; assessment collections begin then, providing the program's first dedicated stormwater revenue.",
       "note": "[INFERRED from plan timeline] — projected. Actual availability depends on collection timing and program adoption."
     }

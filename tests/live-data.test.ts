@@ -1,6 +1,7 @@
 import {
   buildLiveMetricsFromComments,
   getActiveEvent,
+  getEventById,
   getEventBySlug,
   getVisibleComments
 } from "@/lib/live/data";
@@ -110,6 +111,28 @@ describe("live data access", () => {
     expect(supabaseMocks.from).toHaveBeenCalledWith("podcast_events");
     expect(supabaseMocks.eq).toHaveBeenCalledWith("slug", "missing-event");
     expect(supabaseMocks.maybeSingle).toHaveBeenCalledOnce();
+  });
+
+  it("returns null when no event row matches a valid event id", async () => {
+    useSupabaseEnv();
+    const eventId = "99999999-9999-4999-8999-999999999999";
+    supabaseMocks.maybeSingle.mockResolvedValue({ data: null, error: null });
+
+    await expect(getEventById(eventId)).resolves.toBeNull();
+
+    expect(supabaseMocks.from).toHaveBeenCalledWith("podcast_events");
+    expect(supabaseMocks.eq).toHaveBeenCalledWith("id", eventId);
+    expect(supabaseMocks.maybeSingle).toHaveBeenCalledOnce();
+  });
+
+  it("uses the fixture event for id lookup when Supabase is not configured", async () => {
+    useFixtureEnv();
+
+    await expect(getEventById(fixtureEvent.id)).resolves.toEqual(fixtureEvent);
+    await expect(
+      getEventById("99999999-9999-4999-8999-999999999999")
+    ).resolves.toBeNull();
+    expect(supabaseMocks.createSupabaseServerClient).not.toHaveBeenCalled();
   });
 
   it("throws real Supabase errors when event lookup fails", async () => {

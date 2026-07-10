@@ -190,10 +190,19 @@ export function initStandaloneMobileNav() {
   if (!nav || !burger || burger.dataset.p30aMobileNavReady === '1') return;
 
   burger.dataset.p30aMobileNavReady = '1';
+  const menuId = burger.getAttribute('aria-controls');
+  const menu = menuId && document.getElementById(menuId);
   const setOpen = (open) => {
     nav.classList.toggle('menu-open', open);
     burger.setAttribute('aria-expanded', String(open));
     burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    if (open && window.innerWidth <= 820 && menu) {
+      requestAnimationFrame(() => {
+        if (!nav.classList.contains('menu-open')) return;
+        const firstControl = menu.querySelector(':scope > li > a, :scope > li > button');
+        if (firstControl) firstControl.focus();
+      });
+    }
   };
 
   burger.addEventListener('click', () => {

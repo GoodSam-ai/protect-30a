@@ -129,7 +129,45 @@ export function LivePodcastPage({
   );
 
   return (
-    <main className="min-h-screen bg-protect-cream text-protect-ink">
+    <>
+      <a
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded focus:bg-white focus:px-4 focus:py-3 focus:font-semibold focus:text-protect-teal focus:shadow-lg"
+        href="#main-content"
+      >
+        Skip to main content
+      </a>
+      <nav
+        aria-label="Protect30A site"
+        className="border-b border-protect-sand bg-white"
+      >
+        <div className="mx-auto flex min-h-14 max-w-7xl flex-wrap items-center justify-between gap-3 px-4 py-2 sm:px-6 lg:px-8">
+          <a
+            aria-label="Protect30A home"
+            className="font-serif text-lg font-bold text-protect-teal"
+            href="/"
+          >
+            Protect30A
+          </a>
+          <div className="flex flex-wrap items-center gap-2 text-sm font-semibold">
+            <a
+              className="rounded px-3 py-2 text-protect-teal hover:bg-protect-cream"
+              href="/districts/"
+            >
+              Districts
+            </a>
+            <a
+              className="rounded px-3 py-2 text-protect-teal hover:bg-protect-cream"
+              href="/south-walton-resources"
+            >
+              Resources
+            </a>
+          </div>
+        </div>
+      </nav>
+      <main
+        className="min-h-screen bg-protect-cream text-protect-ink"
+        id="main-content"
+      >
       <section className="border-b border-protect-sand bg-white">
         <div className="mx-auto grid max-w-7xl gap-5 px-4 py-6 sm:px-6 lg:grid-cols-[minmax(0,1fr)_22rem] lg:px-8">
           <div className="min-w-0">
@@ -228,6 +266,7 @@ export function LivePodcastPage({
           {event.disclaimer}
         </div>
       </section>
-    </main>
+      </main>
+    </>
   );
 }
