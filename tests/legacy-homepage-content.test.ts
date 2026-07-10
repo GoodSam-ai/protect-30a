@@ -87,4 +87,12 @@ describe("legacy homepage content", () => {
     expect(html).toContain("<summary>Read more about Fuller Lake</summary>");
     expect(html).toContain("<summary>Read more about Lake Powell</summary>");
   });
+
+  it("slightly reduces only the Make It Happen information icon", async () => {
+    const html = await readHomepage();
+
+    expect(html).toContain(
+      "#help .pp-disclosure .pp-disclosure-ico{width:18px;height:18px;margin-top:3px}"
+    );
+  });
 });
