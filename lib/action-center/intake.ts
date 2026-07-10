@@ -1,9 +1,14 @@
+import {
+  getPublicPledgeWall,
+  saveActionCenterSubmission,
+  type ActionCenterFields,
+  type ActionCenterFormType
+} from "@/lib/action-center/storage";
+import { z } from "zod";
+
 const CAPTURE_FIELD_ALLOWLIST = {
-  pledge: ["first", "neighborhood", "consentPublic"],
   rsvp: ["first", "email", "hearingId", "hearingTitle", "consentReminder"],
-  signup: ["email", "consent"],
-  "flood-report": ["location", "description", "photoUrl", "email", "consent"],
-  story: ["neighborhood", "observation", "photoUrl"]
+  signup: ["email", "consent"]
 } as const;
 
 const CAPTURE_FORM_TYPES = Object.keys(CAPTURE_FIELD_ALLOWLIST);
@@ -38,6 +43,32 @@ const PLEDGE_SENSITIVE_KEYS = [
   "email_address",
   "e_mail"
 ];
+
+const requiredText = (max: number) => z.string().trim().min(1).max(max);
+const optionalText = (max: number) => z.string().trim().max(max).optional();
+const optionalEmail = z
+  .union([z.literal(""), z.string().trim().email().max(254)])
+  .optional();
+const CAPTURE_SCHEMAS = {
+  rsvp: z.object({
+    first: requiredText(60),
+    email: optionalEmail,
+    hearingId: requiredText(200),
+    hearingTitle: optionalText(240),
+    consentReminder: z.literal(true)
+  }),
+  signup: z.object({
+    email: z.string().trim().email().max(254),
+    consent: z.literal(true)
+  })
+} as const;
+
+const PLEDGE_SCHEMA = z.object({
+  first: requiredText(60),
+  neighborhood: optionalText(120),
+  consentPublic: z.boolean().optional(),
+  consentRecords: z.literal(true)
+});
 
 const HONEYPOT_FIELDS = ["website", "url", "company_website", "_hp"];
 const MAX_JSON_BODY_BYTES = 100 * 1024;
@@ -168,6 +199,18 @@ function receivedCaptureFieldCount(
   }).length;
 }
 
+function parseCaptureFields(
+  formType: keyof typeof CAPTURE_SCHEMAS,
+  fields: Record<string, unknown>
+): ActionCenterFields | null {
+  const parsed = CAPTURE_SCHEMAS[formType].safeParse(fields);
+  return parsed.success ? (parsed.data as ActionCenterFields) : null;
+}
+
+function submissionUnavailable() {
+  return json({ ok: false, error: "submission_unavailable" }, 503);
+}
+
 export async function handleCapture(request: Request) {
   if (request.method !== "POST") return methodNotAllowed("POST");
 
@@ -199,16 +242,34 @@ export async function handleCapture(request: Request) {
     return json({ ok: false, error: "sensitive_field_rejected" }, 422);
   }
 
+  const validatedFields = parseCaptureFields(formType, recordFields);
+  if (!validatedFields) {
+    return json({ ok: false, error: "validation_failed" }, 422);
+  }
+
+  try {
+    await saveActionCenterSubmission(
+      formType as ActionCenterFormType,
+      validatedFields
+    );
+  } catch {
+    return submissionUnavailable();
+  }
+
   return json({
     ok: true,
     formType,
-    receivedCount: receivedCaptureFieldCount(recordFields, formType)
+    receivedCount: receivedCaptureFieldCount(validatedFields, formType)
   });
 }
 
 export async function handlePledge(request: Request) {
   if (request.method === "GET") {
-    return json({ ok: true, count: 0, recent: [] });
+    try {
+      return json({ ok: true, ...(await getPublicPledgeWall()) });
+    } catch {
+      return submissionUnavailable();
+    }
   }
   if (request.method !== "POST") return methodNotAllowed("GET, POST");
 
@@ -236,6 +297,17 @@ export async function handlePledge(request: Request) {
 
   if (pledge.consentRecords !== true) {
     return json({ ok: false, error: "records_consent_required" }, 422);
+  }
+
+  const validatedPledge = PLEDGE_SCHEMA.safeParse(pledge);
+  if (!validatedPledge.success) {
+    return json({ ok: false, error: "validation_failed" }, 422);
+  }
+
+  try {
+    await saveActionCenterSubmission("pledge", validatedPledge.data);
+  } catch {
+    return submissionUnavailable();
   }
 
   return json({ ok: true });

@@ -79,6 +79,14 @@ needed by `/live`, `/live/[slug]`, and `/admin`. It also installs an
 new Supabase auth user. The application keeps a server-side fallback for users
 created before that trigger exists.
 
+The Action Center migration creates the private
+`action_center_submissions` table used by pledge, RSVP, and update-list forms.
+It revokes access from `anon` and `authenticated`, enables RLS, and grants only
+the server-side `service_role` the table access required by `/api/capture` and
+`/api/pledge`. Until this migration and `SUPABASE_SERVICE_ROLE_KEY` are both
+present in an environment, those APIs intentionally return `503` instead of
+claiming a submission was saved.
+
 ## 5. Bootstrap the First Admin
 
 After deployment, sign in once as `doug@goodsam.ai` so Supabase creates the auth

@@ -8,10 +8,15 @@ import type {
   LiveMetrics,
   PodcastEvent
 } from "@/lib/live/types";
+import {
+  isEventAcceptingComments,
+  isExpiredUpcomingEvent
+} from "@/lib/live/event-status";
 import { getCanonicalUrl } from "@/lib/site-config";
 import { CalendarDays, Mic2, Radio, UsersRound } from "lucide-react";
 
 function statusLabel(event: PodcastEvent) {
+  if (isExpiredUpcomingEvent(event)) return "Past event";
   if (event.status === "live") return "Live now";
   if (event.status === "replay") return "Replay available";
   if (event.status === "archived") return "Archived";
@@ -25,7 +30,7 @@ function playerLabel(event: PodcastEvent) {
 }
 
 function commentsAcceptingStatus(event: PodcastEvent) {
-  return event.status === "upcoming" || event.status === "live";
+  return isEventAcceptingComments(event);
 }
 
 function buildCommentComposerProps(event: PodcastEvent, profile: PublicProfile) {
@@ -36,6 +41,8 @@ function buildCommentComposerProps(event: PodcastEvent, profile: PublicProfile) 
     !profile.is_restricted;
   const status = !event.comments_enabled
     ? "Comments are closed for this event."
+    : isExpiredUpcomingEvent(event)
+      ? "Comments are closed for past events."
     : !commentsAcceptingStatus(event)
       ? `Comments are closed for ${event.status} events.`
     : profile.is_restricted
@@ -74,6 +81,7 @@ export function LivePodcastPage({
     ...event.guest_names
   ].filter(Boolean);
   const playerUrl = event.livestream_url || event.replay_url;
+  const isPastEvent = isExpiredUpcomingEvent(event);
   const composerProps = profile
     ? buildCommentComposerProps(event, profile)
     : null;
@@ -117,11 +125,15 @@ export function LivePodcastPage({
         ) : (
           <div className="grid max-w-xl gap-2">
             <p className="text-lg font-semibold">
-              Livestream or replay will appear here when the event starts.
+              {isPastEvent
+                ? "This event has ended. A replay has not been posted yet."
+                : "Livestream or replay will appear here when the event starts."}
             </p>
-            <p className="text-sm text-white/80">
-              You can still sign in and follow the public conversation below.
-            </p>
+            {!isPastEvent ? (
+              <p className="text-sm text-white/80">
+                You can still sign in and follow the public conversation below.
+              </p>
+            ) : null}
           </div>
         )}
       </div>

@@ -56,7 +56,7 @@ describe("LivePodcastPage", () => {
   it("renders the public resident live room with logged-out engagement surfaces", () => {
     render(
       <LivePodcastPage
-        event={fixtureEvent}
+        event={{ ...fixtureEvent, status: "live" }}
         districts={fixtureDistricts}
         comments={fixtureComments}
         metrics={fixtureMetrics}
@@ -164,6 +164,35 @@ describe("LivePodcastPage", () => {
     expect(screen.getByLabelText("Comment")).toBeDisabled();
     expect(screen.getByRole("status")).toHaveTextContent(
       "Comments are closed for replay events."
+    );
+  });
+
+  it("marks expired upcoming events as past and closes participation", () => {
+    render(
+      <LivePodcastPage
+        event={{
+          ...fixtureEvent,
+          status: "upcoming",
+          starts_at: "2020-01-01T18:00:00.000Z",
+          ends_at: "2020-01-01T19:00:00.000Z",
+          livestream_url: null,
+          replay_url: null,
+          comments_enabled: true
+        }}
+        districts={fixtureDistricts}
+        comments={fixtureComments}
+        metrics={fixtureMetrics}
+        profile={unrestrictedProfile}
+      />
+    );
+
+    expect(screen.getByText("Past event")).toBeInTheDocument();
+    expect(
+      screen.getByText("This event has ended. A replay has not been posted yet.")
+    ).toBeInTheDocument();
+    expect(screen.getByLabelText("Comment")).toBeDisabled();
+    expect(screen.getByRole("status")).toHaveTextContent(
+      "Comments are closed for past events."
     );
   });
 
