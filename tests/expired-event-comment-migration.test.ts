@@ -4,7 +4,7 @@ import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 
 const migrationPath = resolve(
-  "supabase/migrations/202607100002_close_expired_event_comments.sql"
+  "supabase/migrations/20260710161235_close_expired_event_comments.sql"
 );
 
 describe("expired event comment policy migration", () => {

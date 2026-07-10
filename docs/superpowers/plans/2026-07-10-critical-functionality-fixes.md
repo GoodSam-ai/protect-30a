@@ -36,7 +36,7 @@
 
 **Files:**
 - Create: `lib/action-center/storage.ts`
-- Create: `supabase/migrations/202607100001_action_center_submissions.sql`
+- Create: `supabase/migrations/20260710161229_action_center_submissions.sql`
 - Modify: `lib/action-center/intake.ts`
 - Test: `tests/action-center-migration.test.ts`
 
@@ -75,7 +75,7 @@
 - Modify: `components/live/LivePodcastPage.tsx`
 - Modify: `lib/live/actions.ts`
 - Create: `lib/live/event-status.ts`
-- Create: `supabase/migrations/202607100002_close_expired_event_comments.sql`
+- Create: `supabase/migrations/20260710161235_close_expired_event_comments.sql`
 - Test: `tests/expired-event-comment-migration.test.ts`
 
 **Interfaces:**

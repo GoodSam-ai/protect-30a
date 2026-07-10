@@ -3,7 +3,7 @@ import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 
 const migrationPath = resolve(
-  "supabase/migrations/202607100001_action_center_submissions.sql"
+  "supabase/migrations/20260710161229_action_center_submissions.sql"
 );
 
 describe("Action Center submission migration", () => {
