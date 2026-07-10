@@ -335,16 +335,23 @@
         n.toLocaleString() + (n === 1 ? " neighbor has" : " neighbors have") + " pledged to help.";
     }
   }
+  function renderCountUnavailable() {
+    var el = $("pp-pledge-count");
+    if (el) el.textContent = "Pledge count temporarily unavailable.";
+  }
   function loadPledgeWall() {
     renderCount(0);            // honest default until the endpoint answers
     fetch("/api/pledge", { credentials: "omit", cache: "no-cache" })
-      .then(function (r) { return r && r.ok ? r.json() : null; })
+      .then(function (r) {
+        if (!r || !r.ok) throw new Error("pledge_wall_unavailable");
+        return r.json();
+      })
       .then(function (data) {
-        if (!data) return;
+        if (!data) throw new Error("pledge_wall_unavailable");
         renderCount(typeof data.count === "number" ? data.count : 0);
         renderWall(data.recent || [], data.count);
       })
-      .catch(function () { /* keep honest 0 / placeholder wall */ });
+      .catch(function () { renderCountUnavailable(); });
   }
   function initPledge() {
     var form = $("pp-pledge-form");
@@ -526,7 +533,7 @@
       "SUMMARY:" + icsEscape(summary),
       "DESCRIPTION:" + icsEscape(desc),
       m.agendaUrl ? "URL:" + icsEscape(m.agendaUrl) : "",
-      "STATUS:CONFIRMED",
+      "STATUS:" + (m.status === "projected" ? "TENTATIVE" : "CONFIRMED"),
       "END:VEVENT",
       "END:VCALENDAR"
     ].filter(Boolean);

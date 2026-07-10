@@ -125,6 +125,24 @@ function noRecentDuplicateCommentTable() {
   };
 }
 
+function openEventTable() {
+  return {
+    select: vi.fn(() => ({
+      eq: vi.fn(() => ({
+        maybeSingle: vi.fn().mockResolvedValue({
+          data: {
+            status: "live",
+            starts_at: "2026-06-26T12:00:00Z",
+            ends_at: null,
+            comments_enabled: true
+          },
+          error: null
+        })
+      }))
+    }))
+  };
+}
+
 describe("comment validation", () => {
   it("accepts valid comments with supported topics", () => {
     expect(
@@ -325,6 +343,7 @@ describe("live engagement mutation actions", () => {
     actionMocks.createSupabaseServerClient.mockResolvedValue({
       from: vi
         .fn()
+        .mockReturnValueOnce(openEventTable())
         .mockReturnValueOnce(noRecentDuplicateCommentTable())
         .mockReturnValueOnce(commentsTable)
     });
@@ -363,6 +382,55 @@ describe("live engagement mutation actions", () => {
     });
   });
 
+  it("rejects comments for expired events even when the stored status is upcoming", async () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date("2026-07-10T12:00:00Z"));
+    const eventMaybeSingle = vi.fn().mockResolvedValue({
+      data: {
+        status: "upcoming",
+        starts_at: "2026-07-08T12:00:00Z",
+        ends_at: "2026-07-08T13:00:00Z",
+        comments_enabled: true
+      },
+      error: null
+    });
+    const eventEq = vi.fn(() => ({ maybeSingle: eventMaybeSingle }));
+    const eventSelect = vi.fn(() => ({ eq: eventEq }));
+    const commentsTable = insertReturningSingle({
+      id: commentId,
+      event_id: eventId,
+      district_id: districtId,
+      parent_comment_id: null,
+      body: "Please discuss stormwater planning.",
+      topic: "Stormwater",
+      is_featured: false,
+      created_at: "2026-07-10T12:00:00Z",
+      user_id: user.id
+    });
+    actionMocks.createSupabaseServerClient.mockResolvedValue({
+      from: vi.fn((table: string) => {
+        if (table === "podcast_events") return { select: eventSelect };
+        if (table === "comments") {
+          return {
+            ...noRecentDuplicateCommentTable(),
+            insert: commentsTable.insert
+          };
+        }
+        throw new Error(`Unexpected table: ${table}`);
+      })
+    });
+
+    await expect(
+      createComment({
+        eventId,
+        districtId,
+        body: "Please discuss stormwater planning.",
+        topic: "Stormwater"
+      })
+    ).rejects.toThrow("Comments are closed for this event.");
+    expect(commentsTable.insert).not.toHaveBeenCalled();
+  });
+
   it("rejects rapid duplicate comments before inserting", async () => {
     vi.useFakeTimers();
     vi.setSystemTime(new Date("2026-06-26T12:00:20Z"));
@@ -381,6 +449,7 @@ describe("live engagement mutation actions", () => {
     const insert = vi.fn();
     actionMocks.createSupabaseServerClient.mockResolvedValue({
       from: vi.fn((table: string) => {
+        if (table === "podcast_events") return openEventTable();
         expect(table).toBe("comments");
         return { select: duplicateSelect, insert };
       })
@@ -579,6 +648,7 @@ describe("live engagement route handlers", () => {
     let commentsCalls = 0;
     actionMocks.createSupabaseServerClient.mockResolvedValue({
       from: vi.fn((table: string) => {
+        if (table === "podcast_events") return openEventTable();
         if (table === "comments") {
           commentsCalls += 1;
           return commentsCalls === 1

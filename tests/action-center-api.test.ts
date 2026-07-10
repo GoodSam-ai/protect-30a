@@ -1,7 +1,19 @@
 import { existsSync } from "node:fs";
 import { resolve } from "node:path";
 import { pathToFileURL } from "node:url";
-import { describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
+const actionCenterDbMocks = vi.hoisted(() => ({
+  createSupabaseAdminClient: vi.fn(),
+  from: vi.fn(),
+  insert: vi.fn()
+}));
+
+vi.mock("server-only", () => ({}));
+
+vi.mock("@/lib/supabase/admin", () => ({
+  createSupabaseAdminClient: actionCenterDbMocks.createSupabaseAdminClient
+}));
 
 const captureRoutePath = resolve(process.cwd(), "app/api/capture/route.ts");
 const pledgeRoutePath = resolve(process.cwd(), "app/api/pledge/route.ts");
@@ -63,6 +75,17 @@ async function pledgeRequest(request: Request) {
 }
 
 describe("Action Center API contracts", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    actionCenterDbMocks.insert.mockResolvedValue({ error: null });
+    actionCenterDbMocks.from.mockReturnValue({
+      insert: actionCenterDbMocks.insert
+    });
+    actionCenterDbMocks.createSupabaseAdminClient.mockReturnValue({
+      from: actionCenterDbMocks.from
+    });
+  });
+
   it("keeps the capture endpoint's safe RSVP contract", async () => {
     expect(existsSync(captureRoutePath)).toBe(true);
 
@@ -84,6 +107,123 @@ describe("Action Center API contracts", () => {
       ok: true,
       formType: "rsvp",
       receivedCount: 5
+    });
+    expect(actionCenterDbMocks.createSupabaseAdminClient).toHaveBeenCalledOnce();
+    expect(actionCenterDbMocks.from).toHaveBeenCalledWith(
+      "action_center_submissions"
+    );
+    expect(actionCenterDbMocks.insert).toHaveBeenCalledWith({
+      form_type: "rsvp",
+      fields: {
+        hearingId: "meeting",
+        hearingTitle: "Public meeting",
+        first: "Sam",
+        email: "sam@example.com",
+        consentReminder: true
+      }
+    });
+  });
+
+  it("rejects incomplete RSVP submissions before persistence", async () => {
+    const response = await capturePost(
+      jsonRequest({
+        formType: "rsvp",
+        fields: {
+          hearingId: "meeting",
+          first: "",
+          email: "not-an-email",
+          consentReminder: false
+        }
+      })
+    );
+
+    expect(response.status).toBe(422);
+    expect(await response.json()).toEqual({
+      ok: false,
+      error: "validation_failed"
+    });
+    expect(actionCenterDbMocks.createSupabaseAdminClient).not.toHaveBeenCalled();
+  });
+
+  it("rejects invalid newsletter signups before persistence", async () => {
+    const response = await capturePost(
+      jsonRequest({
+        formType: "signup",
+        fields: { email: "not-an-email", consent: false }
+      })
+    );
+
+    expect(response.status).toBe(422);
+    expect(await response.json()).toEqual({
+      ok: false,
+      error: "validation_failed"
+    });
+    expect(actionCenterDbMocks.createSupabaseAdminClient).not.toHaveBeenCalled();
+  });
+
+  it("requires pledges to use the records-consent pledge endpoint", async () => {
+    const response = await capturePost(
+      jsonRequest({
+        formType: "pledge",
+        fields: {
+          first: "Sam",
+          neighborhood: "Seagrove",
+          consentPublic: true
+        }
+      })
+    );
+
+    expect(response.status).toBe(400);
+    expect(await response.json()).toEqual({
+      ok: false,
+      error: "invalid_formType"
+    });
+    expect(actionCenterDbMocks.createSupabaseAdminClient).not.toHaveBeenCalled();
+  });
+
+  it.each([
+    {
+      formType: "flood-report",
+      fields: {
+        location: "Seagrove",
+        description: "Standing water near the intersection.",
+        consent: true
+      }
+    },
+    {
+      formType: "story",
+      fields: {
+        neighborhood: "Seagrove",
+        observation: "Standing water remained after the storm."
+      }
+    }
+  ])("does not expand durable intake to $formType", async ({ formType, fields }) => {
+    const response = await capturePost(jsonRequest({ formType, fields }));
+
+    expect(response.status).toBe(400);
+    expect(await response.json()).toEqual({
+      ok: false,
+      error: "invalid_formType"
+    });
+    expect(actionCenterDbMocks.createSupabaseAdminClient).not.toHaveBeenCalled();
+  });
+
+  it("does not report success when capture persistence fails", async () => {
+    actionCenterDbMocks.insert.mockResolvedValue({
+      error: new Error("database unavailable")
+    });
+
+    const response = await capturePost(
+      jsonRequest({
+        formType: "signup",
+        fields: { email: "sam@example.com", consent: true }
+      })
+    );
+
+    expect(response.status).toBe(503);
+    expect(await response.json()).toEqual({
+      ok: false,
+      error: "submission_unavailable"
     });
   });
 
@@ -123,7 +263,7 @@ describe("Action Center API contracts", () => {
     const response = await capturePost(
       jsonRequest({
         formType: "signup",
-        fields: { email: "sam@example.com", consent: false, ignored: "value" }
+        fields: { email: "sam@example.com", consent: true, ignored: "value" }
       })
     );
 
@@ -188,7 +328,10 @@ describe("Action Center API contracts", () => {
       capturePost(
         request(
           "POST",
-          JSON.stringify({ formType: "signup", fields: { consent: true } }),
+          JSON.stringify({
+            formType: "signup",
+            fields: { email: "sam@example.com", consent: true }
+          }),
           client
         )
       )
@@ -200,11 +343,48 @@ describe("Action Center API contracts", () => {
     expect(await responses[20].json()).toEqual({ ok: false, error: "rate_limited" });
   });
 
-  it("returns the non-persistent pledge wall", async () => {
+  it("returns the saved pledge count and only consented public names", async () => {
+    const countEq = vi.fn().mockResolvedValue({
+      count: 3,
+      error: null
+    });
+    const countSelect = vi.fn().mockReturnValue({ eq: countEq });
+    const publicLimit = vi.fn().mockResolvedValue({
+      data: [
+        {
+          fields: {
+            first: "Sam",
+            neighborhood: "Seagrove",
+            consentPublic: true,
+            consentRecords: true
+          }
+        }
+      ],
+      error: null
+    });
+    const publicOrder = vi.fn().mockReturnValue({ limit: publicLimit });
+    const publicContains = vi.fn().mockReturnValue({ order: publicOrder });
+    const publicEq = vi.fn().mockReturnValue({ contains: publicContains });
+    const publicSelect = vi.fn().mockReturnValue({ eq: publicEq });
+    actionCenterDbMocks.from
+      .mockReturnValueOnce({ select: countSelect })
+      .mockReturnValueOnce({ select: publicSelect });
+
     const response = await pledgeRequest(request("GET"));
 
     expect(response?.status).toBe(200);
-    await expect(response?.json()).resolves.toEqual({ ok: true, count: 0, recent: [] });
+    await expect(response?.json()).resolves.toEqual({
+      ok: true,
+      count: 3,
+      recent: [{ first: "Sam", neighborhood: "Seagrove" }]
+    });
+    expect(countSelect).toHaveBeenCalledWith("id", {
+      count: "exact",
+      head: true
+    });
+    expect(publicContains).toHaveBeenCalledWith("fields", {
+      consentPublic: true
+    });
   });
 
   it("silently accepts pledge honeypots before consent validation", async () => {
@@ -225,13 +405,20 @@ describe("Action Center API contracts", () => {
     });
   });
 
-  it("drops unknown pledge fields before accepting the non-persistent submission", async () => {
+  it("drops unknown pledge fields before persisting the submission", async () => {
     const response = await pledgePost(
       jsonRequest({ consentRecords: true, first: "Sam", unexpected: "not retained" })
     );
 
     expect(response.status).toBe(200);
     expect(await response.json()).toEqual({ ok: true });
+    expect(actionCenterDbMocks.insert).toHaveBeenCalledWith({
+      form_type: "pledge",
+      fields: {
+        first: "Sam",
+        consentRecords: true
+      }
+    });
   });
 
   it("reports pledge invalid JSON without submitted values", async () => {
@@ -253,7 +440,13 @@ describe("Action Center API contracts", () => {
   it("limits pledges to twenty requests per client each minute", async () => {
     const client = "198.51.100.11";
     const requests = Array.from({ length: 21 }, () =>
-      pledgePost(request("POST", JSON.stringify({ consentRecords: true }), client))
+      pledgePost(
+        request(
+          "POST",
+          JSON.stringify({ first: "Sam", consentRecords: true }),
+          client
+        )
+      )
     );
     const responses = await Promise.all(requests);
 
@@ -267,7 +460,10 @@ describe("Action Center API contracts", () => {
       capturePost(
         requestWithHeaders(
           "POST",
-          JSON.stringify({ formType: "signup", fields: { consent: true } }),
+          JSON.stringify({
+            formType: "signup",
+            fields: { email: "sam@example.com", consent: true }
+          }),
           { "x-real-ip": "198.51.100.12" }
         )
       )
@@ -282,7 +478,13 @@ describe("Action Center API contracts", () => {
   it("does not share a rate-limit bucket when no client identity is forwarded", async () => {
     const requests = Array.from({ length: 21 }, () =>
       capturePost(
-        request("POST", JSON.stringify({ formType: "signup", fields: { consent: true } }))
+        request(
+          "POST",
+          JSON.stringify({
+            formType: "signup",
+            fields: { email: "sam@example.com", consent: true }
+          })
+        )
       )
     );
     const responses = await Promise.all(requests);
@@ -295,7 +497,10 @@ describe("Action Center API contracts", () => {
       capturePost(
         requestWithHeaders(
           "POST",
-          JSON.stringify({ formType: "signup", fields: { consent: true } }),
+          JSON.stringify({
+            formType: "signup",
+            fields: { email: "sam@example.com", consent: true }
+          }),
           { "x-forwarded-for": "unknown" }
         )
       )

@@ -118,6 +118,85 @@ describe("Action Center browser behavior", () => {
     expect(document.activeElement).toBe(document.getElementById("pp-signup-email"));
   });
 
+  it("shows that the pledge count is unavailable when storage cannot be read", async () => {
+    document.body.innerHTML = `
+      <p id="pp-pledge-count">Be the first to pledge.</p>
+      <form id="pp-pledge-form">
+        <input id="pp-pledge-first">
+        <select id="pp-pledge-hood"></select>
+        <input id="pp-pledge-public" type="checkbox">
+        <input id="pp-pledge-records" type="checkbox">
+        <output id="pp-pledge-status"></output>
+      </form>
+      <div id="pp-pledge-wall"></div>`;
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({ ok: false, status: 503 })
+    );
+
+    await loadActionCenter();
+    await Promise.resolve();
+    await Promise.resolve();
+
+    expect(document.getElementById("pp-pledge-count")).toHaveTextContent(
+      "Pledge count temporarily unavailable."
+    );
+  });
+
+  it("exports projected meetings as tentative and noticed meetings as confirmed", async () => {
+    document.body.innerHTML = `
+      <form id="pp-rsvp-form">
+        <select id="pp-rsvp-hearing"></select>
+        <input id="pp-rsvp-first" value="Sam">
+        <input id="pp-rsvp-email" type="email" value="sam@example.com">
+        <input id="pp-rsvp-consent" type="checkbox" checked>
+        <button id="pp-rsvp-ics" type="button">Add to calendar</button>
+        <output id="pp-rsvp-status"></output>
+      </form>`;
+    const meetings = [
+      {
+        id: "projected-meeting",
+        title: "Projected workshop",
+        start: "2026-12-01T09:00:00",
+        end: "2026-12-01T10:00:00",
+        status: "projected"
+      },
+      {
+        id: "noticed-meeting",
+        title: "Officially noticed hearing",
+        start: "2026-11-01T09:00:00",
+        end: "2026-11-01T10:00:00",
+        status: "noticed"
+      }
+    ];
+    const generatedCalendars: string[] = [];
+    class CapturingBlob {
+      constructor(parts: BlobPart[]) {
+        generatedCalendars.push(parts.map(String).join(""));
+      }
+    }
+    appWindow.p30aLoadContent = vi.fn().mockResolvedValue({ meetings });
+    vi.stubGlobal("Blob", CapturingBlob);
+    vi.stubGlobal("URL", {
+      createObjectURL: vi.fn().mockReturnValue("blob:protect30a-test"),
+      revokeObjectURL: vi.fn()
+    });
+    vi.spyOn(HTMLAnchorElement.prototype, "click").mockImplementation(() => {});
+
+    await loadActionCenter();
+    await Promise.resolve();
+    const select = document.getElementById("pp-rsvp-hearing") as HTMLSelectElement;
+    const calendarButton = document.getElementById("pp-rsvp-ics") as HTMLButtonElement;
+
+    select.value = "projected-meeting";
+    calendarButton.click();
+    select.value = "noticed-meeting";
+    calendarButton.click();
+
+    expect(generatedCalendars[0]).toContain("STATUS:TENTATIVE");
+    expect(generatedCalendars[1]).toContain("STATUS:CONFIRMED");
+  });
+
   it("toggles a primary dropdown once on Enter", async () => {
     document.body.innerHTML = mobileNavMarkup();
     await loadNav();

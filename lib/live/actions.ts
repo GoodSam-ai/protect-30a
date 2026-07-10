@@ -4,6 +4,7 @@ import { getCurrentUserAndProfile, type PublicProfile } from "@/lib/auth/session
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import type { LiveComment } from "@/lib/live/types";
+import { isEventAcceptingComments } from "@/lib/live/event-status";
 import {
   commentInputSchema,
   isRapidDuplicateComment,
@@ -33,6 +34,13 @@ type CreatedCommentRow = {
 type PreviousCommentRow = {
   body: string;
   created_at: string;
+};
+
+type EngagementEventRow = {
+  status: "upcoming" | "live" | "replay" | "archived";
+  starts_at: string | null;
+  ends_at: string | null;
+  comments_enabled: boolean;
 };
 
 function displayName(profile: PublicProfile) {
@@ -123,6 +131,28 @@ async function assertNotRapidDuplicateComment({
   }
 }
 
+async function assertEventAcceptingComments({
+  supabase,
+  eventId
+}: {
+  supabase: Awaited<ReturnType<typeof createSupabaseServerClient>>;
+  eventId: string;
+}) {
+  const { data, error } = await supabase
+    .from("podcast_events")
+    .select("status, starts_at, ends_at, comments_enabled")
+    .eq("id", eventId)
+    .maybeSingle<EngagementEventRow>();
+
+  if (error) {
+    throw new Error(errorMessage(error, "Unable to verify event status."));
+  }
+
+  if (!data || !isEventAcceptingComments(data)) {
+    throw new Error("Comments are closed for this event.");
+  }
+}
+
 export async function createComment(input: unknown) {
   const { user, profile } = await requireEngagementUser(
     "Sign in required to comment.",
@@ -130,6 +160,10 @@ export async function createComment(input: unknown) {
   );
   const parsed = commentInputSchema.parse(input);
   const supabase = await createSupabaseServerClient();
+  await assertEventAcceptingComments({
+    supabase,
+    eventId: parsed.eventId
+  });
   await assertNotRapidDuplicateComment({
     supabase,
     userId: user.id,
