@@ -58,3 +58,21 @@ Detailed setup and release notes:
 - [Supabase setup](docs/setup/supabase.md)
 - [Auth provider setup](docs/setup/auth-providers.md)
 - [Facebook Groups integration](docs/integrations/facebook-groups.md)
+
+## License
+
+Protect30A is dual-licensed so the plan can travel further than the code.
+
+- **Code** — [MIT](LICENSE). `app/`, `components/`, `lib/`, `tests/`, `supabase/`,
+  `public/assets/` and the root config files.
+- **Content** — [CC BY 4.0](LICENSE-CONTENT). The stormwater plan and supporting
+  editorial material, including the prose rendered by the app.
+
+Another coastal community is free to adapt this plan for its own corridor —
+that is the point. Credit Protect30A, link the license, and make clear that
+your version is adapted, so residents can tell which plan covers which
+watershed.
+
+Third-party material reproduced here (public records, agency documents, media
+not created by Protect30A) keeps its own rights and is not relicensed. The
+Protect30A and GoodSam names and logos are not covered by the content license.

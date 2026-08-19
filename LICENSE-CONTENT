@@ -1,0 +1,65 @@
+Creative Commons Attribution 4.0 International (CC BY 4.0)
+
+Copyright (c) 2026 GoodSam-ai
+
+The Protect30A stormwater plan and its supporting editorial material are
+licensed under the Creative Commons Attribution 4.0 International License.
+
+  Human-readable summary:  https://creativecommons.org/licenses/by/4.0/
+  Full legal code:         https://creativecommons.org/licenses/by/4.0/legalcode
+
+WHAT THIS COVERS
+
+  public/act/              public/records/           public/source-library/
+  public/content/          public/records-privacy/   public/districts/
+  public/impact/           public/legacy/            docs/
+
+  Plus the plan and editorial text rendered by the application, including prose
+  embedded in files under `app/` and `components/`. In those files the code is
+  MIT (see LICENSE) and the editorial text is CC BY 4.0.
+
+WHAT THIS DOES NOT COVER
+
+  - Source code, build configuration and database migrations -- see LICENSE (MIT).
+  - Third-party material reproduced here under its own terms, including public
+    records, agency documents, and any photography or media not created by
+    Protect30A. Those retain their original rights; this license cannot and does
+    not relicense them.
+  - The Protect30A and GoodSam names and logos. Trademark rights are not granted
+    by CC BY 4.0, and attribution must not imply endorsement.
+
+YOU ARE FREE TO
+
+  Share -- copy and redistribute the material in any medium or format.
+  Adapt -- remix, transform, and build upon it for any purpose, including
+           commercially.
+
+  These rights cannot be revoked so long as the license terms are followed.
+
+UNDER ONE CONDITION
+
+  Attribution -- give appropriate credit, link to this license, and indicate if
+  changes were made. You may do so in any reasonable manner, but not in any way
+  that suggests Protect30A endorses you or your use.
+
+  Suggested attribution:
+
+    "Protect30A stormwater plan" by GoodSam-ai, https://protect30a.org/,
+    licensed under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/).
+    Changes were made.
+
+  Neighboring communities adapting this plan for their own corridor are exactly
+  the intended use. Please indicate that your version is adapted, so residents
+  are not misled about which plan applies to which watershed.
+
+NO ADDITIONAL RESTRICTIONS
+
+  You may not apply legal terms or technological measures that legally restrict
+  others from doing anything the license permits.
+
+DISCLAIMER
+
+  The material is provided as-is, without warranties of any kind. It is offered
+  for public information and civic engagement and is not engineering,
+  regulatory, or legal advice. Anyone relying on it for permitting, design, or
+  compliance should obtain their own professional review.
