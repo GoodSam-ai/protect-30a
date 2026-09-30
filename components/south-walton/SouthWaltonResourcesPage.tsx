@@ -59,7 +59,7 @@ const officialResources: OfficialResource[] = [
 const districtResources: DistrictResource[] = [
   {
     district: "Inlet Beach",
-    note: "Eastern gateway district with direct overlap between Protect30A and tourism neighborhood context.",
+    note: "Eastern gateway community with direct overlap between Protect30A and tourism neighborhood context.",
     links: [
       {
         label: "Inlet Beach official guide",
@@ -89,7 +89,7 @@ const districtResources: DistrictResource[] = [
   },
   {
     district: "WaterSound, Seacrest, Prominence & Origins",
-    note: "Grouped Protect30A district with multiple official neighborhood references.",
+    note: "Grouped Protect30A community with multiple official neighborhood references.",
     links: [
       {
         label: "WaterSound official guide",
@@ -103,7 +103,7 @@ const districtResources: DistrictResource[] = [
   },
   {
     district: "Seagrove, Seaside & WaterColor",
-    note: "Central 30A district with three official neighborhood touchpoints.",
+    note: "Central 30A community with three official neighborhood touchpoints.",
     links: [
       {
         label: "Seagrove official guide",
@@ -121,7 +121,7 @@ const districtResources: DistrictResource[] = [
   },
   {
     district: "Grayton & Blue Mountain",
-    note: "Western-central district tied to dune lake, trail, and beach access conversations.",
+    note: "Western-central community tied to dune lake, trail, and beach access conversations.",
     links: [
       {
         label: "Grayton Beach official guide",
@@ -153,7 +153,7 @@ const districtResources: DistrictResource[] = [
   },
   {
     district: "Sandestin, Miramar Beach & Seascape",
-    note: "Western gateway district with official destination and visitor-resource context.",
+    note: "Western gateway community with official destination and visitor-resource context.",
     links: [
       {
         label: "Sandestin official guide",
@@ -174,7 +174,7 @@ const districtResources: DistrictResource[] = [
 const workflowSteps = [
   "Source label",
   "Official URL",
-  "Neighborhood or district",
+  "Neighborhood or community",
   "Last checked",
   "Moderator review"
 ];
@@ -182,7 +182,7 @@ const workflowSteps = [
 const siteNavItems = [
   { label: "Home", href: "/" },
   { label: "The Show", href: "/show" },
-  { label: "Districts", href: "/districts/" },
+  { label: "Communities", href: "/districts/" },
   { label: "Live Room", href: "/live" },
   { label: "Resources", href: "/south-walton-resources", current: true }
 ];
@@ -273,7 +273,7 @@ export function SouthWaltonResourcesPage() {
                 className="inline-flex min-h-11 items-center gap-2 rounded-md bg-[#c56b4a] px-4 py-2 text-sm font-bold text-white transition hover:bg-[#a95338]"
                 href="#district-links"
               >
-                District links
+                Community links
                 <ArrowRight aria-hidden="true" className="h-4 w-4" />
               </a>
               <a
@@ -376,11 +376,11 @@ export function SouthWaltonResourcesPage() {
               Neighborhood crosswalk
             </p>
             <h2 className="mt-3 font-serif text-3xl font-bold text-[#0e3b38]">
-              District Resource Links
+              Community Resource Links
             </h2>
           </div>
           <p className="max-w-xl text-sm leading-6 text-[#50605d]">
-            Each Protect30A district can link to official Visit South Walton
+            Each Protect30A community can link to official Visit South Walton
             neighborhood pages without blending tourism copy into civic issue
             pages.
           </p>

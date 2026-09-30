@@ -43,13 +43,13 @@ export function InfluencerLeaderboard({
             leaders={dashboardMetrics.eventLeaders}
           />
           <InfluencerSection
-            title="Current week district leaders"
+            title="Current week community leaders"
             leaders={dashboardMetrics.weeklyDistrictLeaders}
             showDistrict
           />
           {dashboardMetrics.allTimeDistrictLeaders.length > 0 ? (
             <InfluencerSection
-              title="All-time district leaders"
+              title="All-time community leaders"
               leaders={dashboardMetrics.allTimeDistrictLeaders}
               showDistrict
             />

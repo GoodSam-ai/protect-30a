@@ -124,7 +124,7 @@ function SimpleTrendView({
 
       <div>
         <h3 className="text-sm font-semibold text-protect-teal">
-          Engagement score by district
+          Engagement score by community
         </h3>
         {metrics.districtEngagementScores.length > 0 ? (
           <ol className="mt-2 grid gap-2">
@@ -143,7 +143,7 @@ function SimpleTrendView({
             ))}
           </ol>
         ) : (
-          <EmptyState>District scores will appear as residents participate.</EmptyState>
+          <EmptyState>Community scores will appear as residents participate.</EmptyState>
         )}
       </div>
     </div>
@@ -177,7 +177,7 @@ function DetailedLeaderboardView({ metrics }: { metrics: LiveMetrics }) {
       </div>
 
       <LeaderList title="Event leaders" leaders={metrics.eventLeaders} />
-      <LeaderList title="District leaders" leaders={metrics.weeklyDistrictLeaders} />
+      <LeaderList title="Community leaders" leaders={metrics.weeklyDistrictLeaders} />
       <LeaderList
         title="Weekly influencers"
         leaders={metrics.weeklyDistrictLeaders}
@@ -185,7 +185,7 @@ function DetailedLeaderboardView({ metrics }: { metrics: LiveMetrics }) {
 
       <div>
         <h3 className="text-sm font-semibold text-protect-teal">
-          Running district leaderboard
+          Running community leaderboard
         </h3>
         {metrics.districtEngagementScores.length > 0 ? (
           <ol className="mt-2 grid gap-2">
@@ -207,7 +207,7 @@ function DetailedLeaderboardView({ metrics }: { metrics: LiveMetrics }) {
             ))}
           </ol>
         ) : (
-          <EmptyState>District rankings will appear as activity grows.</EmptyState>
+          <EmptyState>Community rankings will appear as activity grows.</EmptyState>
         )}
       </div>
 

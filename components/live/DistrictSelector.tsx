@@ -36,13 +36,13 @@ export function DistrictSelector({
           id="district-selector-heading"
           className="font-serif text-xl font-semibold text-protect-teal"
         >
-          District focus
+          Community focus
         </h2>
       </div>
       <div
         className="mt-4 flex flex-wrap gap-2"
         role="list"
-        aria-label="30A districts"
+        aria-label="30A communities"
       >
         {districts.map((district) => {
           const selected = district.id === selectedDistrictId;

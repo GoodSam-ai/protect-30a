@@ -431,7 +431,7 @@ function mapEventDistrictEngagementScoreRow(
 ): LiveDistrictEngagementScore {
   return {
     districtId: row.district_id,
-    districtName: row.district_name || "District pending",
+    districtName: row.district_name || "Community pending",
     districtSlug: row.district_slug,
     commentsCount: row.comments_count ?? 0,
     likesReceivedCount: row.likes_received_count ?? 0,
@@ -589,7 +589,7 @@ function buildDistrictScoresFromComments(
       districts.get(key) ??
       {
         districtId: comment.district_id,
-        districtName: district?.name ?? "District pending",
+        districtName: district?.name ?? "Community pending",
         districtSlug: district?.slug ?? null,
         commentsCount: 0,
         likesReceivedCount: 0,
@@ -636,7 +636,7 @@ function buildDistrictLeadersFromComments(
     return {
       ...leader,
       districtId: comment?.district_id ?? null,
-      districtName: district?.name ?? "District pending",
+      districtName: district?.name ?? "Community pending",
       districtSlug: district?.slug ?? null
     };
   });
@@ -693,7 +693,7 @@ function mapWeeklyDistrictInfluencerRow(
   return {
     weekStart: row.week_start ?? undefined,
     districtId: row.district_id,
-    districtName: row.district_name || "District pending",
+    districtName: row.district_name || "Community pending",
     districtSlug: row.district_slug,
     displayName,
     avatarUrl: row.avatar_url,

@@ -5,21 +5,21 @@ export const fixtureDistricts: District[] = [
     id: "10000000-0000-4000-8000-000000000001",
     name: "Inlet Beach",
     slug: "inlet-beach",
-    description: "Inlet Beach district placeholder.",
+    description: "Inlet Beach community placeholder.",
     sort_order: 1
   },
   {
     id: "10000000-0000-4000-8000-000000000002",
     name: "Rosemary Beach",
     slug: "rosemary-beach",
-    description: "Rosemary Beach district placeholder.",
+    description: "Rosemary Beach community placeholder.",
     sort_order: 2
   },
   {
     id: "10000000-0000-4000-8000-000000000003",
     name: "Alys Beach",
     slug: "alys-beach",
-    description: "Alys Beach district placeholder.",
+    description: "Alys Beach community placeholder.",
     sort_order: 3
   },
   {
@@ -65,7 +65,7 @@ export const fixtureEvent: PodcastEvent = {
   title: "Protect30A Live: Community Conversation",
   slug: "protect30a-live-community-conversation",
   description:
-    "A district-based live podcast event for community education and conversation.",
+    "A community-based live podcast event for community education and conversation.",
   status: "upcoming",
   starts_at: new Date("2026-07-03T18:00:00-05:00").toISOString(),
   ends_at: null,

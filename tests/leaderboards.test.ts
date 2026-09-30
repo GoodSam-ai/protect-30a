@@ -632,7 +632,7 @@ describe("dashboard and leaderboard components", () => {
       screen.getByRole("button", { name: "Detailed Leaderboard View" })
     ).toBeInTheDocument();
     expect(screen.getByText("Comments")).toBeInTheDocument();
-    expect(screen.getByText("Engagement score by district")).toBeInTheDocument();
+    expect(screen.getByText("Engagement score by community")).toBeInTheDocument();
     expect(screen.getByText("Inlet Beach")).toBeInTheDocument();
 
     fireEvent.click(
@@ -641,9 +641,9 @@ describe("dashboard and leaderboard components", () => {
 
     expect(screen.getByText("Top comments")).toBeInTheDocument();
     expect(screen.getByText("Event leaders")).toBeInTheDocument();
-    expect(screen.getByText("District leaders")).toBeInTheDocument();
+    expect(screen.getByText("Community leaders")).toBeInTheDocument();
     expect(screen.getByText("Weekly influencers")).toBeInTheDocument();
-    expect(screen.getByText("Running district leaderboard")).toBeInTheDocument();
+    expect(screen.getByText("Running community leaderboard")).toBeInTheDocument();
     expect(screen.getByText("Topic leaderboard")).toBeInTheDocument();
     expect(
       screen.getByText("Keep the stormwater maps visible for every neighborhood.")
@@ -656,8 +656,8 @@ describe("dashboard and leaderboard components", () => {
     render(React.createElement(InfluencerLeaderboard, { metrics }));
 
     expect(screen.getByText("Current event leaders")).toBeInTheDocument();
-    expect(screen.getByText("Current week district leaders")).toBeInTheDocument();
-    expect(screen.getByText("All-time district leaders")).toBeInTheDocument();
+    expect(screen.getByText("Current week community leaders")).toBeInTheDocument();
+    expect(screen.getByText("All-time community leaders")).toBeInTheDocument();
     expect(screen.getAllByText("Avery Resident").length).toBeGreaterThan(0);
     expect(screen.getAllByText(/14 likes/i).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/3 comments/i).length).toBeGreaterThan(0);
