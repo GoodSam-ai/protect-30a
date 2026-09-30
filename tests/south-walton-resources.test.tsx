@@ -27,7 +27,7 @@ describe("SouthWaltonResourcesPage", () => {
       "href",
       "/show"
     );
-    expect(screen.getByRole("link", { name: "Districts" })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: "Communities" })).toHaveAttribute(
       "href",
       "/districts/"
     );
@@ -67,7 +67,7 @@ describe("SouthWaltonResourcesPage", () => {
     render(<SouthWaltonResourcesPage />);
 
     expect(
-      screen.getByRole("heading", { name: /district resource links/i })
+      screen.getByRole("heading", { name: /community resource links/i })
     ).toBeInTheDocument();
     expect(
       screen.getByRole("link", { name: /inlet beach official guide/i })

@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     template: "%s | Protect30A"
   },
   description:
-    "Protect30A community engagement, live podcast participation, district leaderboards, and the South Walton stormwater plan."
+    "Protect30A community engagement, live podcast participation, community leaderboards, and the South Walton stormwater plan."
 };
 
 export default function RootLayout({

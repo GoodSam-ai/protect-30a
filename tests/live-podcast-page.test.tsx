@@ -43,7 +43,7 @@ describe("LivePodcastPage", () => {
     expect(
       screen.getByRole("link", { name: "Protect30A home" })
     ).toHaveAttribute("href", "/");
-    expect(screen.getByRole("link", { name: "Districts" })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: "Communities" })).toHaveAttribute(
       "href",
       "/districts/"
     );
@@ -83,7 +83,7 @@ describe("LivePodcastPage", () => {
     );
     expect(screen.getByText("Jun 26, 7:00 AM")).toBeInTheDocument();
     expect(
-      screen.getByRole("heading", { name: /district focus/i })
+      screen.getByRole("heading", { name: /community focus/i })
     ).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Inlet Beach" })).toHaveAttribute(
       "href",

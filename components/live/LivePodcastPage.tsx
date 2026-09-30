@@ -165,7 +165,7 @@ export function LivePodcastPage({
               className="rounded px-3 py-2 text-protect-teal hover:bg-protect-cream"
               href="/districts/"
             >
-              Districts
+              Communities
             </a>
             <a
               className="rounded px-3 py-2 text-protect-teal hover:bg-protect-cream"
