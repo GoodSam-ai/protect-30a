@@ -3,6 +3,8 @@ const nextConfig = {
   skipTrailingSlashRedirect: true,
   async rewrites() {
     return [
+      { source: "/raven", destination: "/raven/index.html" },
+      { source: "/raven/", destination: "/raven/index.html" },
       { source: "/advocacy/helen-mccall-park", destination: "/advocacy/helen-mccall-park/index.html" },
       { source: "/advocacy/helen-mccall-park/", destination: "/advocacy/helen-mccall-park/index.html" },
       { source: "/", destination: "/legacy/index.html" },
