@@ -1,0 +1,71 @@
+{
+  "review_version": "1.1",
+  "reviewed_at": "2026-10-14T20:08:00-05:00",
+  "reviewed_at_precision": "minute",
+  "timezone": "America/Chicago",
+  "prepared_by": "ChatGPT for Doug Liles",
+  "method": "Selected-document comparison with rendered-page checks; no independent engineering or field validation.",
+  "packet": {
+    "url": "https://walton.civicweb.net/document/540083/",
+    "pages": 84,
+    "bytes": 75032110,
+    "sha256": "e20a31b6e70dae2b3901126574c001aa1c9721146c2f2b98151a884dd37fbf4b",
+    "retrieved_date": "2026-10-14",
+    "page_index": {
+      "location_map": 2,
+      "staff_report": [
+        2,
+        14
+      ],
+      "narrative": [
+        15,
+        16
+      ],
+      "engineering_cover": 24,
+      "master_plan_table": 26,
+      "drainage_overview": 30,
+      "environmental_assessment_start": 53,
+      "allocation_letter": [
+        77,
+        78
+      ]
+    }
+  },
+  "sources": [
+    {
+      "url": "https://saveourbay.net/PFAS-Catfish-Report-ZD17009.pdf",
+      "type": "laboratory report",
+      "role": "Sample-specific PFAS results; Lot ZD17009, completed May 21, 2024"
+    },
+    {
+      "url": "https://saveourbay.net/",
+      "type": "sampling-project account",
+      "role": "Attributed pooling, collection location and fish count; not independently reconstructed"
+    },
+    {
+      "url": "https://nwfwater.com/permits/environmental-resource-permits/",
+      "type": "agency guidance",
+      "role": "Permit-route context; no project-specific eligibility determination"
+    },
+    {
+      "url": "https://floridadep.gov/water/submerged-lands-environmental-resources-coordination/content/mitigation-and-mitigation-banking",
+      "type": "agency guidance",
+      "role": "Mitigation-bank record custodian and ledger context"
+    }
+  ],
+  "unverified": [
+    "current hearing and final approval status",
+    "pre-application notes and tracking number",
+    "controlling complete Exhibit E and subsequent allocations",
+    "permit boundary and mitigation-credit transaction coverage",
+    "native drainage-model performance",
+    "site-to-bay discharge connection",
+    "agency or applicant responses to audit findings"
+  ],
+  "corrections": [
+    "Removed stale packet-unavailable and no-request-sent statements",
+    "Attributed differing Phase II counts to their source versions",
+    "Distinguished observed contamination absence from chemical testing",
+    "Separated documentary differences from ordinary conditional-review context"
+  ]
+}
