@@ -156,9 +156,6 @@ export function initNav() {
           e.preventDefault();
           closeBtn(btn);
           btn.focus();
-        } else if (e.key === 'Tab') {
-          // tabbing out of the panel closes it (no focus trap)
-          closeAll();
         }
       });
     }
@@ -208,6 +205,16 @@ export function initStandaloneMobileNav() {
   burger.addEventListener('click', () => {
     setOpen(!nav.classList.contains('menu-open'));
   });
+  menu?.addEventListener('click', (event) => {
+    if (event.target.closest('a[href]')) setOpen(false);
+  });
+  document.addEventListener('click', (event) => {
+    if (!nav.contains(event.target)) setOpen(false);
+  });
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 820) setOpen(false);
+  });
+
 
   document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape' && nav.classList.contains('menu-open')) {

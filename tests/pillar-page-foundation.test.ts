@@ -111,3 +111,39 @@ describe("pillar-page visual foundation", () => {
     expect(document.activeElement).toBe(burger);
   });
 });
+
+// Regressions: selecting an in-page link left the panel covering the page,
+// and resizing back to desktop left aria-expanded out of sync.
+describe("standalone mobile menu lifecycle", () => {
+  it("closes after selecting a destination", async () => {
+    document.body.innerHTML = mobileNavMarkup();
+    await loadPillarBehavior();
+    document.getElementById("nav-burger")!.click();
+    document.querySelector<HTMLAnchorElement>("#menu-plan a")!.click();
+    expect(document.getElementById("nav")).not.toHaveClass("menu-open");
+    expect(document.getElementById("nav-burger")).toHaveAttribute("aria-expanded", "false");
+  });
+
+  it("resets the toggle when returning to desktop", async () => {
+    Object.defineProperty(window, "innerWidth", { configurable: true, value: 390 });
+    document.body.innerHTML = mobileNavMarkup();
+    await loadPillarBehavior();
+    document.getElementById("nav-burger")!.click();
+    Object.defineProperty(window, "innerWidth", { configurable: true, value: 1024 });
+    window.dispatchEvent(new Event("resize"));
+    expect(document.getElementById("nav")).not.toHaveClass("menu-open");
+    expect(document.getElementById("nav-burger")).toHaveAttribute("aria-expanded", "false");
+  });
+
+  it("keeps focusable submenu links available while tabbing within the panel", async () => {
+    document.body.innerHTML = mobileNavMarkup();
+    document.querySelector("#menu-plan")!.insertAdjacentHTML("beforeend", '<li><a href="#plan">Plan</a></li>');
+    await loadPillarBehavior();
+    const trigger = document.querySelector<HTMLButtonElement>(".nav-top")!;
+    trigger.click();
+    const first = document.querySelector<HTMLAnchorElement>("#menu-plan a")!;
+    first.focus();
+    first.dispatchEvent(new KeyboardEvent("keydown", { key: "Tab", bubbles: true }));
+    expect(trigger).toHaveAttribute("aria-expanded", "true");
+  });
+});

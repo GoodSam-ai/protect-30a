@@ -1,0 +1,80 @@
+/* Shared responsive safeguards. Keep content visible rather than hiding overflow. */
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+*, *::before, *::after { box-sizing: border-box; }
+body { overflow-wrap: anywhere; }
+img, video, iframe, canvas { max-width: 100%; }
+img, video { height: auto; }
+main, section, article, .wrap, .nh-wrap, .nh-copy, .hero-inner,
+.card, .data-card, .cta-card, .ac-card, .nh-pod-body { min-width: 0; }
+button, input, select, textarea { max-width: 100%; font: inherit; }
+pre { max-width: 100%; overflow-wrap: anywhere; }
+[id] { scroll-margin-top: 88px; }
+/* A nav element is also used for breadcrumbs; homepage chrome must not leak. */
+nav.breadcrumb { position: static; padding: 0; display: block; box-shadow: none; background: none; }
+.source-table-wrap { max-width: 100%; overscroll-behavior-x: contain; }
+:focus-visible { outline: 3px solid #d9a441; outline-offset: 3px; }
+
+@media (max-width: 820px) {
+  /* Header remains compact; an expanded menu scrolls independently. */
+  nav#nav:has(.nav-burger) { flex-direction: row; align-items: center; padding: 10px 16px; min-height: 64px; }
+  nav#nav .nav-burger { display: flex; flex: none; color: inherit; }
+  nav#nav:not(.menu-open) .nav-links { display: none; }
+  nav#nav.menu-open .nav-links {
+    position: absolute; inset: 100% 0 auto; display: flex; flex-direction: column;
+    align-items: stretch; gap: 0; flex-wrap: nowrap; padding: 8px 16px 20px;
+    max-height: calc(100vh - 64px); max-height: calc(100dvh - 64px);
+    overflow-y: auto; overscroll-behavior: contain;
+  }
+  nav#nav .nav-links > li { width: 100%; }
+  nav#nav .nav-top { width: 100%; min-height: 48px; justify-content: space-between; padding: 12px; }
+  nav#nav .nav-panel {
+    position: static; inset: auto; width: 100%; min-width: 0; transform: none;
+    max-height: none; padding: 0; border: 0; box-shadow: none;
+  }
+  nav#nav .nav-top[aria-expanded="false"] + .nav-panel { display: none; }
+  nav#nav .nav-top[aria-expanded="true"] + .nav-panel { display: block; transform: none; }
+  nav#nav .nav-panel a { min-height: 44px; padding: 12px 20px; }
+  nav#nav.menu-open .nav-links > li.keep { padding: 12px 0 0; }
+  .site-header .nav-wrap { gap: 12px; padding: 12px 16px; }
+  /* Long community navigation should not occupy most of a phone screen. */
+  .site-header .nav-links { flex-wrap: nowrap; justify-content: flex-start; width: 100%; overflow-x: auto; padding-block: 4px 8px; }
+  .site-header .nav-links a { flex: none; display: inline-flex; align-items: center; min-height: 44px; }
+  .site-header .nav-links .pill { white-space: normal; }
+  input:not([type="checkbox"]):not([type="radio"]), select, textarea { font-size: 16px; }
+  .btn, .button, .nh-btn { white-space: normal; text-align: center; min-height: 44px; }
+  .nh-copy, .nh-grid, .split, .phase-cols { min-width: 0; }
+}
+
+@media (max-width: 600px) {
+  section { padding-block: 48px; }
+  .hero h1.nh-h1 { font-size: clamp(2rem, 8.8vw, 3rem); line-height: 1.05; }
+  .nh-badge { border-radius: 14px; font-size: .78rem; }
+  .nh-btns { flex-direction: column; }
+  .nh-btn { width: 100%; justify-content: center; }
+  .nh-minor { min-height: 44px; display: inline-flex; align-items: center; }
+  /* All nine destinations are visible without a hidden sideways carousel. */
+  .nh-comm-row { grid-auto-flow: row; grid-auto-columns: auto; grid-template-columns: repeat(2, minmax(0, 1fr)); overflow: visible; }
+  .nh-comm-card { min-width: 0; min-height: 152px; padding: 16px 12px; }
+  .nh-comm-name { font-size: .9rem; }
+  .nh-podcast { max-width: 100%; padding: 16px 12px; }
+  .nh-pod-row { gap: 10px; }
+  .nh-pod-links a { display: inline-flex; align-items: center; min-height: 44px; }
+  .nh-map-note { position: static; display: block; padding: 8px 12px; }
+  .stat-grid, .prin-grid, .audience-grid, .community-actions, .cta-grid, #pillars .pp-grid { grid-template-columns: 1fr; }
+  .phase-cols, .split { grid-template-columns: minmax(0, 1fr); }
+  .count-units { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+  .count-unit { min-width: 0; padding: 12px 4px; }
+  .count-unit .num { font-size: 1.8rem; }
+  #help .ac-card { padding: 20px 16px; }
+  #help .ac-card h3 { flex-wrap: wrap; }
+  #help .p30a-records-notice__link { white-space: normal; }
+  .cite-chip-pop { position: fixed; inset: auto 16px 16px; width: auto; max-width: none; max-height: 65dvh; overflow-y: auto; }
+  main#main > section, main#main > header.pillar-head { padding: 32px 16px; }
+  main#main > section .wrap, .pillar-head .wrap { width: 100%; }
+  main#main > section .wrap { padding: 20px 16px; }
+  .rp-wrap { padding-inline: 16px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .reveal { opacity: 1; transform: none; transition: none; }
+}
