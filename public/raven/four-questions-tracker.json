@@ -1,0 +1,196 @@
+{
+  "version": "1.0-review",
+  "updated_at": "2026-10-16T13:36:05.530607-05:00",
+  "prepared_by": "ChatGPT for Doug Liles",
+  "publication": "Preview only; production unchanged",
+  "meeting_status": {
+    "last_verified": "Official October 7, 2026 TRC agenda, item 4 / 26-1621; 9 a.m., Freeport Board Room. Agenda requests approval; it does not prove the outcome. Staff recommendation is not a final order.",
+    "current_final_approval": "Not independently established",
+    "next_raven_hearing": "Not confirmed; no hearing or deadline advertised",
+    "comment_procedure": "County general virtual procedure requires registration at least 24 hours before a meeting and excludes virtual public comment at quasi-judicial hearings. Verify the specific notice, hearing classification, written submission route and cutoff before participating.",
+    "sources": [
+      "https://walton.civicweb.net/document/540121/",
+      "https://www.mywaltonfl.gov/1285/Planning-Department-Zoom-Webinars"
+    ]
+  },
+  "questions": [
+    {
+      "id": "water",
+      "title": "Who provides water and sewer, and what capacity is committed?",
+      "evidence": "The preserved county packet names Regional Utilities for water and sewer (PDF p. 3 / printed staff p. 2). The utility plan names South Walton Utility Company for water and Florida Community Services for sewer (PDF p. 34 / sheet 11 of 17). Both pages were visually reinspected for this preview against the preserved, fingerprinted packet. This verifies the document mismatch, not the actual provider or inadequate capacity.",
+      "favorable": "A table correction or different company names may reconcile the records. A mismatch does not demonstrate insufficient service. No current capacity failure, dangerous leak or contamination is established.",
+      "missing": "Signed parcel-specific water and sewer commitments; connection points and asset ownership; reserved and unbuilt demand; permitted/design, average, peak and wet-weather demand; local network studies and dated incident/pressure records.",
+      "custodian": "County Planning holds the project review file. South Walton Utility and Regional Utilities hold their service/commitment records; DEP drinking-water and wastewater programs hold their respective regulatory records. Utility public-records status is not presumed.",
+      "decision": "County reviewing/issuing authority for MAJ26-000007; each utility for its service commitment and regulators within their permit jurisdiction. The operative order must identify the remaining decision stage.",
+      "requests": [
+        "RAV-01",
+        "RAV-02",
+        "RAV-03",
+        "RAV-05",
+        "RAV-06"
+      ],
+      "next": "Compare signed utility letters and accepted connection drawings to the plan and staff table; reconcile demand and reservations using existing records, with plant and local-network capacity assessed separately.",
+      "criterion": "Providers, connection/ownership boundaries, phase-specific commitments and capacity basis are documented consistently; any required capacity safeguards have a named owner, trigger and verification record.",
+      "citations": [
+        [
+          "Packet p. 3",
+          "https://walton.civicweb.net/document/540083/#page=3"
+        ],
+        [
+          "Packet p. 34",
+          "https://walton.civicweb.net/document/540083/#page=34"
+        ]
+      ]
+    },
+    {
+      "id": "standards",
+      "title": "Which adopted stormwater requirements govern Raven?",
+      "evidence": "AO02 is witness testimony (printed p. 49 lines 6-17 / PDF p. 13; printed pp. 52-53 / PDF p. 14). AO04 p. 1 (February 5, 2020) interprets the 1984 action; AO08 p. 1 (May 11, 2010) seeks clarification. AO11 pp. 2-3 (May 30, 2014) states a historical agency position. These are distinct from adopted controlling text. Raven staff lists a 25-year event (packet p. 3).",
+      "favorable": "The record includes county-approved-plan interpretations and favorable findings under some county criteria. Historical disagreement does not establish today\u2019s controlling standard or a Raven violation. AO07 notes, AO14 advocacy slides and AO15 proposed criteria are not adopted amendments.",
+      "missing": "Complete operative DRI order, incorporated standards/exhibits, adopted amendments and any rescissions; Raven permits, conditions and written review basis tying each requirement to this parcel and phase.",
+      "custodian": "County Planning for orders/amendments and review closure; DEP and NWFWMD for their permits and retained historical correspondence. Record custodians are asked for existing records, not a new legal analysis.",
+      "decision": "County approving authority and the applicable permitting agency within its own authority; current operative approvals must establish which decisions remain.",
+      "requests": [
+        "RAV-01",
+        "RAV-04"
+      ],
+      "next": "Build a dated adoption chain and compare it with the Raven engineering criteria and permit coverage. Preserve rainfall, runoff and storm-duration distinctions.",
+      "criterion": "Each applicable standard has an adopted source, effective date, amendment history, phase/parcel scope and documented engineering compliance basis; unresolved conflicts are explicitly addressed by the responsible reviewer.",
+      "citations": [
+        [
+          "Historical evidence summaries",
+          "#historical-evidence"
+        ],
+        [
+          "Raven packet p. 3",
+          "https://walton.civicweb.net/document/540083/#page=3"
+        ]
+      ]
+    },
+    {
+      "id": "performance",
+      "title": "What project-specific evidence demonstrates development will not worsen flooding or pollution?",
+      "evidence": "Staff reports proposed compensatory storage, a 25-year/24-hour design analysis and no outstanding floodplain issues (packet pp. 6-7 / staff pp. 5-6); environmental review reports no observed onsite contamination (packet p. 8 / staff p. 7). These scoped findings should be tested alongside current project drainage and operational records.",
+      "favorable": "AO01 p. 1 (March 31, 2025) reports compliance of inspected DEP ponds, not blanket Raven clearance. AO12 printed p. 31 / PDF p. 35 pairs historical DRI deficiencies with favorable interior-system and shared-outfall findings. No hydraulic link to Raven follows from proximity, and no current pollution causation is established.",
+      "missing": "Raven native model and inputs, boundary/tailwater assumptions, accepted as-builts, outfall/connection mapping, inspections and maintenance, incident and sampling records; permit coverage and review closure. AO12 appendices are absent.",
+      "custodian": "County Planning/engineering for project review; DEP and NWFWMD for jurisdiction-specific permits/inspections; utilities for utility assets and incidents. Developer/engineer supplies design support through the review file.",
+      "decision": "County technical reviewers and issuing authority; permitting agencies within their jurisdiction. Independent technical review is a community request unless an operative condition requires it.",
+      "requests": [
+        "RAV-01",
+        "RAV-02",
+        "RAV-03",
+        "RAV-04",
+        "RAV-05",
+        "RAV-06"
+      ],
+      "next": "Review the project-specific model and accepted records, distinguish existing from proposed conditions, and match any incident to its asset, date and drainage basin before drawing a causal conclusion.",
+      "criterion": "A reproducible phase-specific analysis documents boundary conditions and effects; applicable safeguards specify measurable thresholds, monitoring/maintenance ownership, corrective triggers and how completion will be verified.",
+      "citations": [
+        [
+          "Packet pp. 6-7",
+          "https://walton.civicweb.net/document/540083/#page=6"
+        ],
+        [
+          "Packet p. 8",
+          "https://walton.civicweb.net/document/540083/#page=8"
+        ],
+        [
+          "Balanced historical evidence",
+          "#historical-evidence"
+        ]
+      ]
+    },
+    {
+      "id": "recreation",
+      "title": "Which enforceable recreation and open-space commitments must be preserved?",
+      "evidence": "The narrative and allocation letter require reconciliation of development/open-space scope (packet pp. 15-16 and 77-78). AO13 p. 2 is a historical Parcel 561 inquiry, not a ruling on Raven. AO09\u2019s majority ends where the concurrence begins at PDF p. 18; reversal/remand does not invalidate all Raven approvals.",
+      "favorable": "AO09 records the absence of objection to the 2016 NOPC and rescission of the 2014 DONC in 2017. Open-space designation alone does not prove a public recreation right or unlawful loss. Later operative amendments and orders may change the analysis.",
+      "missing": "Controlling recreation/open-space conditions and amendments, current Exhibit E and parcel ledger, recorded easements/rights, conversion approvals and acreage reconciliation; operative later court orders.",
+      "custodian": "County Planning for approval/exhibit records; Clerk/official records for recorded instruments and court orders; owners/association for retained commitments. Court records and private recreation rights require separate review.",
+      "decision": "County authority responsible for the operative approval, and parties charged with enforceable recorded commitments; legal effect depends on the controlling instrument.",
+      "requests": [
+        "RAV-01"
+      ],
+      "next": "Reconcile parcel and DRI-wide acreage against the operative exhibits and recorded rights; identify whether each commitment is public, private, amendable or already amended.",
+      "criterion": "Protected acreage and enforceable rights are mapped and reconciled with the adopted record; any authorized change and required replacement/mitigation are documented, with responsible parties and verification steps.",
+      "citations": [
+        [
+          "Narrative pp. 15-16",
+          "https://walton.civicweb.net/document/540083/#page=15"
+        ],
+        [
+          "Allocation pp. 77-78",
+          "https://walton.civicweb.net/document/540083/#page=77"
+        ],
+        [
+          "AO09 / AO13 summaries",
+          "#historical-evidence"
+        ]
+      ]
+    }
+  ],
+  "requests": [
+    {
+      "id": "RAV-01",
+      "custodian": "County Planning",
+      "scope": "Approvals, service commitments, DRI and recreation",
+      "sent": "Verified in Sent, October 16, 2026, approximately 12:20-12:23 p.m. CDT",
+      "acknowledged": "Not verified",
+      "records_received": "Not verified for this request",
+      "under_review": "No verified response to review",
+      "answer_assessment": "Unresolved; no substantive response verified"
+    },
+    {
+      "id": "RAV-02",
+      "custodian": "DEP Northwest Drinking Water",
+      "scope": "Water permits, capacity, pressure and incident records",
+      "sent": "Verified in Sent, October 16, 2026, approximately 12:20-12:23 p.m. CDT",
+      "acknowledged": "Not verified",
+      "records_received": "Not verified for this request",
+      "under_review": "No verified response to review",
+      "answer_assessment": "Unresolved; no substantive response verified"
+    },
+    {
+      "id": "RAV-03",
+      "custodian": "DEP Northwest Wastewater",
+      "scope": "Capacity, collection, spill and corrective-action records",
+      "sent": "Verified in Sent, October 16, 2026, approximately 12:20-12:23 p.m. CDT",
+      "acknowledged": "Not verified",
+      "records_received": "Not verified for this request",
+      "under_review": "No verified response to review",
+      "answer_assessment": "Unresolved; no substantive response verified"
+    },
+    {
+      "id": "RAV-04",
+      "custodian": "NWFWMD Public Records",
+      "scope": "Basis/routing of earlier no-match permit search",
+      "sent": "Verified in Sent, October 16, 2026, approximately 12:20-12:23 p.m. CDT",
+      "acknowledged": "Not verified",
+      "records_received": "Not verified for this request",
+      "under_review": "No verified response to review",
+      "answer_assessment": "Unresolved; no substantive response verified"
+    },
+    {
+      "id": "RAV-05",
+      "custodian": "South Walton Utility",
+      "scope": "Water service commitment, network capacity and incidents",
+      "sent": "Verified in Sent, October 16, 2026, approximately 12:20-12:23 p.m. CDT",
+      "acknowledged": "Not verified",
+      "records_received": "Not verified for this request",
+      "under_review": "No verified response to review",
+      "answer_assessment": "Unresolved; no substantive response verified"
+    },
+    {
+      "id": "RAV-06",
+      "custodian": "Regional Utilities",
+      "scope": "Sewer commitment, network/plant capacity and incidents",
+      "sent": "Verified in Sent, October 16, 2026, approximately 12:20-12:23 p.m. CDT",
+      "acknowledged": "Not verified",
+      "records_received": "Not verified for this request",
+      "under_review": "No verified response to review",
+      "answer_assessment": "Unresolved; no substantive response verified"
+    }
+  ],
+  "provenance": "Five supplied private collections and preserved project packet; official agenda/procedure checks. Public derivative excludes private correspondence and source headers. No new requests sent.",
+  "packet_sha256": "e20a31b6e70dae2b3901126574c001aa1c9721146c2f2b98151a884dd37fbf4b"
+}
