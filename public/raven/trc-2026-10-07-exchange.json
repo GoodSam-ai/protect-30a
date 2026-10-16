@@ -1,0 +1,55 @@
+{
+  "evidence_id": "TRC-2026-10-07-01",
+  "title": "October 7 TRC exchange about litigation and continued development",
+  "meeting_date": "2026-10-07",
+  "recording_title": "Technical Review Committee - Oct 07 2026",
+  "publisher": "Walton County Government",
+  "publisher_verification": "Identified in supplied project source review; exact YouTube channel not independently reverified in this session.",
+  "source_url": "https://www.youtube.com/watch?v=9yvkdF9r6AU&t=1888s",
+  "official_agenda_url": "https://walton.civicweb.net/document/540121/",
+  "segment": {
+    "start": "31:28",
+    "end": "32:55",
+    "start_seconds": 1888,
+    "end_seconds": 1975
+  },
+  "question": {
+    "time": "31:37–31:39",
+    "quote_from_supplied_transcript": "is it under litigation still?",
+    "summary": "A committee member asks about ongoing litigation and how further building can proceed, including whether development is stopped."
+  },
+  "response": {
+    "time": "32:03–32:52",
+    "summary": "The responding speaker, addressed as Brooke in the supplied transcript review, describes no injunction at that point, explains an appeal/remand notice issue and distinguishes a 2016 open-space amendment from litigation over a 2017 amendment.",
+    "status": "Dated meeting explanation, not independently verified present legal status."
+  },
+  "attribution": {
+    "public_label": "a committee member; the responding speaker",
+    "limits": "Chair address transcribed as Darren is consistent with Darrin Dunwald's district identity but does not independently identify the voice. No definitive named-speaker attribution is made.",
+    "identity_context_url": "https://www.southwaltonmosquitocontrol.org/transparency.html",
+    "identity_context_verified": "Official district page lists Darrin Dunwald, Director; this does not establish the recording speaker's identity."
+  },
+  "separate_statement": {
+    "time": "19:04–19:21",
+    "summary": "A separate public commenter asserted noncompliance according to the supplied review. That allegation is not the committee question, the response or an official compliance finding."
+  },
+  "provenance": {
+    "basis": "Project-supplied exported-transcript review and timestamps; official agenda independently retrieved.",
+    "audio_review": "Not independently performed in this session; YouTube fetch throttled.",
+    "transcript_status": "Export contains name errors; full derivative export was not accessible in this environment and is not reproduced or represented as ingested.",
+    "remote_media_download": false
+  },
+  "interpretation_limits": [
+    "Does not establish current injunction status.",
+    "Does not establish a current DRI noncompliance determination or blanket development prohibition.",
+    "Does not establish final Raven approval or the meeting vote.",
+    "Need later docket, operative orders and governing amendments to establish current legal effect."
+  ],
+  "storage": {
+    "public_record": "/raven/trc-2026-10-07-exchange.json",
+    "project_sources_new_uploads": 0,
+    "project_sources_status": "Existing 40 Sources preserved; no deletion or transcript upload in this session."
+  },
+  "updated": "2026-10-16",
+  "creator": "ChatGPT"
+}
