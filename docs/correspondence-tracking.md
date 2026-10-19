@@ -19,7 +19,7 @@ For future rotation or recovery:
 
 The endpoint verifies the raw payload with Svix, validates timestamps, stores each event once, ignores unrelated projects, and returns retryable errors for storage failures. Metadata only is retained. Received email never triggers actions or automatically establishes acknowledgment, legal findings, or commitments. Full message review remains manual in the source mailbox.
 
-The submitted letter's Reply-To remains `digitalcommons@icloud.com`. Forward its replies to `correspondence@inbox.protect30a.org`, retaining the case reference in the subject, to capture a notice after activation. This setup does not configure automatic iCloud forwarding. Future sending workflows must select a tracked reply address explicitly.
+The submitted letter's Reply-To remains `digitalcommons@icloud.com`. Automatic forwarding from that mailbox to `correspondence@inbox.protect30a.org` was enabled with owner confirmation October 19, 2026, 11:37 a.m. CDT; delete-after-forwarding is OFF. Test `P30A-FWD-20261019-1137` confirmed iCloud delivery, Resend inbound receipt (`92083ac2-2895-46d7-98a0-745c2aa1d96b`), and an inbound-email row in the unified dashboard. New replies now enter automatically; older mailbox contents are not backfilled. Future sending workflows must select their reply address explicitly.
 
 No recurring reminders or automated outbound follow-ups have been configured. Record official acknowledgment and council actions only after reviewing the supporting reply, minutes, or recording. The 30-day reporting clock begins only on confirmed adoption of that direction.
 

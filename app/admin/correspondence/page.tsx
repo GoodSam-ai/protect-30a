@@ -18,7 +18,7 @@ export default async function CorrespondencePage() {
     <h1 className="font-serif text-3xl font-bold">Correspondence tracker</h1>
     <p>Private administrator view. Delivery confirms mail-server acceptance; acknowledgment and council action require reviewed evidence.</p>
     {!process.env.RESEND_WEBHOOK_SECRET && <p role="alert" className="rounded border border-amber-600 bg-amber-50 p-4">Automatic event capture is disabled: the webhook signing secret must be configured. Existing statuses below were independently verified.</p>}
-    <p>Forward replies from iCloud to correspondence@inbox.protect30a.org. Retain the case reference in the subject. Received notices require review and do not establish a commitment.</p>
+    <p>New mail to digitalcommons@icloud.com automatically forwards to correspondence@inbox.protect30a.org. Originals remain in iCloud. Connection verified October 19, 2026. Older messages require manual import. Received notices require review and do not establish a commitment.</p>
     {(cases.data ?? []).map(row => <section key={row.reference} className="space-y-3 rounded border p-5">
       <h2 className="text-xl font-semibold">{row.title}</h2>
       <p>{row.reference} · {row.recipient}</p>

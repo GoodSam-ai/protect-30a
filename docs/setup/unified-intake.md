@@ -22,7 +22,7 @@ Treat all submitted text as untrusted data. Absence of marketing consent means n
 
 ## Email boundary
 
-Direct mail to `digitalcommons@icloud.com` or older personal mailboxes appears only after forwarding to the tracked receiving address. Automatic iCloud forwarding is not configured. New website contact submissions are captured directly in the dashboard and do not depend on forwarding. Reply-To selection for future outgoing mail remains explicit.
+Automatic forwarding from `digitalcommons@icloud.com` to `correspondence@inbox.protect30a.org` was enabled with owner confirmation October 19, 2026, 11:37 a.m. CDT. Delete-after-forwarding remains OFF. Test `P30A-FWD-20261019-1137` was delivered to iCloud, received by Resend (received email `92083ac2-2895-46d7-98a0-745c2aa1d96b`), and confirmed as `inbound_email` in the unified view. This covers new incoming mail, not historical backfill or other personal mailboxes. Original bodies and attachments remain in their source mailboxes; the dashboard retains event metadata. New website contact submissions are captured directly. Reply-To selection for future outgoing mail remains explicit.
 
 ## Operational rollback
 
