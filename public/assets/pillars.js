@@ -382,3 +382,21 @@ if (document.readyState === 'loading') {
 if (typeof window !== 'undefined') {
   window.p30aPillars = { initNav, initStandaloneMobileNav, initDisclosures, initCites };
 }
+
+/* Bay campaign: shared discovery link in Engage menus and water-quality section. */
+function initBayCampaignLinks() {
+ const menu=document.getElementById('menu-engage');
+ if(menu&&!menu.querySelector('a[href="/protect-our-bay"]')){
+  const li=document.createElement('li');const a=document.createElement('a');
+  a.href='/protect-our-bay';a.textContent='Protect Our Bay';
+  if(location.pathname.replace(/\/$/,'')==='/protect-our-bay')a.setAttribute('aria-current','page');
+  li.append(a);menu.prepend(li);
+ }
+ const water=document.getElementById('wq-explorer');
+ if(water&&!water.querySelector('a[href="/protect-our-bay"]')){
+  const p=document.createElement('p');const a=document.createElement('a');
+  a.href='/protect-our-bay';a.textContent='Protect Our Bay: review the four requests and write your officials →';
+  p.append(a);water.append(p);
+ }
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initBayCampaignLinks,{once:true});else initBayCampaignLinks();
