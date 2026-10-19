@@ -20,3 +20,10 @@ Local Magic Sundays/
 # Reviewed public-safe campaign briefs only
 !public/raven/Raven_Four_Questions_Meeting_Brief.pdf
 !public/protect-our-bay/brief.pdf
+
+# Application correspondence routes are reviewed code, not private source correspondence.
+!app/admin/correspondence/
+!app/admin/correspondence/**
+!app/api/correspondence/
+!app/api/correspondence/**
+!docs/correspondence-tracking.md
