@@ -6,9 +6,11 @@ Private dashboard: `/admin/correspondence`, linked from the existing admin page.
 
 Case P30A-20261019-01: the original submission to the legacy clerk address bounced. The corrected submission to Lisa Wallace was confirmed delivered through Resend, provider ID `01a154c4-1268-7bc8-8b38-d41f01551deb`. Acknowledgment, placement in the public record, council consideration, and adoption of a reporting deadline remain unconfirmed.
 
-## Activation blocker
+## Activation verified — October 19, 2026, 10:36 AM Central
 
-The Vercel connector returned HTTP 403 when saving `RESEND_WEBHOOK_SECRET` for project `protect-30a`, team `team_NfeAtQjmyoelxw1RuehKVcNq`. No CLI credentials were available. The webhook is disabled until a project administrator configures its signing secret. Do not place the secret in source control or chat.
+The Vercel connector returned HTTP 403 for environment-variable creation. The existing signed-in browser session successfully saved the secret as a production Secret variable. Deployment `dpl_B84yuhCZDYUaAg3pSSLnW9B5WsXJ` reached READY; the webhook was enabled. A controlled internal test produced signed email.sent, email.delivered, and email.received rows in the private database. An unsigned live POST returned 400. Do not place the secret in source control or chat.
+
+For future rotation or recovery:
 
 1. Retrieve the secret securely from the Resend webhook settings for webhook `2dd20292-f036-466e-b06a-d24e9985559c`.
 2. Save it as encrypted `RESEND_WEBHOOK_SECRET` in the Vercel production environment and redeploy.
