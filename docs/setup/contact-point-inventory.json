@@ -1,0 +1,260 @@
+[
+  {
+    "file": "public/raven/index.html",
+    "source": "/raven",
+    "category": "flooding",
+    "previous_recipient": "digitalcommons@icloud.com"
+  },
+  {
+    "file": "public/raven/index.html",
+    "source": "/raven",
+    "category": "evidence",
+    "previous_recipient": "digitalcommons@icloud.com"
+  },
+  {
+    "file": "public/raven/index.html",
+    "source": "/raven",
+    "category": "evidence",
+    "previous_recipient": "digitalcommons@icloud.com"
+  },
+  {
+    "file": "public/act/index.html",
+    "source": "/act",
+    "category": "sponsorship",
+    "previous_recipient": "doug@goodsamaritaninstitute.org"
+  },
+  {
+    "file": "public/records-privacy/index.html",
+    "source": "/records-privacy",
+    "category": "privacy",
+    "previous_recipient": "doug@goodsamaritaninstitute.org"
+  },
+  {
+    "file": "public/records-privacy/index.html",
+    "source": "/records-privacy",
+    "category": "privacy",
+    "previous_recipient": "doug@goodsamaritaninstitute.org"
+  },
+  {
+    "file": "public/records-privacy/index.html",
+    "source": "/records-privacy",
+    "category": "privacy",
+    "previous_recipient": "doug@goodsamaritaninstitute.org"
+  },
+  {
+    "file": "public/legacy/index.html",
+    "source": "/",
+    "category": "meeting_alerts",
+    "previous_recipient": "doug@goodsamaritaninstitute.org"
+  },
+  {
+    "file": "public/legacy/index.html",
+    "source": "/",
+    "category": "meeting_alerts",
+    "previous_recipient": "doug@goodsamaritaninstitute.org"
+  },
+  {
+    "file": "public/legacy/index.html",
+    "source": "/",
+    "category": "story",
+    "previous_recipient": "doug@goodsamaritaninstitute.org"
+  },
+  {
+    "file": "public/legacy/index.html",
+    "source": "/",
+    "category": "sponsorship",
+    "previous_recipient": "doug@goodsamaritaninstitute.org"
+  },
+  {
+    "file": "public/legacy/index.html",
+    "source": "/",
+    "category": "general",
+    "previous_recipient": "doug@goodsamaritaninstitute.org"
+  },
+  {
+    "file": "public/protect-our-bay/index.html",
+    "source": "/protect-our-bay",
+    "category": "evidence",
+    "previous_recipient": "digitalcommons@icloud.com"
+  },
+  {
+    "file": "public/districts/index.html",
+    "source": "/districts",
+    "category": "general",
+    "previous_recipient": "doug@goodsamaritaninstitute.org"
+  },
+  {
+    "file": "public/impact/index.html",
+    "source": "/impact",
+    "category": "flooding",
+    "previous_recipient": "doug@goodsamaritaninstitute.org"
+  },
+  {
+    "file": "public/source-library/index.html",
+    "source": "/source-library",
+    "category": "correction",
+    "previous_recipient": "doug@goodsamaritaninstitute.org"
+  },
+  {
+    "file": "public/source-library/index.html",
+    "source": "/source-library",
+    "category": "general",
+    "previous_recipient": "doug@goodsamaritaninstitute.org"
+  },
+  {
+    "file": "public/legacy/show/index.html",
+    "source": "/show",
+    "category": "general",
+    "previous_recipient": "doug@goodsamaritaninstitute.org"
+  },
+  {
+    "file": "public/legacy/show/index.html",
+    "source": "/show",
+    "category": "sponsorship",
+    "previous_recipient": "doug@goodsamaritaninstitute.org"
+  },
+  {
+    "file": "public/legacy/show/index.html",
+    "source": "/show",
+    "category": "sponsorship",
+    "previous_recipient": "doug@goodsamaritaninstitute.org"
+  },
+  {
+    "file": "public/legacy/show/index.html",
+    "source": "/show",
+    "category": "sponsorship",
+    "previous_recipient": "doug@goodsamaritaninstitute.org"
+  },
+  {
+    "file": "public/legacy/show/index.html",
+    "source": "/show",
+    "category": "story",
+    "previous_recipient": "doug@goodsamaritaninstitute.org"
+  },
+  {
+    "file": "public/legacy/show/index.html",
+    "source": "/show",
+    "category": "general",
+    "previous_recipient": "doug@goodsamaritaninstitute.org"
+  },
+  {
+    "file": "public/legacy/show/index.html",
+    "source": "/show",
+    "category": "general",
+    "previous_recipient": "doug@goodsamaritaninstitute.org"
+  },
+  {
+    "file": "public/advocacy/helen-mccall-park/index.html",
+    "source": "/advocacy/helen-mccall-park",
+    "category": "general",
+    "previous_recipient": "doug@goodsamaritaninstitute.org"
+  },
+  {
+    "file": "public/districts/30a-stormwater/index.html",
+    "source": "/districts/30a-stormwater",
+    "category": "flooding",
+    "previous_recipient": "doug@goodsamaritaninstitute.org"
+  },
+  {
+    "file": "public/districts/30a-stormwater/index.html",
+    "source": "/districts/30a-stormwater",
+    "category": "general",
+    "previous_recipient": "doug@goodsamaritaninstitute.org"
+  },
+  {
+    "file": "public/districts/grayton-blue-mountain/index.html",
+    "source": "/districts/grayton-blue-mountain",
+    "category": "flooding",
+    "previous_recipient": "doug@goodsamaritaninstitute.org"
+  },
+  {
+    "file": "public/districts/grayton-blue-mountain/index.html",
+    "source": "/districts/grayton-blue-mountain",
+    "category": "general",
+    "previous_recipient": "doug@goodsamaritaninstitute.org"
+  },
+  {
+    "file": "public/districts/watersound-seacrest-prominence-origins/index.html",
+    "source": "/districts/watersound-seacrest-prominence-origins",
+    "category": "flooding",
+    "previous_recipient": "doug@goodsamaritaninstitute.org"
+  },
+  {
+    "file": "public/districts/watersound-seacrest-prominence-origins/index.html",
+    "source": "/districts/watersound-seacrest-prominence-origins",
+    "category": "general",
+    "previous_recipient": "doug@goodsamaritaninstitute.org"
+  },
+  {
+    "file": "public/districts/rosemary-beach/index.html",
+    "source": "/districts/rosemary-beach",
+    "category": "flooding",
+    "previous_recipient": "doug@goodsamaritaninstitute.org"
+  },
+  {
+    "file": "public/districts/rosemary-beach/index.html",
+    "source": "/districts/rosemary-beach",
+    "category": "general",
+    "previous_recipient": "doug@goodsamaritaninstitute.org"
+  },
+  {
+    "file": "public/districts/inlet-beach/index.html",
+    "source": "/districts/inlet-beach",
+    "category": "flooding",
+    "previous_recipient": "doug@goodsamaritaninstitute.org"
+  },
+  {
+    "file": "public/districts/inlet-beach/index.html",
+    "source": "/districts/inlet-beach",
+    "category": "general",
+    "previous_recipient": "doug@goodsamaritaninstitute.org"
+  },
+  {
+    "file": "public/districts/seagrove-seaside-watercolor/index.html",
+    "source": "/districts/seagrove-seaside-watercolor",
+    "category": "flooding",
+    "previous_recipient": "doug@goodsamaritaninstitute.org"
+  },
+  {
+    "file": "public/districts/seagrove-seaside-watercolor/index.html",
+    "source": "/districts/seagrove-seaside-watercolor",
+    "category": "general",
+    "previous_recipient": "doug@goodsamaritaninstitute.org"
+  },
+  {
+    "file": "public/districts/sandestin-miramar-beach-seascape/index.html",
+    "source": "/districts/sandestin-miramar-beach-seascape",
+    "category": "flooding",
+    "previous_recipient": "doug@goodsamaritaninstitute.org"
+  },
+  {
+    "file": "public/districts/sandestin-miramar-beach-seascape/index.html",
+    "source": "/districts/sandestin-miramar-beach-seascape",
+    "category": "general",
+    "previous_recipient": "doug@goodsamaritaninstitute.org"
+  },
+  {
+    "file": "public/districts/santa-rosa-beach-gulf-place-dune-allen/index.html",
+    "source": "/districts/santa-rosa-beach-gulf-place-dune-allen",
+    "category": "flooding",
+    "previous_recipient": "doug@goodsamaritaninstitute.org"
+  },
+  {
+    "file": "public/districts/santa-rosa-beach-gulf-place-dune-allen/index.html",
+    "source": "/districts/santa-rosa-beach-gulf-place-dune-allen",
+    "category": "general",
+    "previous_recipient": "doug@goodsamaritaninstitute.org"
+  },
+  {
+    "file": "public/districts/alys-beach/index.html",
+    "source": "/districts/alys-beach",
+    "category": "flooding",
+    "previous_recipient": "doug@goodsamaritaninstitute.org"
+  },
+  {
+    "file": "public/districts/alys-beach/index.html",
+    "source": "/districts/alys-beach",
+    "category": "general",
+    "previous_recipient": "doug@goodsamaritaninstitute.org"
+  }
+]

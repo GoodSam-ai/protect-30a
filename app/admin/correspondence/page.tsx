@@ -14,7 +14,7 @@ export default async function CorrespondencePage() {
   ]);
   if (cases.error || events.error) throw new Error("Correspondence data unavailable");
   return <main className="mx-auto max-w-5xl space-y-6 px-4 py-10">
-    <Link href="/admin">← Admin</Link>
+    <Link href="/admin/intake">← Unified community inbox</Link>
     <h1 className="font-serif text-3xl font-bold">Correspondence tracker</h1>
     <p>Private administrator view. Delivery confirms mail-server acceptance; acknowledgment and council action require reviewed evidence.</p>
     {!process.env.RESEND_WEBHOOK_SECRET && <p role="alert" className="rounded border border-amber-600 bg-amber-50 p-4">Automatic event capture is disabled: the webhook signing secret must be configured. Existing statuses below were independently verified.</p>}

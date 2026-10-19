@@ -78,7 +78,7 @@ describe("Protect30A recommendation implementation", () => {
       expect(html, slug).toContain("Local proof kit");
       expect(html, slug).toContain("Source links and transcript status");
       expect(html, slug).toContain("Report a stormwater trouble spot");
-      expect(html, slug).toContain("mailto:doug@goodsamaritaninstitute.org");
+      expect(html, slug).toContain("/contact?category=flooding");
       expect(html, slug).toContain('href="/source-library"');
     }
   });
