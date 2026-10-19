@@ -59,11 +59,12 @@ describe("site config", () => {
     expect(parsePollingIntervalMs("   ")).toBe(5000);
   });
 
-  it("enables TikTok and Instagram when env flags are absent", () => {
+  it("hides unconfigured social providers when flags are absent", () => {
     const providers = getEnabledAuthProviders({});
+    expect(providers.map(p => p.id)).toEqual(["email"]);
 
-    expect(providers.map((provider) => provider.id)).toContain("custom:tiktok");
-    expect(providers.map((provider) => provider.id)).toContain(
+    expect(providers.map((provider) => provider.id)).not.toContain("custom:tiktok");
+    expect(providers.map((provider) => provider.id)).not.toContain(
       "custom:instagram"
     );
   });
@@ -94,14 +95,14 @@ describe("site config", () => {
     );
   });
 
-  it("uses fallback auth provider flags for invalid values", () => {
+  it("hides providers for invalid flags", () => {
     const providers = getEnabledAuthProviders({
       ENABLE_TIKTOK_LOGIN: "sometimes",
       ENABLE_INSTAGRAM_LOGIN: "nope"
     });
 
-    expect(providers.map((provider) => provider.id)).toContain("custom:tiktok");
-    expect(providers.map((provider) => provider.id)).toContain(
+    expect(providers.map((provider) => provider.id)).not.toContain("custom:tiktok");
+    expect(providers.map((provider) => provider.id)).not.toContain(
       "custom:instagram"
     );
   });

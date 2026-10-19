@@ -1,10 +1,13 @@
 import Link from 'next/link';
+import {SignInPanel} from '@/components/auth/SignInPanel';
 import {redirect} from 'next/navigation';
 import {canAdmin,getCurrentUserAndProfile} from '@/lib/auth/session';
 import {createSupabaseAdminClient} from '@/lib/supabase/admin';
 export const dynamic='force-dynamic';
 export default async function MailHistory({searchParams}:{searchParams:Promise<Record<string,string|string[]|undefined>>}){
- const {profile}=await getCurrentUserAndProfile();if(!canAdmin(profile))redirect('/live');
+ const {user,profile}=await getCurrentUserAndProfile();
+ if(!user)return <main className="mx-auto max-w-xl space-y-6 px-4 py-10"><h1 className="text-3xl font-bold">Private mail history</h1><p>Sign in with your administrator email to view and download imported mail. Access is restricted to authorized administrators.</p><SignInPanel redirectTo="/admin/mail" /></main>;
+ if(!canAdmin(profile))redirect('/live');
  const p=await searchParams;const n=typeof p.page==='string'?Number(p.page):1;const page=Number.isSafeInteger(n)&&n>0?Math.min(n,10000):1;
  const {data,count,error}=await createSupabaseAdminClient().from('email_history').select('id,message_id,sent_at,sender,recipients,subject,body,attachments,folders,source_account,imported_at',{count:'exact'}).order('sent_at',{ascending:false}).order('id').range((page-1)*25,page*25-1);
  if(error)throw Error('Mail history unavailable');

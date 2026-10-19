@@ -69,20 +69,20 @@ export function getCanonicalUrl(pathname: string, env?: EnvLike) {
 export function getEnabledAuthProviders(env: EnvLike = process.env) {
   const providers: AuthProviderConfig[] = [
     { id: "email", label: "Email magic link", enabled: true },
-    { id: "google", label: "Google", enabled: true },
-    { id: "apple", label: "Apple", enabled: true },
-    { id: "facebook", label: "Facebook", enabled: true },
-    { id: "linkedin_oidc", label: "LinkedIn", enabled: true },
+    { id: "google", label: "Google", enabled: readBoolean(env.ENABLE_GOOGLE_LOGIN, false) },
+    { id: "apple", label: "Apple", enabled: readBoolean(env.ENABLE_APPLE_LOGIN, false) },
+    { id: "facebook", label: "Facebook", enabled: readBoolean(env.ENABLE_FACEBOOK_LOGIN, false) },
+    { id: "linkedin_oidc", label: "LinkedIn", enabled: readBoolean(env.ENABLE_LINKEDIN_LOGIN, false) },
     {
       id: "custom:tiktok",
       label: "TikTok",
-      enabled: readBoolean(env.ENABLE_TIKTOK_LOGIN, true),
+      enabled: readBoolean(env.ENABLE_TIKTOK_LOGIN, false),
       note: "Uses TikTok Login Kit through a Supabase custom OAuth provider."
     },
     {
       id: "custom:instagram",
       label: "Instagram",
-      enabled: readBoolean(env.ENABLE_INSTAGRAM_LOGIN, true),
+      enabled: readBoolean(env.ENABLE_INSTAGRAM_LOGIN, false),
       note:
         "Instagram login is for eligible Business/Creator accounts through Meta's supported Instagram Login/API path."
     }
