@@ -1,0 +1,21 @@
+import {beforeEach,describe,expect,it,vi} from 'vitest';
+import {renderToStaticMarkup} from 'react-dom/server';
+import Page from '@/app/admin/intake/page';
+const m=vi.hoisted(()=>({profile:{role:'admin',is_restricted:false} as {role:string;is_restricted:boolean}|null,admin:vi.fn(),result:{data:[] as Record<string,unknown>[],count:0,error:null as null|object},countError:null as null|object,select:vi.fn(),order:vi.fn(),range:vi.fn(),eq:vi.fn()}));
+vi.mock('@/lib/auth/session',()=>({getCurrentUserAndProfile:async()=>({profile:m.profile}),canAdmin:(p:typeof m.profile)=>p?.role==='admin'&&!p.is_restricted}));
+vi.mock('@/lib/supabase/admin',()=>({createSupabaseAdminClient:m.admin}));
+vi.mock('next/navigation',()=>({redirect:(p:string)=>{throw Error('redirect:'+p)}}));
+vi.mock('@/app/admin/intake/actions',()=>({updateIntake:vi.fn()}));
+const row={id:'contact_submissions:123',source_id:'123',source_table:'contact_submissions',channel:'website',category:'flooding',source_path:'/impact',subject:'Local observation',contact_name:'Resident',contact_email:'resident@example.invalid',created_at:'2026-10-19T16:00:00Z',status:'waiting',owner:'Heather',notes:'Follow up',due_at:'2026-10-22T12:00:00Z',consent:{contact:true,updates:false},details:{message:'<script>unsafe()</script>'}};
+async function html(params:Record<string,string|string[]|undefined>={}){return renderToStaticMarkup(await Page({searchParams:Promise.resolve(params)}));}
+describe('unified dashboard view',()=>{
+ beforeEach(()=>{m.profile={role:'admin',is_restricted:false};m.result={data:[],count:0,error:null};m.countError=null;for(const fn of [m.select,m.order,m.range,m.eq])fn.mockReset();const chain={select:m.select,order:m.order,range:m.range,eq:m.eq,then:(resolve:(v:unknown)=>void)=>resolve(m.result)};m.select.mockReturnValue(chain);m.order.mockReturnValue(chain);m.range.mockReturnValue(chain);m.eq.mockReturnValue(chain);let n=0;m.admin.mockReset().mockReturnValue({from:()=>++n===1?chain:{select:()=>({eq:async()=>({count:2,error:m.countError})})}});});
+ it.each([null,{role:'moderator',is_restricted:false},{role:'admin',is_restricted:true}])('redirects unauthorized users before any query',async profile=>{m.profile=profile;await expect(html()).rejects.toThrow('redirect:/live');expect(m.admin).not.toHaveBeenCalled();});
+ it('shows a clear empty state and current connection limitations',async()=>{const h=await html();expect(h).toContain('No submissions match');expect(h).toContain('Automatic forwarding from digitalcommons@icloud.com is active');expect(h).toContain('Older messages are not backfilled');});
+ it('applies supported filters and correct pagination range',async()=>{await html({status:'waiting',category:'flooding',page:'2'});expect(m.eq).toHaveBeenCalledWith('status','waiting');expect(m.eq).toHaveBeenCalledWith('category','flooding');expect(m.range).toHaveBeenCalledWith(50,99);});
+ it.each([{page:'-1',status:'injected',category:'unknown'},{page:'NaN'},{page:['2','3']},{page:'1.2'}])('normalizes invalid parameters %j',async p=>{await html(p);expect(m.range).toHaveBeenCalledWith(0,49);expect(m.eq).not.toHaveBeenCalled();});
+ it('preserves filters in navigation and shows both directions on middle pages',async()=>{m.result={data:[row],count:151,error:null};const h=await html({status:'waiting',category:'flooding',page:'2'});expect(h).toContain('Newer');expect(h).toContain('Older');expect(h).toContain('status=waiting&amp;category=flooding&amp;page=3');});
+ it('renders contact provenance, consent, notes and dates without executing submitted HTML',async()=>{m.result={data:[row],count:1,error:null};const h=await html();expect(h).toContain('/impact');expect(h).toContain('Heather');expect(h).toContain('Follow up');expect(h).toContain('2026-10-22');expect(h).toContain('&lt;script&gt;unsafe()&lt;/script&gt;');expect(h).not.toContain('<script>unsafe()');expect(h).toContain('&quot;updates&quot;: false');});
+ it('fails visibly on inbox read errors',async()=>{m.result.error={message:'offline'};await expect(html()).rejects.toThrow('Unified intake unavailable');});
+ it('fails visibly on queue-count errors rather than showing false zeroes',async()=>{m.countError={message:'offline'};await expect(html()).rejects.toThrow('Unified intake unavailable');});
+});

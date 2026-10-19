@@ -1,0 +1,10 @@
+import {beforeEach,expect,it,vi} from 'vitest';
+import {GET} from '@/app/api/admin/mail/[id]/route';
+const m=vi.hoisted(()=>({allowed:true,result:{data:{raw_mime_base64:Buffer.from('Message-ID: <test@example.org>\r\n\r\nOriginal').toString('base64')},error:null as object|null},admin:vi.fn()}));
+vi.mock('@/lib/auth/session',()=>({getCurrentUserAndProfile:async()=>({profile:{}}),canAdmin:()=>m.allowed}));
+vi.mock('@/lib/supabase/admin',()=>({createSupabaseAdminClient:m.admin}));
+beforeEach(()=>{m.allowed=true;m.result.error=null;m.admin.mockReset().mockReturnValue({from:()=>({select:()=>({eq:()=>({maybeSingle:async()=>m.result})})})});});
+it('blocks unauthenticated original-message downloads before storage access',async()=>{m.allowed=false;expect((await GET(new Request('https://example.org'),{params:Promise.resolve({id:'a'.repeat(64)})})).status).toBe(403);expect(m.admin).not.toHaveBeenCalled();});
+it('rejects malformed message identifiers',async()=>{expect((await GET(new Request('https://example.org'),{params:Promise.resolve({id:'../bad'})})).status).toBe(400);expect(m.admin).not.toHaveBeenCalled();});
+it('returns originals as private non-executable attachments',async()=>{const r=await GET(new Request('https://example.org'),{params:Promise.resolve({id:'a'.repeat(64)})});expect(await r.text()).toContain('Message-ID: <test@example.org>');expect(r.headers.get('cache-control')).toContain('no-store');expect(r.headers.get('content-disposition')).toContain('attachment');expect(r.headers.get('x-content-type-options')).toBe('nosniff');});
+it('does not claim a successful download when storage fails',async()=>{m.result.error={message:'offline'};expect((await GET(new Request('https://example.org'),{params:Promise.resolve({id:'a'.repeat(64)})})).status).toBe(503);});

@@ -8,7 +8,7 @@ export async function POST(request: Request) {
   if (Number(request.headers.get("content-length")) > 131072) return new Response("Payload too large", { status: 413 });
   const payload = await request.text();
   if (Buffer.byteLength(payload) > 131072) return new Response("Payload too large", { status: 413 });
-  let event: { type: string; created_at: string; data: { email_id: string; from?: string; to?: string[]; subject?: string } };
+  let event: { type: string; created_at: string; data: { email_id: string; message_id?: string; from?: string; to?: string[]; subject?: string } };
   const id = request.headers.get("svix-id") ?? "";
   try {
     new Webhook(secret).verify(payload, {
@@ -30,6 +30,7 @@ export async function POST(request: Request) {
     const { error } = await createSupabaseAdminClient().from("correspondence_events").upsert({
       id, provider_email_id: event.data.email_id, event_type: event.type,
       occurred_at: event.created_at,
+      rfc_message_id: event.data.message_id?.slice(0, 1000) ?? null,
       sender: event.data.from?.slice(0, 500) ?? null,
       recipients: (event.data.to ?? []).slice(0, 50),
       subject: event.data.subject?.slice(0, 1000) ?? null
