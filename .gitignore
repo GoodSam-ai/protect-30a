@@ -6,3 +6,5 @@ node_modules/
 out/
 *.tsbuildinfo
 .env*.local
+
+supabase/.temp/

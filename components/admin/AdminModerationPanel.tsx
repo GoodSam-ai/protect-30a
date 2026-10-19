@@ -51,6 +51,7 @@ export function AdminModerationPanel({
 
   return (
     <main className="min-h-screen bg-protect-cream text-protect-ink">
+      {isAdmin && <a className="block bg-protect-teal p-3 text-center font-semibold text-white underline" href="/admin/correspondence">Open correspondence tracker</a>}
       <section className="border-b border-protect-sand bg-white">
         <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
