@@ -2,30 +2,6 @@
   "_readme": "MEETINGS FEED — public calendar of Walton County stormwater-relevant meetings and projected plan milestones. Schema per row: {id, title, type, start (ISO8601 local, no offset), end (ISO8601 local), tz:'America/Chicago', status:'noticed'|'projected', agendaUrl, why, note}. HONESTY RULE: status 'noticed' = a real, officially-noticed meeting with a public agenda source; status 'projected' = an INFERRED milestone derived from the plan timeline that has NOT yet been officially noticed — always carry note:'[INFERRED from plan timeline]' on projected rows. Never present projected rows as scheduled fact. TO EDIT: open this file on GitHub → edit → commit to a branch → open PR → a Vercel Preview build renders your change → merge to prod. Do not add per-property dollar figures. Use 'special assessment', never 'tax'.",
   "meetings": [
     {
-      "id": "bcc-regular-cadence",
-      "title": "Walton County Board of County Commissioners — Regular Meeting",
-      "type": "bcc-regular",
-      "start": "2026-07-14T16:00:00",
-      "end": "2026-07-14T18:00:00",
-      "tz": "America/Chicago",
-      "status": "noticed",
-      "agendaUrl": "https://www.mywaltonfl.gov/AgendaCenter",
-      "why": "The BCC is the adopting body for a countywide stormwater MSBU/assessment program. Regular meetings are where stormwater items are noticed, discussed, and voted. Verified cadence: 2nd & 4th Tuesday, 4:00 PM Central.",
-      "note": "Cadence '2nd & 4th Tuesday, 4:00 PM' verified from the Walton County Meetings & Agendas page. Confirm the specific date, room, and that a stormwater item is on the published agenda before relying on any single occurrence."
-    },
-    {
-      "id": "bcc-regular-cadence-2",
-      "title": "Walton County Board of County Commissioners — Regular Meeting",
-      "type": "bcc-regular",
-      "start": "2026-07-28T16:00:00",
-      "end": "2026-07-28T18:00:00",
-      "tz": "America/Chicago",
-      "status": "noticed",
-      "agendaUrl": "https://www.mywaltonfl.gov/AgendaCenter",
-      "why": "Second regular BCC meeting of the month (4th Tuesday, 4:00 PM Central). Same verified cadence.",
-      "note": "Cadence verified; confirm agenda contents at the source URL. Individual dates auto-derived from the '2nd & 4th Tuesday' rule and should be reconciled against the official calendar."
-    },
-    {
       "id": "milestone-published-notice-window",
       "title": "Projected: Published-notice window for the stormwater assessment program",
       "type": "milestone",
