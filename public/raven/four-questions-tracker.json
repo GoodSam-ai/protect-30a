@@ -1,14 +1,16 @@
 {
-  "version": "1.0-review",
-  "updated_at": "2026-10-16T13:36:05.530607-05:00",
+  "version": "1.1-status",
+  "updated_at": "2026-10-21T08:56:43-05:00",
   "prepared_by": "ChatGPT for Doug Liles",
-  "publication": "Preview only; production unchanged",
+  "publication": "Public page; deployment verified separately",
   "meeting_status": {
-    "last_verified": "Official October 7, 2026 TRC agenda, item 4 / 26-1621; 9 a.m., Freeport Board Room. Agenda requests approval; it does not prove the outcome. Staff recommendation is not a final order.",
+    "last_verified": "The official October 21, 2026 TRC agenda lists Raven as item 8 at the meeting beginning at 9:00 a.m. CDT in the Freeport Board Room. Committee action, vote, conditions and final approval are not yet verified in this update. A request for approval is not an approval.",
     "current_final_approval": "Not independently established",
-    "next_raven_hearing": "Not confirmed; no hearing or deadline advertised",
+    "next_raven_hearing": "October 21 TRC item 8; meeting begins 09:00 CDT, Freeport Board Room. Outcome and later hearing unverified.",
     "comment_procedure": "County general virtual procedure requires registration at least 24 hours before a meeting and excludes virtual public comment at quasi-judicial hearings. Verify the specific notice, hearing classification, written submission route and cutoff before participating.",
     "sources": [
+      "https://walton.civicweb.net/document/541646/",
+      "https://walton.civicweb.net/document/541599/",
       "https://walton.civicweb.net/document/540121/",
       "https://www.mywaltonfl.gov/1285/Planning-Department-Zoom-Webinars"
     ]
@@ -46,7 +48,7 @@
       "id": "standards",
       "title": "Which adopted stormwater requirements govern Raven?",
       "evidence": "AO02 is witness testimony (printed p. 49 lines 6-17 / PDF p. 13; printed pp. 52-53 / PDF p. 14). AO04 p. 1 (February 5, 2020) interprets the 1984 action; AO08 p. 1 (May 11, 2010) seeks clarification. AO11 pp. 2-3 (May 30, 2014) states a historical agency position. These are distinct from adopted controlling text. Raven staff lists a 25-year event (packet p. 3).",
-      "favorable": "The record includes county-approved-plan interpretations and favorable findings under some county criteria. Historical disagreement does not establish today\u2019s controlling standard or a Raven violation. AO07 notes, AO14 advocacy slides and AO15 proposed criteria are not adopted amendments.",
+      "favorable": "The record includes county-approved-plan interpretations and favorable findings under some county criteria. Historical disagreement does not establish today’s controlling standard or a Raven violation. AO07 notes, AO14 advocacy slides and AO15 proposed criteria are not adopted amendments.",
       "missing": "Complete operative DRI order, incorporated standards/exhibits, adopted amendments and any rescissions; Raven permits, conditions and written review basis tying each requirement to this parcel and phase.",
       "custodian": "County Planning for orders/amendments and review closure; DEP and NWFWMD for their permits and retained historical correspondence. Record custodians are asked for existing records, not a new legal analysis.",
       "decision": "County approving authority and the applicable permitting agency within its own authority; current operative approvals must establish which decisions remain.",
@@ -103,7 +105,7 @@
     {
       "id": "recreation",
       "title": "Which enforceable recreation and open-space commitments must be preserved?",
-      "evidence": "The narrative and allocation letter require reconciliation of development/open-space scope (packet pp. 15-16 and 77-78). AO13 p. 2 is a historical Parcel 561 inquiry, not a ruling on Raven. AO09\u2019s majority ends where the concurrence begins at PDF p. 18; reversal/remand does not invalidate all Raven approvals.",
+      "evidence": "The narrative and allocation letter require reconciliation of development/open-space scope (packet pp. 15-16 and 77-78). AO13 p. 2 is a historical Parcel 561 inquiry, not a ruling on Raven. AO09’s majority ends where the concurrence begins at PDF p. 18; reversal/remand does not invalidate all Raven approvals.",
       "favorable": "AO09 records the absence of objection to the 2016 NOPC and rescission of the 2014 DONC in 2017. Open-space designation alone does not prove a public recreation right or unlawful loss. Later operative amendments and orders may change the analysis.",
       "missing": "Controlling recreation/open-space conditions and amendments, current Exhibit E and parcel ledger, recorded easements/rights, conversion approvals and acreage reconciliation; operative later court orders.",
       "custodian": "County Planning for approval/exhibit records; Clerk/official records for recorded instruments and court orders; owners/association for retained commitments. Court records and private recreation rights require separate review.",
@@ -191,6 +193,13 @@
       "answer_assessment": "Unresolved; no substantive response verified"
     }
   ],
-  "provenance": "Five supplied private collections and preserved project packet; official agenda/procedure checks. Public derivative excludes private correspondence and source headers. No new requests sent.",
-  "packet_sha256": "e20a31b6e70dae2b3901126574c001aa1c9721146c2f2b98151a884dd37fbf4b"
+  "provenance": "Five supplied private collections and preserved project packet; official agenda/procedure checks. Public derivative excludes private correspondence and source headers. No new requests sent. October 21 status update by ChatGPT for Doug Liles based on official agenda and privately reviewed October 19 county acknowledgment and October 21 sent follow-up. October 16 historical assessments retained; no private correspondence reproduced.",
+  "packet_sha256": "e20a31b6e70dae2b3901126574c001aa1c9721146c2f2b98151a884dd37fbf4b",
+  "historical_evidence_cutoff": "2026-10-16",
+  "public_comment_filing": {
+    "october_18": "Personal-capacity comment submitted",
+    "october_19": "County planner confirmed October 18 comment uploaded to EnerGov for public view; member review and substantive resolution not established",
+    "october_21": "Follow-up sent at 08:52 CDT; receipt, record inclusion and committee availability not confirmed",
+    "separation": "Does not establish acknowledgment, production or answers for RAV-01 through RAV-06"
+  }
 }
