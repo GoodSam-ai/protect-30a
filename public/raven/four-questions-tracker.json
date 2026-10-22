@@ -1,12 +1,12 @@
 {
-  "version": "1.3-followup",
-  "updated_at": "2026-10-22T11:49:40-05:00",
+  "version": "1.4-planner-response",
+  "updated_at": "2026-10-22T14:01:53-05:00",
   "prepared_by": "ChatGPT for Doug Liles",
   "publication": "Public page; deployment verified separately",
   "meeting_status": {
     "last_verified": "The October 21 official recording contains a motion to move Raven to the Planning Commission without recommendation, requiring open questions and comments to be addressed before that step (1:37:13–1:38:55). It was seconded and put to a voice vote (1:39:04–1:39:35), after which the meeting moved to the next item. A certified numerical tally and voter identities have not been located. This is not final development approval.",
     "current_final_approval": "Not independently established",
-    "next_raven_hearing": "Planning Commission is the next body named in the motion after addressing open questions/comments. Date, exact comment deadline and carry-forward/resubmission procedure unverified.",
+    "next_raven_hearing": "County Senior Planner Willie Brown reported on October 22 at 11:55 a.m. CDT that MAJ26-000007 is scheduled for the November 12, 2026 Planning Commission public hearing. Project-specific official notice, time, location, exact comment cutoff and carry-forward/resubmission procedure remain unverified.",
     "comment_procedure": "County general virtual procedure requires registration at least 24 hours before a meeting and excludes virtual public comment at quasi-judicial hearings. Verify the specific notice, hearing classification, written submission route and cutoff before participating.",
     "sources": [
       "https://walton.civicweb.net/document/541646/",
@@ -29,11 +29,11 @@
       "final_approval_established": false,
       "engineering_review": {
         "time": "1:33:39–1:34:03",
-        "status": "Updated report/civil documents received; review of approximately 600 pages in progress",
+        "status": "At the October 21 meeting, Public Works reported receipt of updated report/civil documents and review of approximately 600 pages in progress. Report length and receipt are attributed statements; the specific report has not been obtained or independently inspected here.",
         "item_by_item_closure_verified": false
       },
       "next_body": "Planning Commission",
-      "hearing_date": null,
+      "hearing_date": "2026-11-12",
       "comment_deadline": null,
       "carry_forward_rule": null,
       "unresolved_evidence": [
@@ -46,7 +46,8 @@
         "Controlling approvals",
         "Phase scope"
       ],
-      "limits": "Caption text may misstate names and technical language. Voice vote does not establish certified numerical tally or substitute for written conditions."
+      "limits": "Caption text may misstate names and technical language. Voice vote does not establish certified numerical tally or substitute for written conditions.",
+      "hearing_date_basis": "October 22 County Planning staff report of scheduled hearing; formal project notice not independently located"
     },
     "history": [
       {
@@ -54,7 +55,25 @@
         "last_verified": "The official October 21, 2026 TRC agenda lists Raven as item 8 at the meeting beginning at 9:00 a.m. CDT in the Freeport Board Room. Committee action, vote, conditions and final approval are not yet verified in this update. A request for approval is not an approval.",
         "next_raven_hearing": "October 21 TRC item 8; meeting begins 09:00 CDT, Freeport Board Room. Outcome and later hearing unverified."
       }
-    ]
+    ],
+    "planner_update": {
+      "received_at": "2026-10-22T11:55:08-05:00",
+      "reviewed_at": "2026-10-22T14:01:53-05:00",
+      "source_type": "Current official County Planning staff correspondence reviewed privately; factual summary only",
+      "reported_hearing_date": "2026-11-12",
+      "next_body": "Walton County Planning Commission",
+      "trc_characterization": "no consensus",
+      "exact_written_language": "Planner says not yet certain; suggested checking back next week. This is not a firm availability deadline.",
+      "official_project_notice": null,
+      "time": null,
+      "location": null,
+      "comment_deadline": null,
+      "carry_forward_rule": null,
+      "written_motion_vote_conditions_received": false,
+      "engineering_materials_received": false,
+      "final_approval_established": false,
+      "public_context_source": "https://walton.civicweb.net/Portal/MeetingInformation.aspx?Id=7258"
+    }
   },
   "questions": [
     {
@@ -234,7 +253,7 @@
       "answer_assessment": "Unresolved; no substantive response verified"
     }
   ],
-  "provenance": "Five supplied private collections and preserved project packet; official agenda/procedure checks. Public derivative excludes private correspondence and source headers. No new requests sent. October 21 status update by ChatGPT for Doug Liles based on official agenda and privately reviewed October 19 county acknowledgment and October 21 sent follow-up. October 16 historical assessments retained; no private correspondence reproduced. October 22 recording update at 10:11 CDT from official Walton County video PYtE_K2BTqE and auto-generated English captions. No certified vote, final approval or engineering-question closure asserted. October 22 follow-up-sent update at 11:49 CDT: current private Sent copy confirms dispatch at 11:44:07 CDT. Three separate response tracks and a hearing-preparation checklist added; no county acknowledgment, records production, deadline or issue closure inferred.",
+  "provenance": "Five supplied private collections and preserved project packet; official agenda/procedure checks. Public derivative excludes private correspondence and source headers. No new requests sent. October 21 status update by ChatGPT for Doug Liles based on official agenda and privately reviewed October 19 county acknowledgment and October 21 sent follow-up. October 16 historical assessments retained; no private correspondence reproduced. October 22 recording update at 10:11 CDT from official Walton County video PYtE_K2BTqE and auto-generated English captions. No certified vote, final approval or engineering-question closure asserted. October 22 follow-up-sent update at 11:49 CDT: current private Sent copy confirms dispatch at 11:44:07 CDT. Three separate response tracks and a hearing-preparation checklist added; no county acknowledgment, records production, deadline or issue closure inferred. October 22 at 14:01 CDT: privately reviewed current official planner reply received at 11:55 CDT. Added attributed November 12 Planning Commission schedule and planner characterization of no consensus; exact written language remains uncertain. No private correspondence, mailbox links or headers published. No certified disposition, exact participation deadline or engineering closure inferred.",
   "packet_sha256": "e20a31b6e70dae2b3901126574c001aa1c9721146c2f2b98151a884dd37fbf4b",
   "historical_evidence_cutoff": "2026-10-16",
   "public_comment_filing": {
@@ -242,16 +261,17 @@
     "october_19": "County planner confirmed October 18 comment uploaded to EnerGov for public view; member review and substantive resolution not established",
     "october_21": "Follow-up sent at 08:52 CDT; receipt, record inclusion and committee availability not confirmed",
     "separation": "Does not establish acknowledgment, production or answers for RAV-01 through RAV-06",
-    "october_22": "Consolidated personal-capacity follow-up verified sent at 11:44 CDT to the assigned planner, copying County Planning. Receipt, project-record inclusion and substantive answers remain unconfirmed."
+    "october_22": "Consolidated personal-capacity follow-up verified sent at 11:44 CDT. Planner replied at 11:55 CDT with a hearing date and provisional TRC characterization. This establishes a response to the October 22 message, not project-record inclusion, separate October 21 acknowledgment or engineering closure."
   },
   "post_trc_followup": {
     "sent_at": "2026-10-22T11:44:07-05:00",
-    "last_checked_at": "2026-10-22T11:49:40-05:00",
-    "status": "Sent; county response pending verification",
-    "source_basis": "Privately reviewed current Gmail Sent message in the existing Raven thread; private headers, mailbox links, email text and personal data are not published",
+    "last_checked_at": "2026-10-22T14:01:53-05:00",
+    "status": "Partial planner response received and reviewed; November 12 hearing date reported; written disposition, participation details and engineering evidence pending",
+    "source_basis": "Privately reviewed current Gmail Sent message in the existing Raven thread; private headers, mailbox links, email text and personal data are not published; October 22 11:55 CDT official planner reply reviewed privately and summarized without correspondence text or personal data",
     "public_context_sources": [
       "https://walton.civicweb.net/Portal/MeetingInformation.aspx?Id=7242",
-      "https://www.youtube.com/watch?v=PYtE_K2BTqE"
+      "https://www.youtube.com/watch?v=PYtE_K2BTqE",
+      "https://walton.civicweb.net/Portal/MeetingInformation.aspx?Id=7258"
     ],
     "tracks": [
       {
@@ -265,21 +285,49 @@
           "basis": "Privately reviewed Gmail Sent copy; sending does not establish county receipt"
         },
         "acknowledged": {
-          "status": "not_verified",
-          "at": null
+          "status": "partial_staff_reply_received",
+          "at": "2026-10-22T11:55:08-05:00",
+          "limit": "Response addresses scheduling and provisional characterization, not full production or filing confirmation"
         },
         "records_received": {
-          "status": "not_verified",
-          "items": []
+          "status": "staff_summary_only_requested_records_pending",
+          "items": [
+            {
+              "at": "2026-10-22T11:55:08-05:00",
+              "summary": "Planner reports November 12 Planning Commission hearing and TRC no consensus; exact written language not yet certain. No formal motion, tally, conditions or hearing notice supplied."
+            }
+          ]
         },
         "reviewed": {
-          "status": "no_responsive_records_available_for_review",
-          "at": null
+          "status": "partial_reply_reviewed_requested_records_pending",
+          "at": "2026-10-22T14:01:53-05:00",
+          "assessment": "Scheduling statement verified as attributed planner correspondence. Exact written language and requested documentation not supplied; track unresolved."
         },
         "resolved": {
           "status": "not_verified",
           "at": null
-        }
+        },
+        "history": [
+          {
+            "at": "2026-10-22T11:49:40-05:00",
+            "acknowledged": {
+              "status": "not_verified",
+              "at": null
+            },
+            "records_received": {
+              "status": "not_verified",
+              "items": []
+            },
+            "reviewed": {
+              "status": "no_responsive_records_available_for_review",
+              "at": null
+            },
+            "resolved": {
+              "status": "not_verified",
+              "at": null
+            }
+          }
+        ]
       },
       {
         "id": "OCT22-HEARING",
@@ -292,21 +340,49 @@
           "basis": "Privately reviewed Gmail Sent copy; sending does not establish county receipt"
         },
         "acknowledged": {
-          "status": "not_verified",
-          "at": null
+          "status": "partial_staff_reply_received",
+          "at": "2026-10-22T11:55:08-05:00",
+          "limit": "Response addresses scheduling and provisional characterization, not full production or filing confirmation"
         },
         "records_received": {
-          "status": "not_verified",
-          "items": []
+          "status": "staff_summary_only_requested_records_pending",
+          "items": [
+            {
+              "at": "2026-10-22T11:55:08-05:00",
+              "summary": "Planner reports November 12 Planning Commission hearing and TRC no consensus; exact written language not yet certain. No formal motion, tally, conditions or hearing notice supplied."
+            }
+          ]
         },
         "reviewed": {
-          "status": "no_responsive_records_available_for_review",
-          "at": null
+          "status": "partial_reply_reviewed_requested_records_pending",
+          "at": "2026-10-22T14:01:53-05:00",
+          "assessment": "Scheduling statement verified as attributed planner correspondence. Exact written language and requested documentation not supplied; track unresolved."
         },
         "resolved": {
           "status": "not_verified",
           "at": null
-        }
+        },
+        "history": [
+          {
+            "at": "2026-10-22T11:49:40-05:00",
+            "acknowledged": {
+              "status": "not_verified",
+              "at": null
+            },
+            "records_received": {
+              "status": "not_verified",
+              "items": []
+            },
+            "reviewed": {
+              "status": "no_responsive_records_available_for_review",
+              "at": null
+            },
+            "resolved": {
+              "status": "not_verified",
+              "at": null
+            }
+          }
+        ]
       },
       {
         "id": "OCT22-ENGINEERING",
@@ -344,28 +420,29 @@
       },
       {
         "message_date": "2026-10-22",
-        "receipt": "not_verified",
-        "project_record_inclusion": "not_verified"
+        "receipt": "verified_by_direct_planner_reply_2026-10-22_11:55_CDT",
+        "project_record_inclusion": "not_verified",
+        "basis": "Reply in the existing thread quotes and responds to the October 22 follow-up; project-record inclusion not confirmed"
       }
     ],
     "hearing_preparation_checklist": [
       {
         "id": "written-disposition",
-        "missing": "Written disposition, vote tally, conditions/prerequisites and reasons for no recommendation",
+        "missing": "Written disposition, certified vote, conditions/prerequisites and documented reasons. Planner characterizes TRC position as no consensus but says exact written language is not yet certain.",
         "reviewing_authority": "TRC action record; County Planning asked for the record",
         "requested_protection": "Use the written disposition and exact prerequisites before representing technical readiness or approval",
-        "status": "pending"
+        "status": "partial_staff_summary_written_record_pending"
       },
       {
         "id": "hearing-participation",
-        "missing": "Official Raven hearing notice, date/time/location, submission route, designated recipient, exact cutoff and carry-forward/resubmission rule",
+        "missing": "Official project hearing notice, time/location, submission route, designated recipient, exact cutoff and carry-forward/resubmission rule. Planner reports November 12, 2026 date; formal notice still unverified.",
         "reviewing_authority": "Planning Commission named in recorded motion; County Planning asked to confirm procedure",
         "requested_protection": "A verified opportunity to submit comments through the accepted channel before the applicable cutoff",
-        "status": "pending"
+        "status": "partially_answered_date_reported_other_details_pending"
       },
       {
         "id": "engineering-closure",
-        "missing": "Dated engineering documents and issue-by-issue applicant response, supporting evidence/version and reviewer acceptance",
+        "missing": "Dated engineering documents and issue-by-issue applicant response, supporting evidence/version and reviewer acceptance; obtain the specific updated report and civil documents mentioned October 21 at 1:33:39–1:34:03, verify title/author/date/revision/completeness and appendices, and preserve originals before review",
         "reviewing_authority": "Public Works review in progress as reported October 21; issue-specific accepting reviewer unconfirmed",
         "requested_protection": "Documented closure or clearly stated deliverables, reviewers, milestones and enforceable restrictions for deferred matters",
         "status": "pending"
@@ -486,6 +563,20 @@
       }
     ],
     "status_policy": "Track sent, acknowledged, records received, reviewed and resolved separately. A reply or record delivery is not substantive closure. Requested protections are requests, not asserted statutory prerequisites. No paid work authorized.",
-    "separation": "Separate from the six October 16 RAV-01 through RAV-06 records requests and from HOA inventory PRR 26-877; none of their prior statuses is reset."
+    "separation": "Separate from the six October 16 RAV-01 through RAV-06 records requests and from HOA inventory PRR 26-877; none of their prior statuses is reset.",
+    "status_history": [
+      {
+        "at": "2026-10-22T11:49:40-05:00",
+        "status": "Sent; county response pending verification"
+      }
+    ],
+    "response_history": [
+      {
+        "received_at": "2026-10-22T11:55:08-05:00",
+        "reviewed_at": "2026-10-22T14:01:53-05:00",
+        "source_type": "Official county planner correspondence privately reviewed",
+        "summary": "November 12 Planning Commission hearing reported; no consensus characterization provisional pending exact written language. No engineering records or participation cutoff supplied."
+      }
+    ]
   }
 }
