@@ -1,18 +1,59 @@
 {
-  "version": "1.1-status",
-  "updated_at": "2026-10-21T08:56:43-05:00",
+  "version": "1.2-recording",
+  "updated_at": "2026-10-22T10:11:15-05:00",
   "prepared_by": "ChatGPT for Doug Liles",
   "publication": "Public page; deployment verified separately",
   "meeting_status": {
-    "last_verified": "The official October 21, 2026 TRC agenda lists Raven as item 8 at the meeting beginning at 9:00 a.m. CDT in the Freeport Board Room. Committee action, vote, conditions and final approval are not yet verified in this update. A request for approval is not an approval.",
+    "last_verified": "The October 21 official recording contains a motion to move Raven to the Planning Commission without recommendation, requiring open questions and comments to be addressed before that step (1:37:13–1:38:55). It was seconded and put to a voice vote (1:39:04–1:39:35), after which the meeting moved to the next item. A certified numerical tally and voter identities have not been located. This is not final development approval.",
     "current_final_approval": "Not independently established",
-    "next_raven_hearing": "October 21 TRC item 8; meeting begins 09:00 CDT, Freeport Board Room. Outcome and later hearing unverified.",
+    "next_raven_hearing": "Planning Commission is the next body named in the motion after addressing open questions/comments. Date, exact comment deadline and carry-forward/resubmission procedure unverified.",
     "comment_procedure": "County general virtual procedure requires registration at least 24 hours before a meeting and excludes virtual public comment at quasi-judicial hearings. Verify the specific notice, hearing classification, written submission route and cutoff before participating.",
     "sources": [
       "https://walton.civicweb.net/document/541646/",
       "https://walton.civicweb.net/document/541599/",
       "https://walton.civicweb.net/document/540121/",
-      "https://www.mywaltonfl.gov/1285/Planning-Department-Zoom-Webinars"
+      "https://www.mywaltonfl.gov/1285/Planning-Department-Zoom-Webinars",
+      "https://www.youtube.com/watch?v=PYtE_K2BTqE",
+      "https://walton.civicweb.net/Portal/MeetingInformation.aspx?Id=7242"
+    ],
+    "recorded_action": {
+      "meeting_date": "2026-10-21",
+      "source": "https://www.youtube.com/watch?v=PYtE_K2BTqE",
+      "source_type": "Official county video and auto-generated English captions",
+      "motion": "Move to Planning Commission without recommendation; address open questions/comments before that step; explain reasons in staff report/presentation, incorporating Public Works litigation concerns.",
+      "motion_time": "1:37:13–1:38:55",
+      "second_and_voice_vote_time": "1:39:04–1:39:35",
+      "certified_numerical_tally": null,
+      "voter_identities": null,
+      "written_disposition_located": false,
+      "final_approval_established": false,
+      "engineering_review": {
+        "time": "1:33:39–1:34:03",
+        "status": "Updated report/civil documents received; review of approximately 600 pages in progress",
+        "item_by_item_closure_verified": false
+      },
+      "next_body": "Planning Commission",
+      "hearing_date": null,
+      "comment_deadline": null,
+      "carry_forward_rule": null,
+      "unresolved_evidence": [
+        "Downstream effects",
+        "Tailwater",
+        "Lake 34 outlet",
+        "Lake 44 crossing",
+        "100-year stages",
+        "Pipe elevations",
+        "Controlling approvals",
+        "Phase scope"
+      ],
+      "limits": "Caption text may misstate names and technical language. Voice vote does not establish certified numerical tally or substitute for written conditions."
+    },
+    "history": [
+      {
+        "updated_at": "2026-10-21T08:56:43-05:00",
+        "last_verified": "The official October 21, 2026 TRC agenda lists Raven as item 8 at the meeting beginning at 9:00 a.m. CDT in the Freeport Board Room. Committee action, vote, conditions and final approval are not yet verified in this update. A request for approval is not an approval.",
+        "next_raven_hearing": "October 21 TRC item 8; meeting begins 09:00 CDT, Freeport Board Room. Outcome and later hearing unverified."
+      }
     ]
   },
   "questions": [
@@ -193,7 +234,7 @@
       "answer_assessment": "Unresolved; no substantive response verified"
     }
   ],
-  "provenance": "Five supplied private collections and preserved project packet; official agenda/procedure checks. Public derivative excludes private correspondence and source headers. No new requests sent. October 21 status update by ChatGPT for Doug Liles based on official agenda and privately reviewed October 19 county acknowledgment and October 21 sent follow-up. October 16 historical assessments retained; no private correspondence reproduced.",
+  "provenance": "Five supplied private collections and preserved project packet; official agenda/procedure checks. Public derivative excludes private correspondence and source headers. No new requests sent. October 21 status update by ChatGPT for Doug Liles based on official agenda and privately reviewed October 19 county acknowledgment and October 21 sent follow-up. October 16 historical assessments retained; no private correspondence reproduced. October 22 recording update at 10:11 CDT from official Walton County video PYtE_K2BTqE and auto-generated English captions. No certified vote, final approval or engineering-question closure asserted.",
   "packet_sha256": "e20a31b6e70dae2b3901126574c001aa1c9721146c2f2b98151a884dd37fbf4b",
   "historical_evidence_cutoff": "2026-10-16",
   "public_comment_filing": {
