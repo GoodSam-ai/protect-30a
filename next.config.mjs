@@ -3,6 +3,8 @@ const nextConfig = {
   skipTrailingSlashRedirect: true,
   async rewrites() {
     return [
+      { source: "/ecoguardian", destination: "/ecoguardian/index.html" },
+      { source: "/ecoguardian/", destination: "/ecoguardian/index.html" },
       { source: "/protect-our-bay", destination: "/protect-our-bay/index.html" },
       { source: "/protect-our-bay/", destination: "/protect-our-bay/index.html" },
       { source: "/raven", destination: "/raven/index.html" },
