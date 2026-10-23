@@ -1,6 +1,6 @@
 {
-  "version": "1.4-planner-response",
-  "updated_at": "2026-10-22T14:01:53-05:00",
+  "version": "1.5-engineering-referral",
+  "updated_at": "2026-10-23T08:22:15-05:00",
   "prepared_by": "ChatGPT for Doug Liles",
   "publication": "Public page; deployment verified separately",
   "meeting_status": {
@@ -253,7 +253,7 @@
       "answer_assessment": "Unresolved; no substantive response verified"
     }
   ],
-  "provenance": "Five supplied private collections and preserved project packet; official agenda/procedure checks. Public derivative excludes private correspondence and source headers. No new requests sent. October 21 status update by ChatGPT for Doug Liles based on official agenda and privately reviewed October 19 county acknowledgment and October 21 sent follow-up. October 16 historical assessments retained; no private correspondence reproduced. October 22 recording update at 10:11 CDT from official Walton County video PYtE_K2BTqE and auto-generated English captions. No certified vote, final approval or engineering-question closure asserted. October 22 follow-up-sent update at 11:49 CDT: current private Sent copy confirms dispatch at 11:44:07 CDT. Three separate response tracks and a hearing-preparation checklist added; no county acknowledgment, records production, deadline or issue closure inferred. October 22 at 14:01 CDT: privately reviewed current official planner reply received at 11:55 CDT. Added attributed November 12 Planning Commission schedule and planner characterization of no consensus; exact written language remains uncertain. No private correspondence, mailbox links or headers published. No certified disposition, exact participation deadline or engineering closure inferred.",
+  "provenance": "Five supplied private collections and preserved project packet; official agenda/procedure checks. Public derivative excludes private correspondence and source headers. No new requests sent. October 21 status update by ChatGPT for Doug Liles based on official agenda and privately reviewed October 19 county acknowledgment and October 21 sent follow-up. October 16 historical assessments retained; no private correspondence reproduced. October 22 recording update at 10:11 CDT from official Walton County video PYtE_K2BTqE and auto-generated English captions. No certified vote, final approval or engineering-question closure asserted. October 22 follow-up-sent update at 11:49 CDT: current private Sent copy confirms dispatch at 11:44:07 CDT. Three separate response tracks and a hearing-preparation checklist added; no county acknowledgment, records production, deadline or issue closure inferred. October 22 at 14:01 CDT: privately reviewed current official planner reply received at 11:55 CDT. Added attributed November 12 Planning Commission schedule and planner characterization of no consensus; exact written language remains uncertain. No private correspondence, mailbox links or headers published. No certified disposition, exact participation deadline or engineering closure inferred. October 23 at 08:22 CDT: reviewed 07:48:46 CDT official planner forwarding acknowledgment. Engineering referral recorded separately from document delivery and issue acceptance; no private correspondence or personal data published.",
   "packet_sha256": "e20a31b6e70dae2b3901126574c001aa1c9721146c2f2b98151a884dd37fbf4b",
   "historical_evidence_cutoff": "2026-10-16",
   "public_comment_filing": {
@@ -265,13 +265,14 @@
   },
   "post_trc_followup": {
     "sent_at": "2026-10-22T11:44:07-05:00",
-    "last_checked_at": "2026-10-22T14:01:53-05:00",
-    "status": "Partial planner response received and reviewed; November 12 hearing date reported; written disposition, participation details and engineering evidence pending",
-    "source_basis": "Privately reviewed current Gmail Sent message in the existing Raven thread; private headers, mailbox links, email text and personal data are not published; October 22 11:55 CDT official planner reply reviewed privately and summarized without correspondence text or personal data",
+    "last_checked_at": "2026-10-23T08:22:15-05:00",
+    "status": "Planner confirms drainage-report and revised-civil-plans request forwarded to county engineering; records delivery, engineering acceptance, written disposition and participation details remain pending",
+    "source_basis": "Privately reviewed current Gmail Sent message in the existing Raven thread; private headers, mailbox links, email text and personal data are not published; October 22 11:55 CDT official planner reply reviewed privately and summarized without correspondence text or personal data; October 23 07:48:46 CDT planner forwarding acknowledgment reviewed privately, public factual summary only.",
     "public_context_sources": [
       "https://walton.civicweb.net/Portal/MeetingInformation.aspx?Id=7242",
       "https://www.youtube.com/watch?v=PYtE_K2BTqE",
-      "https://walton.civicweb.net/Portal/MeetingInformation.aspx?Id=7258"
+      "https://walton.civicweb.net/Portal/MeetingInformation.aspx?Id=7258",
+      "https://waltoncountyfl-energovweb.tylerhost.net/apps/SelfService#/home"
     ],
     "tracks": [
       {
@@ -388,28 +389,51 @@
         "id": "OCT22-ENGINEERING",
         "title": "Engineering evidence and review closure",
         "requested": "Current dated drainage report, civil plans and issue-by-issue response/acceptance records; deferred deliverables, responsible reviewer, milestones and enforceable restrictions.",
-        "reviewing_authority": "Public Works reported engineering review in progress; specific accepting reviewer/agency for each issue must be identified.",
+        "reviewing_authority": "County engineering referral confirmed by assigned planner October 23. Issue-specific accepting reviewer and acceptance remain unconfirmed.",
         "sent": {
           "status": "verified_sent",
           "at": "2026-10-22T11:44:07-05:00",
           "basis": "Privately reviewed Gmail Sent copy; sending does not establish county receipt"
         },
         "acknowledged": {
-          "status": "not_verified",
-          "at": null
+          "status": "planner_referral_confirmed_engineer_receipt_not_verified",
+          "at": "2026-10-23T07:48:46-05:00",
+          "limit": "Planner states request for drainage and revised civil plans forwarded to county engineer. No independent engineer acknowledgment or project-record inclusion established."
         },
         "records_received": {
           "status": "not_verified",
           "items": []
         },
         "reviewed": {
-          "status": "no_responsive_records_available_for_review",
-          "at": null
+          "status": "referral_acknowledgment_reviewed_records_pending",
+          "at": "2026-10-23T08:22:15-05:00",
+          "assessment": "Acknowledgment confirms routing only; no report, revised plan, response matrix or issue-by-issue acceptance supplied."
         },
         "resolved": {
           "status": "not_verified",
           "at": null
-        }
+        },
+        "history": [
+          {
+            "at": "2026-10-22T14:01:53-05:00",
+            "acknowledged": {
+              "status": "not_verified",
+              "at": null
+            },
+            "records_received": {
+              "status": "not_verified",
+              "items": []
+            },
+            "reviewed": {
+              "status": "no_responsive_records_available_for_review",
+              "at": null
+            },
+            "resolved": {
+              "status": "not_verified",
+              "at": null
+            }
+          }
+        ]
       }
     ],
     "filing_acknowledgments": [
@@ -443,9 +467,9 @@
       {
         "id": "engineering-closure",
         "missing": "Dated engineering documents and issue-by-issue applicant response, supporting evidence/version and reviewer acceptance; obtain the specific updated report and civil documents mentioned October 21 at 1:33:39–1:34:03, verify title/author/date/revision/completeness and appendices, and preserve originals before review",
-        "reviewing_authority": "Public Works review in progress as reported October 21; issue-specific accepting reviewer unconfirmed",
+        "reviewing_authority": "County engineering referral confirmed by assigned planner October 23. Issue-specific accepting reviewer and acceptance remain unconfirmed.",
         "requested_protection": "Documented closure or clearly stated deliverables, reviewers, milestones and enforceable restrictions for deferred matters",
-        "status": "pending"
+        "status": "referral_confirmed_records_and_acceptance_pending"
       }
     ],
     "engineering_issues": [
@@ -568,6 +592,10 @@
       {
         "at": "2026-10-22T11:49:40-05:00",
         "status": "Sent; county response pending verification"
+      },
+      {
+        "at": "2026-10-22T14:01:53-05:00",
+        "status": "Partial planner response received and reviewed; November 12 hearing date reported; written disposition, participation details and engineering evidence pending"
       }
     ],
     "response_history": [
@@ -576,7 +604,24 @@
         "reviewed_at": "2026-10-22T14:01:53-05:00",
         "source_type": "Official county planner correspondence privately reviewed",
         "summary": "November 12 Planning Commission hearing reported; no consensus characterization provisional pending exact written language. No engineering records or participation cutoff supplied."
+      },
+      {
+        "received_at": "2026-10-23T07:48:46-05:00",
+        "reviewed_at": "2026-10-23T08:22:15-05:00",
+        "source_type": "Official county planner forwarding acknowledgment privately reviewed",
+        "summary": "Drainage-report and revised-civil-plans request forwarded to county engineer. County EnerGov portal identified for updates. No engineering documents, accepted closure, motion/vote/conditions or hearing cutoff supplied."
       }
-    ]
+    ],
+    "engineering_referral": {
+      "confirmed_at": "2026-10-23T07:48:46-05:00",
+      "reviewed_at": "2026-10-23T08:22:15-05:00",
+      "confirmed_by": "Assigned County Planning senior planner",
+      "scope": "Drainage report and revised civil plans",
+      "destination": "County engineer, as described by planner",
+      "engineer_receipt_verified": false,
+      "records_delivered": false,
+      "issue_closure_verified": false,
+      "status_portal": "https://waltoncountyfl-energovweb.tylerhost.net/apps/SelfService#/home"
+    }
   }
 }
