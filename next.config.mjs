@@ -3,6 +3,10 @@ const nextConfig = {
   skipTrailingSlashRedirect: true,
   async rewrites() {
     return [
+      { source: "/district-ops", destination: "/district-ops/index.html" },
+      { source: "/district-ops/", destination: "/district-ops/index.html" },
+      { source: "/rain-gardens", destination: "/rain-gardens/index.html" },
+      { source: "/rain-gardens/", destination: "/rain-gardens/index.html" },
       { source: "/storm-recovery", destination: "/storm-recovery/index.html" },
       { source: "/storm-recovery/", destination: "/storm-recovery/index.html" },
       { source: "/ecoguardian", destination: "/ecoguardian/index.html" },
