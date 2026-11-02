@@ -28,3 +28,6 @@ Local Magic Sundays/
 !app/api/correspondence/
 !app/api/correspondence/**
 !docs/correspondence-tracking.md
+
+# Public MS4 meeting brief approved for publication
+!public/ms4/Walton_County_MS4_Meeting_Brief_2026-11-02.pdf
