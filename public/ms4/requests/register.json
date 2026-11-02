@@ -1,0 +1,35 @@
+{
+  "project": "Protect30A / Walton County / Stormwater Accountability",
+  "updated_at": "2026-11-02T15:54:00-06:00",
+  "timezone": "America/Chicago",
+  "public_url": "https://protect30a.org/ms4#records",
+  "monitoring_status": "setup_blocked_task_capacity",
+  "requests": [
+    {
+      "internal_reference": "P30A-MS4-COUNTY-20261102",
+      "agency": "Walton County",
+      "recipient": "publicrecords@mywaltonfl.gov",
+      "sent_date": "2026-11-02",
+      "status": "sent_awaiting_acknowledgment",
+      "agency_request_number": null,
+      "request_text": "/ms4/requests/county-2026-11-02.html",
+      "responses": []
+    },
+    {
+      "internal_reference": "P30A-MS4-DEP-20261102",
+      "agency": "Florida Department of Environmental Protection",
+      "recipient": "PublicRecordsRequests_Regulatory@FloridaDEP.gov",
+      "sent_date": "2026-11-02",
+      "status": "sent_awaiting_acknowledgment",
+      "agency_request_number": null,
+      "request_text": "/ms4/requests/dep-2026-11-02.html",
+      "responses": []
+    }
+  ],
+  "notes": [
+    "Internal references are Protect30A labels, not agency-issued request numbers.",
+    "10-business-day status checkpoint requested; not a statutory deadline.",
+    "No chargeable work authorized.",
+    "Historical June 3, 2025 county statement requires DEP source verification."
+  ]
+}
