@@ -1,6 +1,6 @@
 {
   "project": "Protect30A / Walton County / Stormwater Accountability",
-  "updated_at": "2026-11-02T15:54:00-06:00",
+  "updated_at": "2026-11-02T19:01:10-06:00",
   "timezone": "America/Chicago",
   "public_url": "https://protect30a.org/ms4#records",
   "monitoring_status": "setup_blocked_task_capacity",
@@ -10,26 +10,59 @@
       "agency": "Walton County",
       "recipient": "publicrecords@mywaltonfl.gov",
       "sent_date": "2026-11-02",
-      "status": "sent_awaiting_acknowledgment",
-      "agency_request_number": null,
+      "status": "acknowledged_awaiting_records",
+      "agency_request_number": "26-915",
       "request_text": "/ms4/requests/county-2026-11-02.html",
-      "responses": []
+      "responses": [
+        {
+          "type": "portal_submission_confirmation",
+          "received_at": "2026-11-02T16:14:31-06:00",
+          "summary": "NextRequest confirmed request 26-915 was submitted successfully. Estimated completion within 10 days, subject to the November 11 office closure; estimate, not a statutory deadline.",
+          "source_document": "/ms4/requests/county-acknowledgment-2026-11-02.html#nextrequest",
+          "verification_method": "Protect30A reviewed the agency acknowledgment email; private email content is not reproduced."
+        },
+        {
+          "type": "acknowledgment",
+          "received_at": "2026-11-02T16:15:05-06:00",
+          "summary": "Walton County acknowledged receipt and entered the request in NextRequest. Responses and released documents will be managed through that portal.",
+          "source_document": "/ms4/requests/county-acknowledgment-2026-11-02.html",
+          "verification_method": "Protect30A reviewed the agency acknowledgment email; private email content is not reproduced."
+        }
+      ],
+      "acknowledged_date": "2026-11-02",
+      "acknowledged_at": "2026-11-02T16:15:05-06:00",
+      "production_status": "No substantive records production identified in correspondence reviewed as of 2026-11-02T19:01:10-06:00",
+      "compliance_status": "Not determined by acknowledgment",
+      "agency_portal": "https://waltoncountyfl.nextrequest.com/requests/26-915"
     },
     {
       "internal_reference": "P30A-MS4-DEP-20261102",
       "agency": "Florida Department of Environmental Protection",
       "recipient": "PublicRecordsRequests_Regulatory@FloridaDEP.gov",
       "sent_date": "2026-11-02",
-      "status": "sent_awaiting_acknowledgment",
-      "agency_request_number": null,
+      "status": "acknowledged_awaiting_records",
+      "agency_request_number": "00251779",
       "request_text": "/ms4/requests/dep-2026-11-02.html",
-      "responses": []
+      "responses": [
+        {
+          "type": "acknowledgment",
+          "received_at": "2026-11-02T16:08:06-06:00",
+          "summary": "Florida DEP acknowledged the request for Walton County Phase II MS4 FLR04E084 and stated that processing will begin. Reference/case number: 00251779.",
+          "source_document": "/ms4/requests/dep-acknowledgment-2026-11-02.html",
+          "verification_method": "Protect30A reviewed the agency acknowledgment email; private email content is not reproduced."
+        }
+      ],
+      "acknowledged_date": "2026-11-02",
+      "acknowledged_at": "2026-11-02T16:08:06-06:00",
+      "production_status": "No substantive records production identified in correspondence reviewed as of 2026-11-02T19:01:10-06:00",
+      "compliance_status": "Not determined by acknowledgment"
     }
   ],
   "notes": [
     "Internal references are Protect30A labels, not agency-issued request numbers.",
     "10-business-day status checkpoint requested; not a statutory deadline.",
     "No chargeable work authorized.",
-    "Historical June 3, 2025 county statement requires DEP source verification."
+    "Historical June 3, 2025 county statement requires DEP source verification.",
+    "November 2 acknowledgments establish receipt only; substantive production and independently verified compliance findings remain separate. An unanswered request is not evidence of a violation."
   ]
 }
