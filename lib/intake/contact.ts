@@ -1,5 +1,5 @@
 import { z } from 'zod';
-export const categories = ['general','flooding','evidence','correction','sponsorship','story','meeting_alerts','privacy'] as const;
+export const categories = ['general','storm_cleanup_planning','flooding','evidence','correction','sponsorship','story','meeting_alerts','privacy'] as const;
 export const contactSchema = z.object({
  id: z.string().uuid(), name: z.string().trim().min(1).max(120),
  email: z.string().trim().email().max(254), category: z.enum(categories),
@@ -8,4 +8,4 @@ export const contactSchema = z.object({
  consentContact: z.literal(true), consentUpdates: z.boolean().default(false),
  website: z.string().max(200).optional()
 });
-export const categoryLabels: Record<string,string> = { general:'General question',flooding:'Flooding observation',evidence:'Photos or evidence',correction:'Source correction',sponsorship:'Sponsorship',story:'Community story',meeting_alerts:'Meeting alerts',privacy:'Privacy request' };
+export const categoryLabels: Record<string,string> = { general:'General question',storm_cleanup_planning:'Storm cleanup planning inquiry',flooding:'Flooding observation',evidence:'Photos or evidence',correction:'Source correction',sponsorship:'Sponsorship',story:'Community story',meeting_alerts:'Meeting alerts',privacy:'Privacy request' };
