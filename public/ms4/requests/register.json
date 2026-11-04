@@ -1,9 +1,9 @@
 {
   "project": "Protect30A / Walton County / Stormwater Accountability",
-  "updated_at": "2026-11-04T15:35:12-06:00",
+  "updated_at": "2026-11-04T16:17:12-06:00",
   "timezone": "America/Chicago",
   "public_url": "https://protect30a.org/ms4#records",
-  "monitoring_status": "setup_blocked_task_capacity",
+  "monitoring_status": "active_weekday_review",
   "requests": [
     {
       "internal_reference": "P30A-MS4-COUNTY-20261102",
@@ -31,10 +31,15 @@
       ],
       "acknowledged_date": "2026-11-02",
       "acknowledged_at": "2026-11-02T16:15:05-06:00",
-      "production_status": "No newer substantive county response identified in targeted searches of six connected mailboxes through 2026-11-04T15:34:14-06:00. NextRequest portal contents not independently inspected in this check.",
+      "production_status": "No newer substantive county response found in the designated doug@goodsam.ai mailbox through November 4, 2026, 4:17 p.m. Central. NextRequest request page checked; request details are access-limited and require sign-in. No released county documents reviewed in this check.",
       "compliance_status": "Not determined by acknowledgment",
       "agency_portal": "https://waltoncountyfl.nextrequest.com/requests/26-915",
-      "correspondence_reviewed_at": "2026-11-04T15:34:14-06:00"
+      "correspondence_reviewed_at": "2026-11-04T16:17:12-06:00",
+      "portal_access": {
+        "checked_at": "2026-11-04T16:17:12-06:00",
+        "status": "sign_in_required",
+        "observed": "Request 26-915 page states access is currently limited to requester or staff; sign-in required."
+      }
     },
     {
       "internal_reference": "P30A-MS4-DEP-20261102",
@@ -57,13 +62,11 @@
           "received_at": "2026-11-03T17:06:14-06:00",
           "summary": "Tommy Moore supplied the FLR04E084 electronic-records portal as DEP's responsive-records response; no individual record attachments in the reviewed MIME message.",
           "source_document": "/ms4/requests/dep-records-review-2026-11-04.html",
-          "original_source": "https://mail.google.com/mail/u/?authuser=doug%40goodsam.ai#all/1a1a3a9c4c3b3ad7",
           "verification_method": "Reviewed original HTML MIME body, sender, date and attachments; plain-text alternative contained unfilled template text."
         },
         {
           "type": "accessible_copies_followup_sent",
           "sent_date": "2026-11-04",
-          "message_id": "1a1a6d6fd9794696",
           "summary": "Requested accessible copies and original-scope missing evidence, receipt timestamps, coverage/renewal disposition, and clarification of the two April 2026 report entries. No fees authorized.",
           "source_document": "/ms4/requests/dep-records-review-2026-11-04.html"
         },
@@ -72,7 +75,6 @@
           "message_date": "2026-11-04T08:20:59-06:00",
           "summary": "Tommy Moore stated that the Northwest District is working on the remainder of the request and that he forwarded the access follow-up. No attachments; no underlying records production or compliance determination established.",
           "source_document": "/ms4/requests/dep-status-2026-11-04.html",
-          "original_source": "https://mail.google.com/mail/u/?authuser=doug%40goodsam.ai#all/1a1a6ef47e06cd62",
           "verification_method": "Read actual MIME body, sender and Date header; no record attachments. Date header used; quoted message timestamps not used to infer sequence."
         }
       ],
@@ -180,7 +182,15 @@
           "Index completeness and document uniqueness not established."
         ]
       },
-      "correspondence_reviewed_at": "2026-11-04T15:34:14-06:00"
+      "correspondence_reviewed_at": "2026-11-04T16:17:12-06:00",
+      "latest_access_check": {
+        "checked_at": "2026-11-04T16:17:12-06:00",
+        "index_visible": true,
+        "visible_total_entries": 56,
+        "tested_record": "29.600720.1",
+        "result": "View link produced no readable document or additional document tab in this browser; underlying file not examined.",
+        "limitation": "Current check inspected first index page only; earlier two-page review retained separately."
+      }
     }
   ],
   "notes": [
@@ -188,6 +198,8 @@
     "10-business-day status checkpoint requested; not a statutory deadline.",
     "No chargeable work authorized.",
     "Historical June 3, 2025 county statement requires DEP source verification.",
-    "November 2 acknowledgments establish receipt only; substantive production and independently verified compliance findings remain separate. An unanswered request is not evidence of a violation."
-  ]
+    "November 2 acknowledgments establish receipt only; substantive production and independently verified compliance findings remain separate. An unanswered request is not evidence of a violation.",
+    "November 4, 2026, 4:17 p.m. Central: Rechecked designated mailbox and portal access; no new agency reply located. Activated weekday review status and removed private mailbox references from the public register."
+  ],
+  "monitoring_note": "Weekday reply checks and publication enabled November 4, 2026; reviews are periodic, not continuous."
 }
