@@ -1,6 +1,6 @@
 {
   "project": "Protect30A / Walton County / Stormwater Accountability",
-  "updated_at": "2026-11-04T07:54:39-06:00",
+  "updated_at": "2026-11-04T15:35:12-06:00",
   "timezone": "America/Chicago",
   "public_url": "https://protect30a.org/ms4#records",
   "monitoring_status": "setup_blocked_task_capacity",
@@ -31,16 +31,17 @@
       ],
       "acknowledged_date": "2026-11-02",
       "acknowledged_at": "2026-11-02T16:15:05-06:00",
-      "production_status": "No substantive records production identified in correspondence reviewed as of 2026-11-02T19:01:10-06:00",
+      "production_status": "No newer substantive county response identified in targeted searches of six connected mailboxes through 2026-11-04T15:34:14-06:00. NextRequest portal contents not independently inspected in this check.",
       "compliance_status": "Not determined by acknowledgment",
-      "agency_portal": "https://waltoncountyfl.nextrequest.com/requests/26-915"
+      "agency_portal": "https://waltoncountyfl.nextrequest.com/requests/26-915",
+      "correspondence_reviewed_at": "2026-11-04T15:34:14-06:00"
     },
     {
       "internal_reference": "P30A-MS4-DEP-20261102",
       "agency": "Florida Department of Environmental Protection",
       "recipient": "PublicRecordsRequests_Regulatory@FloridaDEP.gov",
       "sent_date": "2026-11-02",
-      "status": "records_index_received_document_access_followup_sent",
+      "status": "northwest_district_processing_access_followup",
       "agency_request_number": "00251779",
       "request_text": "/ms4/requests/dep-2026-11-02.html",
       "responses": [
@@ -65,6 +66,14 @@
           "message_id": "1a1a6d6fd9794696",
           "summary": "Requested accessible copies and original-scope missing evidence, receipt timestamps, coverage/renewal disposition, and clarification of the two April 2026 report entries. No fees authorized.",
           "source_document": "/ms4/requests/dep-records-review-2026-11-04.html"
+        },
+        {
+          "type": "processing_status_update",
+          "message_date": "2026-11-04T08:20:59-06:00",
+          "summary": "Tommy Moore stated that the Northwest District is working on the remainder of the request and that he forwarded the access follow-up. No attachments; no underlying records production or compliance determination established.",
+          "source_document": "/ms4/requests/dep-status-2026-11-04.html",
+          "original_source": "https://mail.google.com/mail/u/?authuser=doug%40goodsam.ai#all/1a1a6ef47e06cd62",
+          "verification_method": "Read actual MIME body, sender and Date header; no record attachments. Date header used; quoted message timestamps not used to infer sequence."
         }
       ],
       "acknowledged_date": "2026-11-02",
@@ -170,7 +179,8 @@
           "Direct CSV and pagination retrieval returned 403; browser pagination succeeded.",
           "Index completeness and document uniqueness not established."
         ]
-      }
+      },
+      "correspondence_reviewed_at": "2026-11-04T15:34:14-06:00"
     }
   ],
   "notes": [
