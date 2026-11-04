@@ -1,6 +1,6 @@
 {
   "project": "Protect30A / Walton County / Stormwater Accountability",
-  "updated_at": "2026-11-02T19:01:10-06:00",
+  "updated_at": "2026-11-04T07:54:39-06:00",
   "timezone": "America/Chicago",
   "public_url": "https://protect30a.org/ms4#records",
   "monitoring_status": "setup_blocked_task_capacity",
@@ -40,7 +40,7 @@
       "agency": "Florida Department of Environmental Protection",
       "recipient": "PublicRecordsRequests_Regulatory@FloridaDEP.gov",
       "sent_date": "2026-11-02",
-      "status": "acknowledged_awaiting_records",
+      "status": "records_index_received_document_access_followup_sent",
       "agency_request_number": "00251779",
       "request_text": "/ms4/requests/dep-2026-11-02.html",
       "responses": [
@@ -50,12 +50,127 @@
           "summary": "Florida DEP acknowledged the request for Walton County Phase II MS4 FLR04E084 and stated that processing will begin. Reference/case number: 00251779.",
           "source_document": "/ms4/requests/dep-acknowledgment-2026-11-02.html",
           "verification_method": "Protect30A reviewed the agency acknowledgment email; private email content is not reproduced."
+        },
+        {
+          "type": "records_portal_referral",
+          "received_at": "2026-11-03T17:06:14-06:00",
+          "summary": "Tommy Moore supplied the FLR04E084 electronic-records portal as DEP's responsive-records response; no individual record attachments in the reviewed MIME message.",
+          "source_document": "/ms4/requests/dep-records-review-2026-11-04.html",
+          "original_source": "https://mail.google.com/mail/u/?authuser=doug%40goodsam.ai#all/1a1a3a9c4c3b3ad7",
+          "verification_method": "Reviewed original HTML MIME body, sender, date and attachments; plain-text alternative contained unfilled template text."
+        },
+        {
+          "type": "accessible_copies_followup_sent",
+          "sent_date": "2026-11-04",
+          "message_id": "1a1a6d6fd9794696",
+          "summary": "Requested accessible copies and original-scope missing evidence, receipt timestamps, coverage/renewal disposition, and clarification of the two April 2026 report entries. No fees authorized.",
+          "source_document": "/ms4/requests/dep-records-review-2026-11-04.html"
         }
       ],
       "acknowledged_date": "2026-11-02",
       "acknowledged_at": "2026-11-02T16:08:06-06:00",
-      "production_status": "No substantive records production identified in correspondence reviewed as of 2026-11-02T19:01:10-06:00",
-      "compliance_status": "Not determined by acknowledgment"
+      "production_status": "Portal index inspected: 56 entries across two pages. Individual file contents not retrieved or examined; accessible-copy follow-up sent November 4, 2026.",
+      "compliance_status": "Undetermined: index metadata does not establish current coverage, filing timeliness, substantive compliance, or violations.",
+      "facility_reference": "FLR04E084",
+      "agency_portal": "https://prodenv.dep.state.fl.us/DepNexus/public/electronic-documents/FLR04E084/facility!search",
+      "index_review": {
+        "reviewed_at": "2026-11-04T07:54:39-06:00",
+        "total_entries": 56,
+        "pages_inspected": 2,
+        "evidence_level": "index_metadata_only",
+        "selected_records": [
+          {
+            "document_date": "2026-10-06",
+            "subject": "COMPLAINT - 129 BUDS LN",
+            "catalog_id": "29",
+            "guid": "29.612447.1",
+            "content_examined": false
+          },
+          {
+            "document_date": "2026-04-13",
+            "subject": "YEAR 8 ANNUAL REPORT",
+            "catalog_id": "29",
+            "guid": "29.600720.1",
+            "content_examined": false
+          },
+          {
+            "document_date": "2026-04-13",
+            "subject": "WALTONCO_084_C5Y2_AR",
+            "catalog_id": "29",
+            "guid": "29.597807.1",
+            "content_examined": false
+          },
+          {
+            "document_date": "2025-12-05",
+            "subject": "ID_PITS BAYSHORE DR_RESOLVED",
+            "catalog_id": "29",
+            "guid": "29.585414.1",
+            "content_examined": false
+          },
+          {
+            "document_date": "2023-06-19",
+            "subject": "WALTON_C4Y4_AR_REVIEW & CLOSURE",
+            "catalog_id": "29",
+            "guid": "29.506421.1",
+            "content_examined": false
+          },
+          {
+            "document_date": "2023-05-23",
+            "subject": "NOI",
+            "catalog_id": "29",
+            "guid": "29.531337.1",
+            "content_examined": false
+          },
+          {
+            "document_date": "2022-11-04",
+            "subject": "YEAR3_AUDIT REPORT",
+            "catalog_id": "29",
+            "guid": "29.510347.1",
+            "content_examined": false
+          },
+          {
+            "document_date": "2022-08-12",
+            "subject": "YEAR3_AUDIT NOTIFICATION",
+            "catalog_id": "29",
+            "guid": "29.510346.1",
+            "content_examined": false
+          },
+          {
+            "document_date": "2021-04-12",
+            "subject": "WALTON COUNTY_CYCLE 4_YEAR 2_ANNUAL_REPORT_PACKAGE",
+            "catalog_id": "29",
+            "guid": "29.461036.1",
+            "content_examined": false
+          },
+          {
+            "document_date": "2020-09-11",
+            "subject": "WALTON COUNTY ILLICIT DISCHARGE CONCERN - RESOLVED",
+            "catalog_id": "29",
+            "guid": "29.461037.1",
+            "content_examined": false
+          },
+          {
+            "document_date": "2018-10-15",
+            "subject": "WALTON_COUNTY_CYCLE_4_NOTICE_OF_RENEWED_PERMIT_COVERAGE",
+            "catalog_id": "29",
+            "guid": "29.461032.1",
+            "content_examined": false
+          },
+          {
+            "document_date": "2017-12-04",
+            "subject": "WALTON_COUNTY_CYCLE_4_PERMIT_RENEWAL_PACKAGE",
+            "catalog_id": "29",
+            "guid": "29.461035.1",
+            "content_examined": false
+          }
+        ],
+        "limitations": [
+          "Document Date is not verified receipt/submission date.",
+          "Tested annual-report View link did not yield a readable document or captured download.",
+          "Direct CSV and pagination retrieval returned 403; browser pagination succeeded.",
+          "Index completeness and document uniqueness not established."
+        ]
+      }
     }
   ],
   "notes": [
