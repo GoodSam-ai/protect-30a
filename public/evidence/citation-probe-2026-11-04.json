@@ -1,0 +1,72 @@
+{
+  "title": "Controlled assistant-with-retrieval citation support probe",
+  "recorded_at": "2026-11-04T16:27:23.170908-06:00",
+  "timezone": "America/Chicago",
+  "sample_design": "Four deliberately selected questions, two per website. Answers drafted from retrieved pages, then checked in a separate verification pass against cited page text. Same assistant performed generation and checking; no independent human or model reviewer.",
+  "stage": "pre-publication baseline during website revision",
+  "metric": {
+    "name": "claim-to-cited-page support",
+    "unit": "one cited answer per prompt",
+    "denominator": 4,
+    "supported": 4,
+    "partially_supported": 0,
+    "unsupported": 0,
+    "interpretation": "4 of 4 selected answers were supported by their cited pages. This is not an unbiased estimate of general answer-engine accuracy."
+  },
+  "tests": [
+    {
+      "id": "P30A-1",
+      "prompt": "According to Protect30A’s current MS4 review, is Walton County’s current permit coverage verified?",
+      "answer": "Protect30A says current permit coverage remains unverified in its review; it does not claim an independent compliance determination.",
+      "source_url": "https://protect30a.org/ms4",
+      "evidence_quote": "current permit coverage, filing timeliness and compliance remain unverified in this review",
+      "verdict": "supported",
+      "verification_note": "The short-answer section expressly states the coverage limit; the header separately disclaims an independent compliance determination.",
+      "retrieval": "Direct HTTPS, 200; search retrieval failed.",
+      "source_sha256": "3e015c03e4ac97026216adcaa9133004ebb12f4a7a8fb26ad54dda16b41a9478",
+      "answer_with_citation": "Protect30A says current permit coverage remains unverified in its review; it does not claim an independent compliance determination. [Source](https://protect30a.org/ms4)"
+    },
+    {
+      "id": "P30A-2",
+      "prompt": "When Protect30A’s summary conflicts with an official record, which source does its source library say controls?",
+      "answer": "Protect30A’s source library says the original official source controls when it conflicts with a Protect30A summary.",
+      "source_url": "https://protect30a.org/source-library",
+      "evidence_quote": "the original source controls",
+      "verdict": "supported",
+      "verification_note": "The Original records section explicitly covers conflicts with statutes, notices and agency records.",
+      "retrieval": "Search tool turn21view1 plus direct HTTPS, 200.",
+      "source_sha256": "e0767077d08431c57d25fc2f06abd737e769501979c1a82fc151681cc4b078d3",
+      "answer_with_citation": "Protect30A’s source library says the original official source controls when it conflicts with a Protect30A summary. [Source](https://protect30a.org/source-library)"
+    },
+    {
+      "id": "GC-1",
+      "prompt": "Does Good Combinator describe Sponsor Matchmaker as a live record of successful sponsorships or a demonstration?",
+      "answer": "Good Combinator labels Sponsor Matchmaker a demonstration using sample data. That page does not establish completed sponsorship outcomes.",
+      "source_url": "https://goodcombinator.ai/about",
+      "evidence_quote": "Demonstration · Sample data",
+      "verdict": "supported",
+      "verification_note": "The program card is explicitly labeled demonstration and sample data. The second sentence limits inference from that card rather than asserting no sponsorship exists elsewhere.",
+      "retrieval": "Search tool initial turn21view2; second verification turn22view0.",
+      "answer_with_citation": "Good Combinator labels Sponsor Matchmaker a demonstration using sample data. That page does not establish completed sponsorship outcomes. [Source](https://goodcombinator.ai/about)"
+    },
+    {
+      "id": "GC-2",
+      "prompt": "Does the current Good Combinator research page provide a quantified outcome, or describe the work and evidence expected?",
+      "answer": "The reviewed research page describes scoped research work and expected evidence types. It does not present a quantified result on that page.",
+      "source_url": "https://goodcombinator.ai/research",
+      "evidence_quote": "Proof should include datasets, experiments, evaluations, reproducible artifacts, or fielded outputs.",
+      "verdict": "supported",
+      "verification_note": "The page describes a bounded research sprint and expected proof. Inspection of the complete returned page found no measured outcome; this is limited to the reviewed page, not all Good Combinator work.",
+      "retrieval": "Search tool initial turn21view3; second verification turn22view1.",
+      "answer_with_citation": "The reviewed research page describes scoped research work and expected evidence types. It does not present a quantified result on that page. [Source](https://goodcombinator.ai/research)"
+    }
+  ],
+  "limitations": [
+    "This controlled test supplied or selected source pages; it does not measure spontaneous source selection, organic AI citation frequency or search ranking.",
+    "It does not test separate ChatGPT, Google AI Mode, Perplexity or other consumer answer engines.",
+    "Support means the cited webpage supports the answer; it does not independently verify the underlying agency records, program performance or real-world facts.",
+    "Same-assistant checking can miss errors; independent review remains desirable.",
+    "Search retrieval could not open the MS4 URL while direct HTTPS did, so this probe does not establish crawler/index eligibility.",
+    "Sites are being revised in parallel; findings describe retrieved baseline page versions at the recorded time."
+  ]
+}

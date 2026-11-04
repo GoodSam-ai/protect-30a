@@ -152,9 +152,9 @@
   function emailBody(name, hood) {
     return (
       "Dear Commissioners,\n\n" +
-      "I live in / own property in the 30A corridor of South Walton, and I'm writing to ask you to support the 30A Stormwater Plan — specifically, to adopt the resolution of intent under FS § 197.3632 before January 1, 2027, so the first stormwater projects can be funded in the November 2027 cycle.\n\n" +
-      "Flooding in our neighborhoods is getting worse, and our coastal dune lakes — among the rarest waters in the world — bear the cost of every untreated storm. This plan keeps money raised on 30A working on 30A, apportions costs fairly by benefit, and pairs local funding with state Resilient Florida grants.\n\n" +
-      "Please don't let the January 1, 2027 deadline slip. Our community is ready to do its part.\n\n" +
+      "I live in / own property in the 30A corridor of South Walton, and I'm writing to ask you to support the 30A Stormwater Plan — specifically, to adopt the resolution of intent under FS § 197.3632 before January 1, 2027, as a planning target for proposed 2027 tax-bill collection, subject to adoption, notices, assessment-roll certification and project readiness. Section 197.3632 also permits a deadline before March 1 with agreement of the county, property appraiser and tax collector.\n\n" +
+      "Flooding in our neighborhoods is getting worse, and our coastal dune lakes — among the rarest waters in the world — face flood risk and runoff impacts. This plan keeps money raised on 30A working on 30A, apportions costs fairly by benefit, and would seek eligible Resilient Florida grants without assuming an award.\n\n" +
+      "Please prioritize the standard January 1 planning target and publicly explain the remaining steps and any agreed extension. Our community is ready to do its part.\n\n" +
       "Respectfully,\n" +
       fallbackName(name) + "\n" +
       fallbackHood(hood)
@@ -219,7 +219,7 @@
   /* ==================================================================== */
   var SHARE_TITLE = "Protect 30A — South Walton Stormwater Plan";
   var SHARE_TEXT =
-    "30A needs a real stormwater plan. See how the funding works and how to help before the Jan 1, 2027 deadline:";
+    "30A needs a real stormwater plan. Review the proposed funding approach, its planning targets and source evidence:";
   function shareUrl() {
     try { return window.location.href; } catch (_) { return ""; }
   }

@@ -1,0 +1,363 @@
+{
+  "schema_version": "1.0",
+  "title": "Public retrieval and measurement baseline",
+  "checked_at": "2026-11-04T22:24:48Z",
+  "timezone": "America/Chicago",
+  "checked_at_local": "November 4, 2026, 4:24 p.m. Central",
+  "sites": [
+    "https://protect30a.org/",
+    "https://goodcombinator.ai/"
+  ],
+  "method": "Read-only live HTTP source inspection and public search tool spot checks. No browser analytics events intentionally submitted. Search result returned order is tool order, not a Google/Bing ranking.",
+  "observations": {
+    "protect30a": {
+      "home_http_status": 200,
+      "ms4_http_status": 200,
+      "robots_http_status": 200,
+      "robots_policy": "User-agent: *; Allow: /",
+      "tracking_source": "https://protect30a.org/assets/traffic.js",
+      "tracking": "Existing script injects Vercel Web Analytics and strips URL query/hash. Preview/local hostname excluded. Civic custom events currently limited in this file to Helen McCall Park.",
+      "insights_script_http_status": 200
+    },
+    "goodcombinator": {
+      "home_http_status": 200,
+      "research_http_status": 200,
+      "robots_http_status": 200,
+      "robots_policy": "General allow plus explicit OAI-SearchBot allowance",
+      "tracking_source": "https://goodcombinator.ai/assets/main.js",
+      "tracking": "Existing bundle includes @vercel/analytics 2.0.1. Workflow attribution pushes events to dataLayer; a dataLayer event alone does not establish collection.",
+      "insights_script_http_status": 200
+    }
+  },
+  "search_tests": [
+    {
+      "q": "site:protect30a.org/ms4",
+      "target": "https://protect30a.org/ms4",
+      "checked_at": "2026-11-04T22:24:46.158Z",
+      "results": [
+        {
+          "returned_order": 1,
+          "title": "Protect 30A — The South Walton Stormwater Plan",
+          "url": "https://protect30a.org/",
+          "source_ref": "turn16search0"
+        },
+        {
+          "returned_order": 2,
+          "title": "Protect 30A — The Show | Weekly Community Media for South Walton",
+          "url": "https://protect30a.org/show",
+          "source_ref": "turn16search1"
+        },
+        {
+          "returned_order": 3,
+          "title": "Contact Protect30A | Protect30A",
+          "url": "https://protect30a.org/contact",
+          "source_ref": "turn16search2"
+        },
+        {
+          "returned_order": 4,
+          "title": "Records & Privacy — Protect 30A",
+          "url": "https://protect30a.org/records-privacy/",
+          "source_ref": "turn16search3"
+        },
+        {
+          "returned_order": 5,
+          "title": "Sources & Evidence | Protect30A",
+          "url": "https://protect30a.org/source-library",
+          "source_ref": "turn16search4"
+        },
+        {
+          "returned_order": 6,
+          "title": "Protect30A District Ops: Community Storm Recovery",
+          "url": "https://protect30a.org/storm-recovery",
+          "source_ref": "turn16search5"
+        },
+        {
+          "returned_order": 7,
+          "title": "Raven — Evidence, Water and Recreation Questions | Protect30A",
+          "url": "https://protect30a.org/raven",
+          "source_ref": "turn16search6"
+        },
+        {
+          "returned_order": 8,
+          "title": "Protect30A Community Hub | Communities and Stormwater Media",
+          "url": "https://protect30a.org/districts/",
+          "source_ref": "turn16search7"
+        },
+        {
+          "returned_order": 9,
+          "title": "Take Action — Protect 30A",
+          "url": "https://protect30a.org/act",
+          "source_ref": "turn16search8"
+        },
+        {
+          "returned_order": 10,
+          "title": "Raven Community Evidence Review",
+          "url": "https://protect30a.org/raven/review.html",
+          "source_ref": "turn16search9"
+        },
+        {
+          "returned_order": 11,
+          "title": "Community programs | Protect30A District Ops",
+          "url": "https://protect30a.org/district-ops",
+          "source_ref": "turn16search10"
+        },
+        {
+          "returned_order": 12,
+          "title": "Protect30A",
+          "url": "https://protect30a.org/live",
+          "source_ref": "turn16search11"
+        }
+      ],
+      "target_returned_order": null
+    },
+    {
+      "q": "site:goodcombinator.ai/research",
+      "target": "https://goodcombinator.ai/research",
+      "checked_at": "2026-11-04T22:24:46.787Z",
+      "results": [
+        {
+          "returned_order": 1,
+          "title": "Good Combinator | Applied AI Ecosystem",
+          "url": "https://goodcombinator.ai/",
+          "source_ref": "turn17search0"
+        },
+        {
+          "returned_order": 2,
+          "title": "Site Directory | Good Combinator",
+          "url": "https://goodcombinator.ai/site-map",
+          "source_ref": "turn17search1"
+        }
+      ],
+      "target_returned_order": null
+    },
+    {
+      "q": "\"Walton County\" \"MS4\" \"Protect30A\"",
+      "target": "https://protect30a.org/ms4",
+      "checked_at": "2026-11-04T22:24:47.415Z",
+      "results": [],
+      "target_returned_order": null
+    },
+    {
+      "q": "\"Good Combinator\" \"research\" evidence",
+      "target": "https://goodcombinator.ai/research",
+      "checked_at": "2026-11-04T22:24:48.288Z",
+      "results": [
+        {
+          "returned_order": 1,
+          "title": "Good Combinator | Applied AI Ecosystem",
+          "url": "https://goodcombinator.ai/",
+          "source_ref": "turn19search0"
+        },
+        {
+          "returned_order": 2,
+          "title": "Site Directory | Good Combinator",
+          "url": "https://goodcombinator.ai/site-map",
+          "source_ref": "turn19search1"
+        },
+        {
+          "returned_order": 3,
+          "title": "Research Synthesis | SuperAI by Good Combinator",
+          "url": "https://superai.ai/experts/research-synthesis",
+          "source_ref": "turn19search2"
+        },
+        {
+          "returned_order": 4,
+          "title": "About | FL2ai.com",
+          "url": "https://fl2ai.com/about",
+          "source_ref": "turn19search3"
+        },
+        {
+          "returned_order": 5,
+          "title": "Research, Data & Decision Science | SuperAI by Good Combinator",
+          "url": "https://superai.ai/domains/research-data-decision-science",
+          "source_ref": "turn19search4"
+        },
+        {
+          "returned_order": 6,
+          "title": "Decision Analysis | SuperAI by Good Combinator",
+          "url": "https://superai.ai/experts/decision-analysis",
+          "source_ref": "turn19search5"
+        },
+        {
+          "returned_order": 7,
+          "title": "The State of AI and Software Engineering: Code is Cheaper but Expertise are More Valuable [Full Book]",
+          "url": "https://www.freecodecamp.org/news/the-state-of-ai-and-software-engineering-book",
+          "source_ref": "turn19search6"
+        },
+        {
+          "returned_order": 8,
+          "title": "Find the right support — Founder Denominator",
+          "url": "https://founderdenominator.com/research/08-accelerators-investors-support/",
+          "source_ref": "turn19search7"
+        },
+        {
+          "returned_order": 9,
+          "title": "Forecasting & Scenario Analysis | SuperAI by Good Combinator",
+          "url": "https://superai.ai/experts/forecasting-scenario-analysis",
+          "source_ref": "turn19search8"
+        },
+        {
+          "returned_order": 10,
+          "title": "Data Architecture & Engineering | SuperAI by Good Combinator",
+          "url": "https://superai.ai/experts/data-architecture-engineering",
+          "source_ref": "turn19search9"
+        },
+        {
+          "returned_order": 11,
+          "title": "Legal Research & Regulatory Mapping | SuperAI by Good Combinator",
+          "url": "https://superai.ai/experts/legal-research-regulatory-mapping",
+          "source_ref": "turn19search10"
+        },
+        {
+          "returned_order": 12,
+          "title": "Do Not Split Equity Until You Have Seen How You Disagree",
+          "url": "https://storyofentrepreneur.com/chapter/hiring/guide/cofounder-disagreement-before-equity",
+          "source_ref": "turn19search11"
+        },
+        {
+          "returned_order": 13,
+          "title": "UC Berkeley",
+          "url": "https://escholarship.org/content/qt0f9869zk/qt0f9869zk.pdf",
+          "source_ref": "turn19search12"
+        },
+        {
+          "returned_order": 14,
+          "title": "Redistributive Solidarity? Exp",
+          "url": "https://rucforsk.ruc.dk/ws/portalfiles/portal/80590057/12300_He_3_A_002_.pdf",
+          "source_ref": "turn19search13"
+        },
+        {
+          "returned_order": 15,
+          "title": "Y Combinator, where he was devoting his attention to personal projects like OpenAI rather than acting for the good of Y Combinator.<sup>102</sup>",
+          "url": "https://www.justsecurity.org/wp-content/uploads/2026/10/Iowa.pdf",
+          "source_ref": "turn19search14"
+        },
+        {
+          "returned_order": 16,
+          "title": "Redistributive Solidarity?",
+          "url": "https://research.cbs.dk/files/94166302/linea_m_petersen_et_al_redistributive_solidarity_acceptedversion.pdf",
+          "source_ref": "turn19search15"
+        },
+        {
+          "returned_order": 17,
+          "title": "Are “Better” Ideas More Likely to",
+          "url": "https://www.hbs.edu/faculty/Publication%20Files/16-013_41f3750a-9d54-49be-a8f4-51a6489d514e.pdf",
+          "source_ref": "turn19search16"
+        },
+        {
+          "returned_order": 18,
+          "title": "Y Combinator, where he was devoting his attention to personal projects like OpenAI rather than acting for the good of Y Combinator.<sup>108</sup>",
+          "url": "https://www.justsecurity.org/wp-content/uploads/2026/10/Montana.pdf",
+          "source_ref": "turn19search17"
+        }
+      ],
+      "target_returned_order": null
+    }
+  ],
+  "second_engine_checks": {
+    "engine": "system1_search_query",
+    "queries": [
+      "site:protect30a.org/ms4 \"Walton\"",
+      "site:goodcombinator.ai/research \"Research\"",
+      "\"Protect30A\" \"FLR04E084\""
+    ],
+    "returned_urls": [
+      "https://protect30a.org/",
+      "https://protect30a.org/records-privacy/",
+      "https://goodcombinator.ai/",
+      "https://goodcombinator.ai/site-map",
+      "https://protect30a.org/districts/"
+    ],
+    "refs": [
+      "turn15search0",
+      "turn15search1",
+      "turn15search2",
+      "turn15search3",
+      "turn15search4"
+    ],
+    "limitation": "Batch result set; per-query order unavailable. Neither exact target page appeared in returned set. This does not establish absence from search indexes."
+  },
+  "citation_source_checks": [
+    {
+      "claim": "Protect30A is community advocacy, not a government body.",
+      "url": "https://protect30a.org/",
+      "ref": "turn16search0",
+      "status": "supported_by_current_page",
+      "scope": "publisher_identity_only"
+    },
+    {
+      "claim": "Good Combinator connects learning through GROW, proof through FDE, and building through Foundry.",
+      "url": "https://goodcombinator.ai/",
+      "ref": "turn19search0",
+      "status": "supported_by_current_page",
+      "scope": "published_program_description_only"
+    },
+    {
+      "claim": "Good Combinator's public footer says Last updated April 27, 2026.",
+      "url": "https://goodcombinator.ai/",
+      "ref": "turn19search0",
+      "status": "supported_by_current_page",
+      "scope": "page_wording_only_not_actual_revision_date"
+    }
+  ],
+  "citation_accuracy": {
+    "status": "Independent answer-engine citation accuracy not measured",
+    "reason": "No independent ChatGPT/Claude/Perplexity answer sessions or stored historical answer outputs were obtained. Three search-source/page support checks are recorded separately and are not a representative accuracy rate.",
+    "measurement_unit": "Claim with an attributed URL in a saved answer",
+    "recommended_fields": [
+      "engine",
+      "model_or_mode",
+      "prompt",
+      "run_at",
+      "answer_text",
+      "cited_url",
+      "supported_claim",
+      "source_quote_or_location",
+      "verdict",
+      "reviewer"
+    ],
+    "verdicts": [
+      "supported",
+      "partially_supported",
+      "unsupported",
+      "source_unavailable"
+    ],
+    "rate_formula": "supported / all evaluable attributed claims; report partial, unavailable, and uncited claims separately"
+  },
+  "private_analytics": {
+    "status": "Unavailable in this audit",
+    "visitors": null,
+    "pageviews": null,
+    "ai_referrals": null,
+    "search_impressions": null,
+    "indexed_page_count": null,
+    "connector_discovery": "No Search Console or Google Analytics connector found. Vercel exposes legacy observability query tools, but no separately named Web Analytics report tool.",
+    "attempts": [
+      {
+        "operation": "GET /v2/observability/schema",
+        "scope": "default",
+        "http_status": 404,
+        "message": "Observability Data not found"
+      },
+      {
+        "operation": "GET /v2/observability/schema",
+        "scope": "team_NfeAtQjmyoelxw1RuehKVcNq",
+        "http_status": 404,
+        "message": "Observability Data not found"
+      }
+    ],
+    "limitation": "Null means not obtained, never zero. Script delivery does not verify event ingestion or dashboard history."
+  },
+  "next_measurements": [
+    "Export Vercel Web Analytics visitors/page views/referrers by day and landing page for the same fixed reporting interval on both projects; preserve raw export and filter rules.",
+    "Use Search Console and Bing Webmaster verified properties to record submitted sitemap, indexed/non-indexed URLs, clicks/impressions, and URL inspection for /ms4 and /research.",
+    "Run a fixed neutral prompt suite in independent answer engines; save verbatim answers with citation URLs, model/mode, timestamp, and page evidence; score each claim.",
+    "Compare identical prompt suite after changes; separate retrieval presence, citation support, referrals and business/civic outcomes."
+  ],
+  "limitations": [
+    "No full-site crawl or authenticated analytics dashboard inspection.",
+    "Search API results are neither an exhaustive index census nor ordinary consumer SERP rankings.",
+    "No independent environmental, legal, educational or commercial outcome evaluation.",
+    "This self-published audit is not independent validation of either organization."
+  ]
+}
