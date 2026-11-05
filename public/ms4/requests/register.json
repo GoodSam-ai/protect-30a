@@ -1,6 +1,6 @@
 {
   "project": "Protect30A / Walton County / Stormwater Accountability",
-  "updated_at": "2026-11-04T16:17:12-06:00",
+  "updated_at": "2026-11-05T16:43:24-06:00",
   "timezone": "America/Chicago",
   "public_url": "https://protect30a.org/ms4#records",
   "monitoring_status": "active_weekday_review",
@@ -31,10 +31,10 @@
       ],
       "acknowledged_date": "2026-11-02",
       "acknowledged_at": "2026-11-02T16:15:05-06:00",
-      "production_status": "No newer substantive county response found in the designated doug@goodsam.ai mailbox through November 4, 2026, 4:17 p.m. Central. NextRequest request page checked; request details are access-limited and require sign-in. No released county documents reviewed in this check.",
+      "production_status": "No newer substantive response or release notice located in the designated mailbox on November 5, 2026. The November 4 NextRequest access check required sign-in to see request details.",
       "compliance_status": "Not determined by acknowledgment",
       "agency_portal": "https://waltoncountyfl.nextrequest.com/requests/26-915",
-      "correspondence_reviewed_at": "2026-11-04T16:17:12-06:00",
+      "correspondence_reviewed_at": "2026-11-05T16:43:24-06:00",
       "portal_access": {
         "checked_at": "2026-11-04T16:17:12-06:00",
         "status": "sign_in_required",
@@ -182,7 +182,7 @@
           "Index completeness and document uniqueness not established."
         ]
       },
-      "correspondence_reviewed_at": "2026-11-04T16:17:12-06:00",
+      "correspondence_reviewed_at": "2026-11-05T16:43:24-06:00",
       "latest_access_check": {
         "checked_at": "2026-11-04T16:17:12-06:00",
         "index_visible": true,
@@ -190,6 +190,21 @@
         "tested_record": "29.600720.1",
         "result": "View link produced no readable document or additional document tab in this browser; underlying file not examined.",
         "limitation": "Current check inspected first index page only; earlier two-page review retained separately."
+      },
+      "permit_application_review": {
+        "reviewed_at": "2026-11-05T16:43:24-06:00",
+        "source_data_as_of": "2026-11-04",
+        "application_number": "FLR04E084-005-MS2A",
+        "application_received": "2023-04-20",
+        "agency_action": "Pending",
+        "additional_information_event": {
+          "started": "2023-04-20",
+          "completed": null
+        },
+        "source_url": "https://prodapps.dep.state.fl.us/webpa/PublicPAreports/PASearch",
+        "source_lookup": "Search by Application Number for FLR04E084-005-MS2A",
+        "evidence_level": "agency_application_tracking_entry",
+        "remaining_evidence": "Underlying application, correspondence, coverage determination and written Cycle 4 continuation guidance remain open. Filing timeliness and compliance are unresolved."
       }
     }
   ],
@@ -199,7 +214,8 @@
     "No chargeable work authorized.",
     "Historical June 3, 2025 county statement requires DEP source verification.",
     "November 2 acknowledgments establish receipt only; substantive production and independently verified compliance findings remain separate. An unanswered request is not evidence of a violation.",
-    "November 4, 2026, 4:17 p.m. Central: Rechecked designated mailbox and portal access; no new agency reply located. Activated weekday review status and removed private mailbox references from the public register."
+    "November 4, 2026, 4:17 p.m. Central: Rechecked designated mailbox and portal access; no new agency reply located. Activated weekday review status and removed private mailbox references from the public register.",
+    "November 5, 2026: DEP application tracker corroborates the April 2023 application receipt date and lists agency action pending in data current November 4. The November 4 agency records-request status and earlier evidence remain preserved."
   ],
   "monitoring_note": "Weekday reply checks and publication enabled November 4, 2026; reviews are periodic, not continuous."
 }
