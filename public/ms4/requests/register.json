@@ -1,6 +1,6 @@
 {
   "project": "Protect30A / Walton County / Stormwater Accountability",
-  "updated_at": "2026-11-05T16:43:24-06:00",
+  "updated_at": "2026-11-12T16:10:00-06:00",
   "timezone": "America/Chicago",
   "public_url": "https://protect30a.org/ms4#records",
   "monitoring_status": "active_weekday_review",
@@ -10,7 +10,7 @@
       "agency": "Walton County",
       "recipient": "publicrecords@mywaltonfl.gov",
       "sent_date": "2026-11-02",
-      "status": "acknowledged_awaiting_records",
+      "status": "records_released_selected_evidence_reviewed_open_items",
       "agency_request_number": "26-915",
       "request_text": "/ms4/requests/county-2026-11-02.html",
       "responses": [
@@ -27,26 +27,151 @@
           "summary": "Walton County acknowledged receipt and entered the request in NextRequest. Responses and released documents will be managed through that portal.",
           "source_document": "/ms4/requests/county-acknowledgment-2026-11-02.html",
           "verification_method": "Protect30A reviewed the agency acknowledgment email; private email content is not reproduced."
+        },
+        {
+          "type": "portal_document_release_notice",
+          "received_at": "2026-11-12T14:35:48-06:00",
+          "summary": "NextRequest listed 11 released files: nine PDFs and two outfall exports (ZIP and CSV). The email contained requester links and no file attachments. Selected PDF contents were read in the portal.",
+          "source_document": "/ms4#release-review-2026-11-12",
+          "verification_method": "Reviewed the notice and opened document pages using the requester links."
+        },
+        {
+          "type": "agency_production_statement",
+          "received_at": "2026-11-12T14:35:57-06:00",
+          "summary": "County staff said the Environmental Department uploaded all related documents. Request closure and fulfillment of each item remain unverified.",
+          "source_document": "/ms4#release-review-2026-11-12",
+          "verification_method": "Reviewed the NextRequest message notice."
         }
       ],
       "acknowledged_date": "2026-11-02",
       "acknowledged_at": "2026-11-02T16:15:05-06:00",
-      "production_status": "No newer substantive response or release notice located in the designated mailbox on November 5, 2026. The November 4 NextRequest access check required sign-in to see request details.",
-      "compliance_status": "Not determined by acknowledgment",
+      "production_status": "NextRequest notified the requester of 11 released files. County staff said Environmental Services uploaded all related documents. Protect30A reviewed selected PDF contents in the requester portal and identified the outfall ZIP and CSV listings. Full scope, inventory contents and agency closure remain unverified.",
+      "compliance_status": "DEP’s historical continuation and report-review statements were examined. Current coverage, permit-wide compliance, and field completion remain undetermined.",
       "agency_portal": "https://waltoncountyfl.nextrequest.com/requests/26-915",
-      "correspondence_reviewed_at": "2026-11-05T16:43:24-06:00",
+      "correspondence_reviewed_at": "2026-11-12T16:10:00-06:00",
       "portal_access": {
         "checked_at": "2026-11-04T16:17:12-06:00",
         "status": "sign_in_required",
         "observed": "Request 26-915 page states access is currently limited to requester or staff; sign-in required."
-      }
+      },
+      "release_review": {
+        "reviewed_at": "2026-11-12T16:10:00-06:00",
+        "listed_files": 11,
+        "public_request_url": "https://waltoncountyfl.nextrequest.com/requests/26-915",
+        "selected_evidence": [
+          {
+            "document": "Walton_County_MS4_NPDES_Permit_Compliance.pdf",
+            "pages": "1–2",
+            "finding": "August 14, 2025 DEP direction and explanation of administrative continuation."
+          },
+          {
+            "document": "WaltonCo_084_C4Y6_AR_Closure_20250616.pdf",
+            "pages": "1",
+            "finding": "DEP deemed the Cycle 4 Year 6 report administratively complete June 16, 2025. The letter identifies a May 2 review and a May 28 response."
+          },
+          {
+            "document": "Re_Phase_II_MS4_Permit_ID_FLR04E084 2024-2025 NPDES Annual Report.pdf",
+            "pages": "1–4",
+            "finding": "County original and corrected-signature transmittals April 13, 2026. DEP receipt confirmation April 20, 2026."
+          },
+          {
+            "document": "#FLR04E084 2024-2025 NPDES Annual Report.pdf",
+            "pages": "1–2, 13–14, 17",
+            "finding": "Report identifies permit year 2, with a period of October 15, 2024 through October 14, 2025. PDF page 13, BMP 6a 06, reports 116 ponds maintained and approximately 1,048 roadway miles where ditch and swale maintenance is performed."
+          },
+          {
+            "document": "MS4_Required_Improvements_Response_20250513.pdf",
+            "pages": "1",
+            "finding": "County response discusses planned rain-barrel outreach and staff certification."
+          },
+          {
+            "document": "Updated_MS4.pdf",
+            "pages": "1–2",
+            "finding": "County’s June 3, 2025 response and the district’s May 8, 2025 permit request."
+          }
+        ],
+        "access_limit": "The portal displayed requester-only document pages. The outfall exports had download pages without inline contents. Full file and item review remains open.",
+        "listed_documents": [
+          "#FLR04E084 2024-2025 NPDES Annual Report (Signed-BW).pdf",
+          "#FLR04E084 2024-2025 NPDES Annual Report.pdf",
+          "FW_Walton_County_MS4_FLR04E084_Cycle_4_Year_6_Annual_Report_Review_Response_Due_20250602.pdf",
+          "MS4_Required_Improvements_Response_20250513.pdf",
+          "Re_Phase_II_MS4_Permit_ID_FLR04E084 2024-2025 NPDES Annual Report.pdf",
+          "Updated_MS4.pdf",
+          "Walton_County_MS4_FLR04E084_Cycle_4_Year_6_Annual_Report_Closure.pdf",
+          "Walton_County_MS4_NPDES_Permit_Compliance.pdf",
+          "WaltonCo_084_C4Y6_AR_Closure_20250616.pdf",
+          "1__Stormwater_Asset_Management___Out_Fall___Field_Editable__202501300823_WFL1.zip",
+          "Outfalls2026.csv"
+        ],
+        "notice_link_access": "The notice says its requester links are valid until December 12, 2026. Requester sign-in is required after that date.",
+        "unverified_status": "No separate case closure notice or itemized fee estimate appeared in the reviewed correspondence."
+      },
+      "items": [
+        {
+          "item": 1,
+          "title": "Coverage, renewal and stormwater program",
+          "status": "partial",
+          "answer": "DEP’s October 15, 2018 Cycle 4 notice gives the original term as October 15, 2018 through October 14, 2023. DEP’s application tracker records the April 20, 2023 application receipt. The August 2025 DEP email documents continuation as of that correspondence.",
+          "open": "Current coverage and successor identifier, final renewal disposition, complete application and supplements, and the current approved stormwater program.",
+          "source_document": "/ms4#release-review-2026-11-12"
+        },
+        {
+          "item": 2,
+          "title": "Written Cycle 4 continuation guidance",
+          "status": "partial",
+          "answer": "In an August 14, 2025 email released by the county, DEP MS4 coordinator Kristie Beeman said Cycle 4 had been administratively continued due to DEP’s backlog and instructed Walton County to keep operating under Cycle 4 while DEP reviewed the permit. She said Cycle 5 would begin a new five-year cycle upon issuance.",
+          "open": "The original instruction cited in the county’s June 3, 2025 email, any other continuation records and any later coverage decision or formal notice.",
+          "source_document": "/ms4#release-review-2026-11-12"
+        },
+        {
+          "item": 3,
+          "title": "Reports, deadlines, transmittals and DEP receipts",
+          "status": "partial",
+          "answer": "The 2022–2023 and 2023–2024 reports are publicly posted. The released 2024–2025 report covers October 15, 2024 through October 14, 2025. County correspondence shows the April 13, 2026 transmittal and corrected-signature transmittal. DEP confirmed receipt on April 20, 2026.",
+          "open": "Complete reporting calendar and required periods, receipt timestamps and deadlines for each filing, identification of both April 2026 DEP entries, and the 2024–2025 review disposition.",
+          "source_document": "/ms4#release-review-2026-11-12"
+        },
+        {
+          "item": 4,
+          "title": "Audits, corrective actions and assigned responsibilities",
+          "status": "partial",
+          "answer": "DEP’s November 2022 audit transmittal records its historical assessment. The county’s 2025 response discusses rain-barrel workshops and staff certification. DEP deemed the Cycle 4 Year 6 report administratively complete on June 16, 2025 after a May 28 response to its May 2 review.",
+          "open": "Full evaluations, deficiency and enforcement files, completion evidence for corrective steps, current assignments and outstanding or overdue items.",
+          "source_document": "/ms4#release-review-2026-11-12"
+        },
+        {
+          "item": 5,
+          "title": "Asset inventory and operational logs",
+          "status": "partial",
+          "answer": "NextRequest listed an outfall ZIP export and Outfalls2026.csv and displayed their document pages. The released 2024–2025 report lists 116 ponds maintained and approximately 1,048 roadway miles where ditch and swale maintenance is performed.",
+          "open": "Review the inventory files and field definitions. Obtain mapped asset IDs and dated inspection, illicit-discharge, construction-runoff enforcement and maintenance logs and work orders.",
+          "source_document": "/ms4#release-review-2026-11-12"
+        },
+        {
+          "item": 6,
+          "title": "Backlog, corrective actions and mosquito-control referrals",
+          "status": "open",
+          "answer": "The release notice identifies no distinct backlog or referral log.",
+          "open": "Locations, ownership, responsible department, reported dates, interim measures, costs, completion targets, referral logs and closure evidence.",
+          "source_document": "/ms4#release-review-2026-11-12"
+        },
+        {
+          "item": 7,
+          "title": "County and mosquito-control correspondence",
+          "status": "partial",
+          "answer": "The released Updated MS4 correspondence contains the May 8, 2025 request for the permit and the county’s June 3 reply.",
+          "open": "Other responsive correspondence through November 2, 2026, including ditch ownership and maintenance responsibilities.",
+          "source_document": "/ms4#release-review-2026-11-12"
+        }
+      ]
     },
     {
       "internal_reference": "P30A-MS4-DEP-20261102",
       "agency": "Florida Department of Environmental Protection",
       "recipient": "PublicRecordsRequests_Regulatory@FloridaDEP.gov",
       "sent_date": "2026-11-02",
-      "status": "northwest_district_processing_access_followup",
+      "status": "oculus_index_received_selected_evidence_reviewed_open_items",
       "agency_request_number": "00251779",
       "request_text": "/ms4/requests/dep-2026-11-02.html",
       "responses": [
@@ -76,12 +201,19 @@
           "summary": "Tommy Moore stated that the Northwest District is working on the remainder of the request and that he forwarded the access follow-up. No attachments; no underlying records production or compliance determination established.",
           "source_document": "/ms4/requests/dep-status-2026-11-04.html",
           "verification_method": "Read actual MIME body, sender and Date header; no record attachments. Date header used; quoted message timestamps not used to infer sequence."
+        },
+        {
+          "type": "records_index_attachment",
+          "received_at": "2026-11-12T10:11:56-06:00",
+          "summary": "Michelle Bull said the requested documentation was available in DEP’s electronic records system and provided an OCULUS search workbook with document links. She recommended the DEP Information Portal during the system transition.",
+          "source_document": "/ms4#release-review-2026-11-12",
+          "verification_method": "Reviewed original message and inspected the attached workbook."
         }
       ],
       "acknowledged_date": "2026-11-02",
       "acknowledged_at": "2026-11-02T16:08:06-06:00",
-      "production_status": "Portal index inspected: 56 entries across two pages. Individual file contents not retrieved or examined; accessible-copy follow-up sent November 4, 2026.",
-      "compliance_status": "Undetermined: index metadata does not establish current coverage, filing timeliness, substantive compliance, or violations.",
+      "production_status": "DEP provided an OCULUS workbook and recommended its Information Portal. Protect30A inspected the workbook and selected related documents obtained through the county or earlier correspondence. Tested OCULUS and facility-index document links did not yield readable file contents.",
+      "compliance_status": "The released DEP correspondence documents August 2025 administrative continuation and administrative closure of one report review. Current coverage, filing timeliness and permit-wide compliance remain undetermined.",
       "facility_reference": "FLR04E084",
       "agency_portal": "https://prodenv.dep.state.fl.us/DepNexus/public/electronic-documents/FLR04E084/facility!search",
       "index_review": {
@@ -182,7 +314,7 @@
           "Index completeness and document uniqueness not established."
         ]
       },
-      "correspondence_reviewed_at": "2026-11-05T16:43:24-06:00",
+      "correspondence_reviewed_at": "2026-11-12T16:10:00-06:00",
       "latest_access_check": {
         "checked_at": "2026-11-04T16:17:12-06:00",
         "index_visible": true,
@@ -204,8 +336,113 @@
         "source_url": "https://prodapps.dep.state.fl.us/webpa/PublicPAreports/PASearch",
         "source_lookup": "Search by Application Number for FLR04E084-005-MS2A",
         "evidence_level": "agency_application_tracking_entry",
-        "remaining_evidence": "Underlying application, correspondence, coverage determination and written Cycle 4 continuation guidance remain open. Filing timeliness and compliance are unresolved."
-      }
+        "remaining_evidence": "As of this November 5 review, the application file, correspondence, coverage determination and written continuation guidance had not been verified. The November 12 release review adds August 2025 DEP correspondence."
+      },
+      "workbook_review": {
+        "reviewed_at": "2026-11-12T16:10:00-06:00",
+        "filename": "OCULUSSearchData_261112110838.xlsx",
+        "result_rows": 57,
+        "document_rows": 56,
+        "link_rows": 1,
+        "evidence_level": "agency_index_metadata",
+        "selected_records": [
+          {
+            "subject": "YEAR 8 ANNUAL REPORT",
+            "guid": "29.600720.1",
+            "document_date": "2026-04-13",
+            "received_date_field": "2026-04-13",
+            "application_number": "FLR04E084004"
+          },
+          {
+            "subject": "WALTONCO_084_C5Y2_AR",
+            "guid": "29.597807.1",
+            "document_date": "2026-04-13",
+            "received_date_field": "2026-04-13",
+            "application_number": "FLR04E084005"
+          },
+          {
+            "subject": "NOI",
+            "guid": "29.531337.1",
+            "document_date": "2023-05-23",
+            "received_date_field": "2023-05-23",
+            "application_number": "FLR04E084005"
+          },
+          {
+            "subject": "YEAR 6 ANNUAL REPORT PACKAGE",
+            "guid": "29.614729.1",
+            "document_date": "2025-04-07",
+            "received_date_field": "2025-06-16",
+            "application_number": "FLR04E084004"
+          }
+        ],
+        "source_url": "https://prodenv.dep.state.fl.us/DepNexus/public/electronic-documents/FLR04E084/facility!search",
+        "limitations": "Row counts cover this export and may include duplicates or related records. Received Date fields are catalog metadata. Tested file links did not yield readable records from DEP. County-released copies and earlier records provide separate evidence.",
+        "unverified_status": "No itemized fee estimate or formal case closure appeared in the reviewed correspondence."
+      },
+      "historical_evidence": [
+        {
+          "document": "2018 Cycle 4 final notice of renewed permit coverage",
+          "catalog_guid": "29.461032.1",
+          "finding": "Original term October 15, 2018 through October 14, 2023. The letter identifies Year 2 and Year 4 deadlines for the original term.",
+          "source_url": "https://prodenv.dep.state.fl.us/DepNexus/public/electronic-documents/FLR04E084/facility!search"
+        },
+        {
+          "document": "2022 Cycle 4 Year 3 audit report",
+          "catalog_guid": "29.510347.1",
+          "finding": "DEP stated in its November 4, 2022 transmittal that the county satisfied SWMP elements as assessed in that historical audit.",
+          "source_url": "https://prodenv.dep.state.fl.us/DepNexus/public/electronic-documents/FLR04E084/facility!search"
+        }
+      ],
+      "items": [
+        {
+          "item": 1,
+          "title": "Coverage and complete renewal file",
+          "status": "partial",
+          "answer": "DEP’s application tracker records April 20, 2023 receipt of FLR04E084-005-MS2A and shows pending action in its November 4, 2026 data. The workbook separately lists an NOI entry dated and marked received May 23, 2023. The original 2018 notice records the initial Cycle 4 dates.",
+          "open": "Complete application and supplements, fee/receipt records, completeness and deficiency reviews, current approved stormwater program, and formal current coverage or disposition. Reconcile the application tracker and the document-level NOI entry.",
+          "source_document": "/ms4#release-review-2026-11-12"
+        },
+        {
+          "item": 2,
+          "title": "Continuation after October 14, 2023",
+          "status": "partial",
+          "answer": "The county released DEP’s August 14, 2025 written direction to continue under Cycle 4 and DEP’s statement that it had been administratively continued.",
+          "open": "Any earlier DEP instruction corresponding to the June 2025 account, the full continuation record, and any later or superseding determination.",
+          "source_document": "/ms4#release-review-2026-11-12"
+        },
+        {
+          "item": 3,
+          "title": "Required reports, receipt timestamps and deadlines",
+          "status": "partial",
+          "answer": "The DEP workbook gives April 13, 2026 in both Received Date fields for the two April entries. County-released correspondence shows the 2024–2025 report sent April 13 and acknowledged by DEP April 20.",
+          "open": "Compare both indexed files to the transmitted versions, verify reporting periods and applicable due dates for all required filings, obtain precise receipts, deadline/frequency notices, and the remaining reviews.",
+          "source_document": "/ms4#release-review-2026-11-12"
+        },
+        {
+          "item": 4,
+          "title": "Compliance file, corrective actions and closure",
+          "status": "partial",
+          "answer": "DEP’s June 16, 2025 letter released by the county closes the administrative review of the Cycle 4 Year 6 report. The 2022 DEP audit is historical evidence. The workbook lists other evaluation and compliance records.",
+          "open": "Underlying and complete current evaluation, enforcement and corrective-action files, outstanding findings, response records and closure evidence for other matters.",
+          "source_document": "/ms4#release-review-2026-11-12"
+        },
+        {
+          "item": 5,
+          "title": "DEP correspondence with county or mosquito control",
+          "status": "partial",
+          "answer": "The county release includes DEP’s 2025 continuation and review correspondence and 2026 receipt confirmation.",
+          "open": "Other responsive correspondence, including ditch ownership, maintenance and mosquito-control referrals. The workbook alone cannot establish correspondence completeness.",
+          "source_document": "/ms4#release-review-2026-11-12"
+        },
+        {
+          "item": 6,
+          "title": "Identifiers, records index and current program contact",
+          "status": "partial",
+          "answer": "DEP supplied the facility portal for FLR04E084 and an OCULUS workbook with 57 result rows and document locators. Michelle Bull responded for DEP on November 12.",
+          "open": "Usable copies for the tested documents, any successor identifier, and confirmation of the current designated program contact.",
+          "source_document": "/ms4#release-review-2026-11-12"
+        }
+      ]
     }
   ],
   "notes": [
@@ -215,7 +452,10 @@
     "Historical June 3, 2025 county statement requires DEP source verification.",
     "November 2 acknowledgments establish receipt only; substantive production and independently verified compliance findings remain separate. An unanswered request is not evidence of a violation.",
     "November 4, 2026, 4:17 p.m. Central: Rechecked designated mailbox and portal access; no new agency reply located. Activated weekday review status and removed private mailbox references from the public register.",
-    "November 5, 2026: DEP application tracker corroborates the April 2023 application receipt date and lists agency action pending in data current November 4. The November 4 agency records-request status and earlier evidence remain preserved."
+    "November 5, 2026: DEP application tracker corroborates the April 2023 application receipt date and lists agency action pending in data current November 4. The November 4 agency records-request status and earlier evidence remain preserved.",
+    "November 12, 2026: Superseded the acknowledgment-only county status and the prior DEP processing status with the release notice, reviewed county records and DEP index attachment. The earlier November 4 portal-access and November 5 application-tracker findings are preserved as dated observations.",
+    "November 12, 2026: Updated the evidence status of Cycle 4 continuation. The August 14, 2025 DEP email provides written guidance as of that date; the earlier county attribution remains historical, and current coverage or later disposition is unresolved.",
+    "November 12, 2026: The OCULUS workbook supplied Received Date fields for both April 2026 entries. County-released correspondence separately establishes transmittal and an acknowledgment for the 2024–2025 report. Matching the underlying DEP entries and determining filing timeliness remain open."
   ],
   "monitoring_note": "Weekday reply checks and publication enabled November 4, 2026; reviews are periodic, not continuous."
 }
