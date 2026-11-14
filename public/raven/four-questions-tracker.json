@@ -1,12 +1,12 @@
 {
-  "version": "1.5-engineering-referral",
-  "updated_at": "2026-10-23T08:22:15-05:00",
+  "version": "1.6-followup-and-tentative-hearing",
+  "updated_at": "2026-11-13T22:15:00-06:00",
   "prepared_by": "ChatGPT for Doug Liles",
   "publication": "Public page; deployment verified separately",
   "meeting_status": {
     "last_verified": "The October 21 official recording contains a motion to move Raven to the Planning Commission without recommendation, requiring open questions and comments to be addressed before that step (1:37:13–1:38:55). It was seconded and put to a voice vote (1:39:04–1:39:35), after which the meeting moved to the next item. A certified numerical tally and voter identities have not been located. This is not final development approval.",
     "current_final_approval": "Not independently established",
-    "next_raven_hearing": "County Senior Planner Willie Brown reported on October 22 at 11:55 a.m. CDT that MAJ26-000007 is scheduled for the November 12, 2026 Planning Commission public hearing. Project-specific official notice, time, location, exact comment cutoff and carry-forward/resubmission procedure remain unverified.",
+    "next_raven_hearing": "SOA November 13 newsletter attributes a tentative December 17, 2026, 9:00 a.m. Quasi-Judicial Special Magistrate hearing in the Freeport Board Room to County Planning. Project-specific county notice, participation rules and comment cutoff not independently verified.",
     "comment_procedure": "County general virtual procedure requires registration at least 24 hours before a meeting and excludes virtual public comment at quasi-judicial hearings. Verify the specific notice, hearing classification, written submission route and cutoff before participating.",
     "sources": [
       "https://walton.civicweb.net/document/541646/",
@@ -73,6 +73,12 @@
       "engineering_materials_received": false,
       "final_approval_established": false,
       "public_context_source": "https://walton.civicweb.net/Portal/MeetingInformation.aspx?Id=7258"
+    },
+    "reported_november_12_outcome": {
+      "source": "https://mailchi.mp/soaowners/weekly-email-nov-132026",
+      "source_type": "Association newsletter; attributed report",
+      "summary": "SOA reports the Planning Commission did not recommend approval. Exact motion, vote and official disposition not independently verified.",
+      "final_development_decision_established": false
     }
   },
   "questions": [
@@ -253,7 +259,7 @@
       "answer_assessment": "Unresolved; no substantive response verified"
     }
   ],
-  "provenance": "Five supplied private collections and preserved project packet; official agenda/procedure checks. Public derivative excludes private correspondence and source headers. No new requests sent. October 21 status update by ChatGPT for Doug Liles based on official agenda and privately reviewed October 19 county acknowledgment and October 21 sent follow-up. October 16 historical assessments retained; no private correspondence reproduced. October 22 recording update at 10:11 CDT from official Walton County video PYtE_K2BTqE and auto-generated English captions. No certified vote, final approval or engineering-question closure asserted. October 22 follow-up-sent update at 11:49 CDT: current private Sent copy confirms dispatch at 11:44:07 CDT. Three separate response tracks and a hearing-preparation checklist added; no county acknowledgment, records production, deadline or issue closure inferred. October 22 at 14:01 CDT: privately reviewed current official planner reply received at 11:55 CDT. Added attributed November 12 Planning Commission schedule and planner characterization of no consensus; exact written language remains uncertain. No private correspondence, mailbox links or headers published. No certified disposition, exact participation deadline or engineering closure inferred. October 23 at 08:22 CDT: reviewed 07:48:46 CDT official planner forwarding acknowledgment. Engineering referral recorded separately from document delivery and issue acceptance; no private correspondence or personal data published.",
+  "provenance": "Five supplied private collections and preserved project packet; official agenda/procedure checks. Public derivative excludes private correspondence and source headers. No new requests sent. October 21 status update by ChatGPT for Doug Liles based on official agenda and privately reviewed October 19 county acknowledgment and October 21 sent follow-up. October 16 historical assessments retained; no private correspondence reproduced. October 22 recording update at 10:11 CDT from official Walton County video PYtE_K2BTqE and auto-generated English captions. No certified vote, final approval or engineering-question closure asserted. October 22 follow-up-sent update at 11:49 CDT: current private Sent copy confirms dispatch at 11:44:07 CDT. Three separate response tracks and a hearing-preparation checklist added; no county acknowledgment, records production, deadline or issue closure inferred. October 22 at 14:01 CDT: privately reviewed current official planner reply received at 11:55 CDT. Added attributed November 12 Planning Commission schedule and planner characterization of no consensus; exact written language remains uncertain. No private correspondence, mailbox links or headers published. No certified disposition, exact participation deadline or engineering closure inferred. October 23 at 08:22 CDT: reviewed 07:48:46 CDT official planner forwarding acknowledgment. Engineering referral recorded separately from document delivery and issue acceptance; no private correspondence or personal data published. November 13: verified new sent follow-up and public SOA newsletter report; agency acknowledgment and official hearing disposition remain unverified. Historical fields retain original dates.",
   "packet_sha256": "e20a31b6e70dae2b3901126574c001aa1c9721146c2f2b98151a884dd37fbf4b",
   "historical_evidence_cutoff": "2026-10-16",
   "public_comment_filing": {
@@ -623,5 +629,19 @@
       "issue_closure_verified": false,
       "status_portal": "https://waltoncountyfl-energovweb.tylerhost.net/apps/SelfService#/home"
     }
+  },
+  "november_13_followup": {
+    "agency_request": "26-893",
+    "status": "sent_acknowledgment_pending",
+    "sent_at": "2026-11-13T21:56:13-06:00",
+    "status_checked_at": "2026-11-13T22:03:00-06:00",
+    "scope": [
+      "November 12 Planning Commission disposition records",
+      "Handling of November 13 submission",
+      "Next-stage issued notices"
+    ],
+    "public_summary": "/records/updates/2026-11-13.html",
+    "fees_authorized": false,
+    "source_basis": "Original sent correspondence reviewed privately; no mailbox links published"
   }
 }
