@@ -1,6 +1,6 @@
 {
   "project": "Protect30A / Walton County / Stormwater Accountability",
-  "updated_at": "2026-11-12T16:10:00-06:00",
+  "updated_at": "2026-11-13T22:06:39-06:00",
   "timezone": "America/Chicago",
   "public_url": "https://protect30a.org/ms4#records",
   "monitoring_status": "active_weekday_review",
@@ -41,6 +41,14 @@
           "summary": "County staff said the Environmental Department uploaded all related documents. Request closure and fulfillment of each item remain unverified.",
           "source_document": "/ms4#release-review-2026-11-12",
           "verification_method": "Reviewed the NextRequest message notice."
+        },
+        {
+          "type": "scope_clarification_sent",
+          "sent_at": "2026-11-13T21:56:19-06:00",
+          "summary": "Asked whether the Environmental Department upload statement covers that department alone or collection across all custodians, including Public Works. Original scope unchanged; no duplicate file production or new report requested. No fees authorized.",
+          "source_document": "/records/updates/2026-11-13.html",
+          "verification_method": "Send confirmation and SENT message record reviewed privately. No private mailbox links or message headers published.",
+          "acknowledgment_status": "unverified"
         }
       ],
       "acknowledged_date": "2026-11-02",
@@ -164,7 +172,15 @@
           "open": "Other responsive correspondence through November 2, 2026, including ditch ownership and maintenance responsibilities.",
           "source_document": "/ms4#release-review-2026-11-12"
         }
-      ]
+      ],
+      "latest_followup": {
+        "sent_at": "2026-11-13T21:56:19-06:00",
+        "status": "sent_awaiting_acknowledgment",
+        "source_document": "/records/updates/2026-11-13.html",
+        "scope": "departmental_vs_all_custodians_collection_status",
+        "original_scope_changed": false,
+        "fees_authorized": false
+      }
     },
     {
       "internal_reference": "P30A-MS4-DEP-20261102",
@@ -455,7 +471,8 @@
     "November 5, 2026: DEP application tracker corroborates the April 2023 application receipt date and lists agency action pending in data current November 4. The November 4 agency records-request status and earlier evidence remain preserved.",
     "November 12, 2026: Superseded the acknowledgment-only county status and the prior DEP processing status with the release notice, reviewed county records and DEP index attachment. The earlier November 4 portal-access and November 5 application-tracker findings are preserved as dated observations.",
     "November 12, 2026: Updated the evidence status of Cycle 4 continuation. The August 14, 2025 DEP email provides written guidance as of that date; the earlier county attribution remains historical, and current coverage or later disposition is unresolved.",
-    "November 12, 2026: The OCULUS workbook supplied Received Date fields for both April 2026 entries. County-released correspondence separately establishes transmittal and an acknowledgment for the 2024–2025 report. Matching the underlying DEP entries and determining filing timeliness remain open."
+    "November 12, 2026: The OCULUS workbook supplied Received Date fields for both April 2026 entries. County-released correspondence separately establishes transmittal and an acknowledgment for the 2024–2025 report. Matching the underlying DEP entries and determining filing timeliness remain open.",
+    "November 13, 2026: County scope clarification sent in the existing request thread. Sending does not establish agency receipt, full production, compliance or request closure. November 12 reviewed evidence and older dated observations remain preserved."
   ],
   "monitoring_note": "Weekday reply checks and publication enabled November 4, 2026; reviews are periodic, not continuous."
 }
