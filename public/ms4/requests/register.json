@@ -1,6 +1,6 @@
 {
   "project": "Protect30A / Walton County / Stormwater Accountability",
-  "updated_at": "2026-11-13T22:06:39-06:00",
+  "updated_at": "2026-11-16T15:48:08-06:00",
   "timezone": "America/Chicago",
   "public_url": "https://protect30a.org/ms4#records",
   "monitoring_status": "active_weekday_review",
@@ -10,7 +10,7 @@
       "agency": "Walton County",
       "recipient": "publicrecords@mywaltonfl.gov",
       "sent_date": "2026-11-02",
-      "status": "records_released_selected_evidence_reviewed_open_items",
+      "status": "environmental_records_released_other_departments_processing",
       "agency_request_number": "26-915",
       "request_text": "/ms4/requests/county-2026-11-02.html",
       "responses": [
@@ -48,15 +48,23 @@
           "summary": "Asked whether the Environmental Department upload statement covers that department alone or collection across all custodians, including Public Works. Original scope unchanged; no duplicate file production or new report requested. No fees authorized.",
           "source_document": "/records/updates/2026-11-13.html",
           "verification_method": "Send confirmation and SENT message record reviewed privately. No private mailbox links or message headers published.",
-          "acknowledgment_status": "unverified"
+          "acknowledgment_status": "answered_2026_11_16"
+        },
+        {
+          "type": "scope_clarification_received",
+          "received_at": "2026-11-16T09:01:46-06:00",
+          "summary": "Walton County Public Records Technician Kizzie Merrifield clarified that the November 12 upload statement covered only the Environmental Department’s records. She said request 26-915 was still being processed and records from other departments would be sent as received. The reply supplied no additional files or itemized fee estimate and gave no department-by-department status or release date.",
+          "source_document": "/ms4#county-scope-2026-11-16",
+          "source_url": "https://waltoncountyfl.nextrequest.com/requests/26-915",
+          "verification_method": "Reviewed the original NextRequest message and both MIME body alternatives. The message contained no record attachments."
         }
       ],
       "acknowledged_date": "2026-11-02",
       "acknowledged_at": "2026-11-02T16:15:05-06:00",
-      "production_status": "NextRequest notified the requester of 11 released files. County staff said Environmental Services uploaded all related documents. Protect30A reviewed selected PDF contents in the requester portal and identified the outfall ZIP and CSV listings. Full scope, inventory contents and agency closure remain unverified.",
+      "production_status": "NextRequest listed 11 files released on November 12. On November 16, Walton County Public Records clarified that the upload statement applied only to the Environmental Department’s records. The county said the request was still being processed and that it would send other departments’ records as it received them. Protect30A reviewed selected PDFs and identified two outfall export listings. Further releases, full item review and closure remain open.",
       "compliance_status": "DEP’s historical continuation and report-review statements were examined. Current coverage, permit-wide compliance, and field completion remain undetermined.",
       "agency_portal": "https://waltoncountyfl.nextrequest.com/requests/26-915",
-      "correspondence_reviewed_at": "2026-11-12T16:10:00-06:00",
+      "correspondence_reviewed_at": "2026-11-16T15:48:08-06:00",
       "portal_access": {
         "checked_at": "2026-11-04T16:17:12-06:00",
         "status": "sign_in_required",
@@ -330,7 +338,7 @@
           "Index completeness and document uniqueness not established."
         ]
       },
-      "correspondence_reviewed_at": "2026-11-12T16:10:00-06:00",
+      "correspondence_reviewed_at": "2026-11-16T15:48:08-06:00",
       "latest_access_check": {
         "checked_at": "2026-11-04T16:17:12-06:00",
         "index_visible": true,
@@ -472,7 +480,8 @@
     "November 12, 2026: Superseded the acknowledgment-only county status and the prior DEP processing status with the release notice, reviewed county records and DEP index attachment. The earlier November 4 portal-access and November 5 application-tracker findings are preserved as dated observations.",
     "November 12, 2026: Updated the evidence status of Cycle 4 continuation. The August 14, 2025 DEP email provides written guidance as of that date; the earlier county attribution remains historical, and current coverage or later disposition is unresolved.",
     "November 12, 2026: The OCULUS workbook supplied Received Date fields for both April 2026 entries. County-released correspondence separately establishes transmittal and an acknowledgment for the 2024–2025 report. Matching the underlying DEP entries and determining filing timeliness remain open.",
-    "November 13, 2026: County scope clarification sent in the existing request thread. Sending does not establish agency receipt, full production, compliance or request closure. November 12 reviewed evidence and older dated observations remain preserved."
+    "November 13, 2026: County scope clarification sent in the existing request thread. Sending does not establish agency receipt, full production, compliance or request closure. November 12 reviewed evidence and older dated observations remain preserved.",
+    "November 16, 2026: Clarified the scope of the November 12 county production. Walton County Public Records said the upload statement applied only to the Environmental Department and that records from other departments were still being processed. The prior release, reviewed evidence and open items remain documented."
   ],
   "monitoring_note": "Weekday reply checks and publication enabled November 4, 2026; reviews are periodic, not continuous."
 }
