@@ -1,6 +1,6 @@
 {
   "project": "Protect30A / Walton County / Stormwater Accountability",
-  "updated_at": "2026-11-16T15:48:08-06:00",
+  "updated_at": "2026-11-19T16:19:21-06:00",
   "timezone": "America/Chicago",
   "public_url": "https://protect30a.org/ms4#records",
   "monitoring_status": "active_weekday_review",
@@ -10,7 +10,7 @@
       "agency": "Walton County",
       "recipient": "publicrecords@mywaltonfl.gov",
       "sent_date": "2026-11-02",
-      "status": "environmental_records_released_other_departments_processing",
+      "status": "agency_closed_evidence_review_open",
       "agency_request_number": "26-915",
       "request_text": "/ms4/requests/county-2026-11-02.html",
       "responses": [
@@ -57,14 +57,48 @@
           "source_document": "/ms4#county-scope-2026-11-16",
           "source_url": "https://waltoncountyfl.nextrequest.com/requests/26-915",
           "verification_method": "Reviewed the original NextRequest message and both MIME body alternatives. The message contained no record attachments."
+        },
+        {
+          "type": "portal_document_release_notice",
+          "received_at": "2026-11-19T13:43:41-06:00",
+          "summary": "NextRequest listed 26-915 Emails.pdf as released through a requester link. No PDF was attached to the message. Underlying contents remain unreviewed.",
+          "source_document": "/ms4#county-closure-2026-11-19",
+          "source_url": "https://waltoncountyfl.nextrequest.com/requests/26-915",
+          "verification_method": "Read both MIME body alternatives of the original notice and checked for attachments."
+        },
+        {
+          "type": "department_response",
+          "department": "Engineering",
+          "received_at": "2026-11-19T13:43:49-06:00",
+          "summary": "The county notice stated that no responsive documents were provided by Engineering Staff. This records the department response without establishing the result for other custodians.",
+          "source_document": "/ms4#county-closure-2026-11-19",
+          "source_url": "https://waltoncountyfl.nextrequest.com/requests/26-915",
+          "verification_method": "Read the original NextRequest message."
+        },
+        {
+          "type": "department_response",
+          "department": "Code Compliance",
+          "received_at": "2026-11-19T13:43:54-06:00",
+          "summary": "The county notice stated that Code Compliance does not have records responsive to this request. The statement is limited to Code Compliance.",
+          "source_document": "/ms4#county-closure-2026-11-19",
+          "source_url": "https://waltoncountyfl.nextrequest.com/requests/26-915",
+          "verification_method": "Read the original NextRequest message."
+        },
+        {
+          "type": "agency_closure_notice",
+          "received_at": "2026-11-19T13:44:11-06:00",
+          "summary": "Walton County closed request 26-915 and stated that all records had been released and the request fulfilled. Protect30A’s review remains open pending the new PDF and item-by-item reconciliation.",
+          "source_document": "/ms4#county-closure-2026-11-19",
+          "source_url": "https://waltoncountyfl.nextrequest.com/requests/26-915",
+          "verification_method": "Read the original closure notice and its stated reason."
         }
       ],
       "acknowledged_date": "2026-11-02",
       "acknowledged_at": "2026-11-02T16:15:05-06:00",
-      "production_status": "NextRequest listed 11 files released on November 12. On November 16, Walton County Public Records clarified that the upload statement applied only to the Environmental Department’s records. The county said the request was still being processed and that it would send other departments’ records as it received them. Protect30A reviewed selected PDFs and identified two outfall export listings. Further releases, full item review and closure remain open.",
+      "production_status": "On November 19, NextRequest announced 26-915 Emails.pdf, relayed Engineering and Code Compliance responses, and notified the requester that the county had closed request 26-915 as fulfilled. Protect30A verified these notices. The new PDF could not be retrieved or read in this check, and its contents and item-by-item fulfillment remain unverified. Earlier selected record reviews remain documented.",
       "compliance_status": "DEP’s historical continuation and report-review statements were examined. Current coverage, permit-wide compliance, and field completion remain undetermined.",
       "agency_portal": "https://waltoncountyfl.nextrequest.com/requests/26-915",
-      "correspondence_reviewed_at": "2026-11-16T15:48:08-06:00",
+      "correspondence_reviewed_at": "2026-11-19T16:19:21-06:00",
       "portal_access": {
         "checked_at": "2026-11-04T16:17:12-06:00",
         "status": "sign_in_required",
@@ -188,6 +222,21 @@
         "scope": "departmental_vs_all_custodians_collection_status",
         "original_scope_changed": false,
         "fees_authorized": false
+      },
+      "agency_status": "closed",
+      "agency_closed_at": "2026-11-19T13:44:11-06:00",
+      "protect30a_review_status": "open_unresolved_items",
+      "closure_recommendation": "Closure of Protect30A’s evidence review is not yet supported. Review the November 19 PDF and reconcile all requested items against the releases and departmental responses.",
+      "additional_release_review": {
+        "checked_at": "2026-11-19T16:19:21-06:00",
+        "filename": "26-915 Emails.pdf",
+        "notice_received_at": "2026-11-19T13:43:41-06:00",
+        "content_examined": false,
+        "status": "release_notified_access_blocked",
+        "access_result": "Direct retrieval failed. Browser navigation timed out and a subsequent document observation was rejected by the browser URL policy. No underlying PDF contents were reviewed.",
+        "requester_link_expiration": "2026-12-19",
+        "source_url": "https://waltoncountyfl.nextrequest.com/requests/26-915",
+        "review_gap": "Read the new PDF, identify its custodians and date range, compare correspondence with the original scope, and reconcile all outstanding request items."
       }
     },
     {
@@ -338,7 +387,7 @@
           "Index completeness and document uniqueness not established."
         ]
       },
-      "correspondence_reviewed_at": "2026-11-16T15:48:08-06:00",
+      "correspondence_reviewed_at": "2026-11-19T16:19:21-06:00",
       "latest_access_check": {
         "checked_at": "2026-11-04T16:17:12-06:00",
         "index_visible": true,
@@ -481,7 +530,8 @@
     "November 12, 2026: Updated the evidence status of Cycle 4 continuation. The August 14, 2025 DEP email provides written guidance as of that date; the earlier county attribution remains historical, and current coverage or later disposition is unresolved.",
     "November 12, 2026: The OCULUS workbook supplied Received Date fields for both April 2026 entries. County-released correspondence separately establishes transmittal and an acknowledgment for the 2024–2025 report. Matching the underlying DEP entries and determining filing timeliness remain open.",
     "November 13, 2026: County scope clarification sent in the existing request thread. Sending does not establish agency receipt, full production, compliance or request closure. November 12 reviewed evidence and older dated observations remain preserved.",
-    "November 16, 2026: Clarified the scope of the November 12 county production. Walton County Public Records said the upload statement applied only to the Environmental Department and that records from other departments were still being processed. The prior release, reviewed evidence and open items remain documented."
+    "November 16, 2026: Clarified the scope of the November 12 county production. Walton County Public Records said the upload statement applied only to the Environmental Department and that records from other departments were still being processed. The prior release, reviewed evidence and open items remain documented.",
+    "November 19, 2026: County request 26-915 was closed by the agency after a new PDF release notice and Engineering and Code Compliance responses. Protect30A’s evidence review stays open. The November 16 processing statement remains preserved as a dated historical response."
   ],
   "monitoring_note": "Weekday reply checks and publication enabled November 4, 2026; reviews are periodic, not continuous."
 }
