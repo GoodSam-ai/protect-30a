@@ -1,5 +1,5 @@
 
-const addresses=["dan.curry@mywaltonfl.gov","danny.glidewell@mywaltonfl.gov","brad.drake@mywaltonfl.gov","donna.johns@mywaltonfl.gov","tony.anderson@mywaltonfl.gov"];
+const addresses=["dan.curry@mywaltonfl.gov","w.whitaker@mywaltonfl.gov","jim.bagby@mywaltonfl.gov","tony.anderson@mywaltonfl.gov"];
 const letter=document.getElementById('letter');
 function draft(to){return 'mailto:'+to+'?subject='+encodeURIComponent('Raven MAJ26-000007 — request for complete review and protections')+'&body='+encodeURIComponent(letter.value)}
 document.getElementById('all').addEventListener('click',function(){this.href=draft(addresses.join(','))});
