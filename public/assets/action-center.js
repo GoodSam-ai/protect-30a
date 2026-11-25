@@ -28,7 +28,7 @@
  *   #pp-email-name        commissioner-email name input
  *   #pp-email-neighborhood commissioner-email neighborhood input
  *   #pp-email-preview     read-only <textarea> live preview
- *   #pp-email-open        "Open in email app" -> mailto: 5 commissioners
+ *   #pp-email-open        "Open in email app" -> mailto: current commissioners
  *   #pp-email-copy        "Copy email text" -> clipboard + #copied-toast
  *   #pp-share-row         share button row (native + fallbacks)
  *   #pp-share-native      navigator.share primary button
@@ -138,13 +138,12 @@
   }
 
   /* ---------- commissioner email (MUST match the inline handler) ------- */
-  /* Addresses verified 2026-06-10 from mywaltonfl.gov/112/Commissioners
+  /* Addresses verified 2026-11-25 from mywaltonfl.gov/112/Commissioners
      (kept identical to the existing inline #email-btn handler). */
   var COMMISSIONERS = [
     "dan.curry@mywaltonfl.gov",
-    "danny.glidewell@mywaltonfl.gov",
-    "brad.drake@mywaltonfl.gov",
-    "donna.johns@mywaltonfl.gov",
+    "w.whitaker@mywaltonfl.gov",
+    "jim.bagby@mywaltonfl.gov",
     "tony.anderson@mywaltonfl.gov"
   ];
   var EMAIL_SUBJECT =
